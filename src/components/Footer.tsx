@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Instagram, Facebook, Twitter } from "lucide-react";
 import logo from "@/assets/bambotia-logo.png";
 
@@ -15,10 +16,10 @@ const Footer = () => (
         <div>
           <h4 className="font-heading text-sm font-semibold text-foreground mb-4 tracking-wider">SHOP</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><a href="#jewellery" className="hover:text-accent transition-colors">Jewellery</a></li>
-            <li><a href="#cosmetics" className="hover:text-accent transition-colors">Cosmetics</a></li>
-            <li><a href="#purses" className="hover:text-accent transition-colors">Purses</a></li>
-            <li><a href="#new-arrivals" className="hover:text-accent transition-colors">New Arrivals</a></li>
+            <li><Link to="/category/jewellery" className="hover:text-accent transition-colors">Jewellery</Link></li>
+            <li><Link to="/category/cosmetics" className="hover:text-accent transition-colors">Cosmetics</Link></li>
+            <li><Link to="/category/purses" className="hover:text-accent transition-colors">Purses</Link></li>
+            <li><a href="/#new-arrivals" className="hover:text-accent transition-colors">New Arrivals</a></li>
           </ul>
         </div>
 
