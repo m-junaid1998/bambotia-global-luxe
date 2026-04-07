@@ -1,13 +1,14 @@
+import { Link } from "react-router-dom";
 import earringsImg from "@/assets/product-earrings.jpg";
 import lipstickImg from "@/assets/product-lipstick.jpg";
 import clutchImg from "@/assets/product-clutch.jpg";
 import banglesImg from "@/assets/product-bangles.jpg";
 
 const products = [
-  { name: "Emerald Jhumka Earrings", category: "Jewellery", price: "PKR 12,500", image: earringsImg },
-  { name: "Velvet Rose Lipstick Duo", category: "Cosmetics", price: "PKR 3,200", image: lipstickImg },
-  { name: "Emerald Satin Clutch", category: "Purses", price: "PKR 8,900", image: clutchImg },
-  { name: "Heritage Gold Bangles", category: "Jewellery", price: "PKR 18,000", image: banglesImg },
+  { slug: "emerald-jhumka-earrings", name: "Emerald Jhumka Earrings", category: "Jewellery", price: "PKR 12,500", image: earringsImg },
+  { slug: "velvet-rose-lipstick-duo", name: "Velvet Rose Lipstick Duo", category: "Cosmetics", price: "PKR 3,200", image: lipstickImg },
+  { slug: "emerald-satin-clutch", name: "Emerald Satin Clutch", category: "Purses", price: "PKR 8,900", image: clutchImg },
+  { slug: "heritage-gold-bangles", name: "Heritage Gold Bangles", category: "Jewellery", price: "PKR 18,000", image: banglesImg },
 ];
 
 const NewArrivals = () => (
@@ -22,7 +23,7 @@ const NewArrivals = () => (
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {products.map((p, i) => (
-          <div key={i} className="group cursor-pointer">
+          <Link key={i} to={`/product/${p.slug}`} className="group cursor-pointer">
             <div className="relative overflow-hidden rounded-sm aspect-[4/5] mb-4">
               <img
                 src={p.image}
@@ -39,9 +40,9 @@ const NewArrivals = () => (
               </div>
             </div>
             <p className="text-xs text-muted-foreground tracking-wider mb-1">{p.category}</p>
-            <h3 className="font-heading text-sm md:text-base font-medium text-foreground mb-1">{p.name}</h3>
+            <h3 className="font-heading text-sm md:text-base font-medium text-foreground mb-1 group-hover:text-accent transition-colors">{p.name}</h3>
             <p className="text-sm text-accent font-medium">{p.price}</p>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

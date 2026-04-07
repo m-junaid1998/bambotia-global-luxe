@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import jewelleryImg from "@/assets/category-jewellery.jpg";
 import cosmeticsImg from "@/assets/category-cosmetics.jpg";
 import pursesImg from "@/assets/category-purses.jpg";
@@ -20,10 +21,9 @@ const CategoriesSection = () => (
 
       <div className="grid md:grid-cols-3 gap-6 md:gap-8">
         {categories.map((cat) => (
-          <a
+          <Link
             key={cat.id}
-            href={`#${cat.id}`}
-            id={cat.id}
+            to={`/category/${cat.id}`}
             className="group relative overflow-hidden rounded-sm aspect-[3/4]"
           >
             <img
@@ -44,7 +44,7 @@ const CategoriesSection = () => (
                 EXPLORE →
               </span>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </div>
