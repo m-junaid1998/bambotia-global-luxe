@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import CartDrawer from "@/components/CartDrawer";
 import logo from "@/assets/bambotia-logo.png";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const { totalItems } = useCart();
 
   return (
@@ -29,7 +31,7 @@ const Navbar = () => {
             <button className="hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Account">
               <User className="w-5 h-5" />
             </button>
-            <button className="relative text-foreground hover:text-accent transition-colors" aria-label="Cart">
+            <button className="relative text-foreground hover:text-accent transition-colors" aria-label="Cart" onClick={() => setCartOpen(true)}>
               <ShoppingBag className="w-5 h-5" />
               {totalItems > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-accent text-accent-foreground text-[10px] font-bold flex items-center justify-center">
@@ -57,6 +59,8 @@ const Navbar = () => {
           </div>
         </div>
       )}
+
+      <CartDrawer open={cartOpen} onOpenChange={setCartOpen} />
     </nav>
   );
 };
