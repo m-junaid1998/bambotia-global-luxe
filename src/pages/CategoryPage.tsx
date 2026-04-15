@@ -3,6 +3,7 @@ import { ArrowLeft, ChevronRight } from "lucide-react";
 import { getProductsByCategory, formatPrice } from "@/data/products";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import WishlistButton from "@/components/WishlistButton";
 
 const categoryMeta: Record<string, { title: string; subtitle: string }> = {
   jewellery: { title: "Luxury Jewellery", subtitle: "Timeless pieces crafted with precision and adorned with natural stones" },
@@ -72,6 +73,7 @@ const CategoryPage = () => {
                       </span>
                     </div>
                   )}
+                  <WishlistButton productId={p.id} productName={p.name} className="absolute top-3 right-3 opacity-0 group-hover:opacity-100" />
                 </div>
                 <h3 className="font-heading text-sm md:text-base font-medium text-foreground mb-1 group-hover:text-accent transition-colors">
                   {p.name}
