@@ -27,7 +27,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="text-foreground hover:text-accent transition-colors" aria-label="Search">
+            <button className="text-foreground hover:text-accent transition-colors" aria-label="Search" onClick={() => setSearchOpen(true)}>
               <Search className="w-5 h-5" />
             </button>
             <button className="hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Account">
