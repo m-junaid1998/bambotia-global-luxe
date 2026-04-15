@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, Heart, ShoppingBag, Menu, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 import CartDrawer from "@/components/CartDrawer";
 import SearchOverlay from "@/components/SearchOverlay";
 import logo from "@/assets/bambotia-logo.png";
@@ -11,6 +12,7 @@ const Navbar = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { totalItems } = useCart();
+  const { items: wishlistItems } = useWishlist();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
@@ -30,9 +32,14 @@ const Navbar = () => {
             <button className="text-foreground hover:text-accent transition-colors" aria-label="Search" onClick={() => setSearchOpen(true)}>
               <Search className="w-5 h-5" />
             </button>
-            <button className="hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Account">
-              <User className="w-5 h-5" />
-            </button>
+            <Link to="/wishlist" className="relative hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Wishlist">
+              <Heart className="w-5 h-5" />
+              {wishlistItems.length > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-accent text-accent-foreground text-[10px] font-bold flex items-center justify-center">
+                  {wishlistItems.length}
+                </span>
+              )}
+            </Link>
             <button className="relative text-foreground hover:text-accent transition-colors" aria-label="Cart" onClick={() => setCartOpen(true)}>
               <ShoppingBag className="w-5 h-5" />
               {totalItems > 0 && (
@@ -58,6 +65,10 @@ const Navbar = () => {
             <Link to="/category/jewellery" className="block text-sm font-medium tracking-[0.2em] text-foreground" onClick={() => setMobileOpen(false)}>JEWELLERY</Link>
             <Link to="/category/cosmetics" className="block text-sm font-medium tracking-[0.2em] text-foreground" onClick={() => setMobileOpen(false)}>COSMETICS</Link>
             <Link to="/category/purses" className="block text-sm font-medium tracking-[0.2em] text-foreground" onClick={() => setMobileOpen(false)}>PURSES</Link>
+            <Link to="/wishlist" className="flex items-center gap-2 text-sm font-medium tracking-[0.2em] text-foreground" onClick={() => setMobileOpen(false)}>
+              <Heart className="w-4 h-4" /> WISHLIST
+              {wishlistItems.length > 0 && <span className="text-accent text-xs">({wishlistItems.length})</span>}
+            </Link>
           </div>
         </div>
       )}
