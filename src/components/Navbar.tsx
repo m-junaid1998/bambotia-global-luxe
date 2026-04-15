@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
+import SearchOverlay from "@/components/SearchOverlay";
 import logo from "@/assets/bambotia-logo.png";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { totalItems } = useCart();
 
   return (
@@ -25,7 +27,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="text-foreground hover:text-accent transition-colors" aria-label="Search">
+            <button className="text-foreground hover:text-accent transition-colors" aria-label="Search" onClick={() => setSearchOpen(true)}>
               <Search className="w-5 h-5" />
             </button>
             <button className="hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Account">
@@ -61,6 +63,7 @@ const Navbar = () => {
       )}
 
       <CartDrawer open={cartOpen} onOpenChange={setCartOpen} />
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </nav>
   );
 };
