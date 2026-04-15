@@ -7,6 +7,7 @@ import cosmeticsImg from "@/assets/category-cosmetics.jpg";
 import pursesImg from "@/assets/category-purses.jpg";
 import ringImg from "@/assets/product-ring.jpg";
 import AnimateOnScroll from "@/components/AnimateOnScroll";
+import WishlistButton from "@/components/WishlistButton";
 import { useState } from "react";
 
 const jewelleryProducts = products.filter((p) => p.category === "jewellery");
@@ -30,6 +31,7 @@ const ProductCard = ({ product, delay = 0 }: { product: typeof products[0]; dela
             NEW
           </span>
         )}
+        <WishlistButton productId={product.id} productName={product.name} className="absolute top-2 right-2 opacity-0 group-hover:opacity-100" />
       </div>
       <h4 className="text-xs md:text-sm font-medium text-foreground group-hover:text-accent transition-colors leading-tight mb-0.5">
         {product.name}
@@ -69,6 +71,7 @@ const TabProductCard = ({ product }: { product: typeof products[0] }) => {
           >
             <ShoppingBag className="w-3.5 h-3.5" />
           </button>
+          <WishlistButton productId={product.id} productName={product.name} className="absolute top-2 right-2 opacity-0 group-hover:opacity-100" />
         </div>
       </Link>
       <Link to={`/product/${product.slug}`}>

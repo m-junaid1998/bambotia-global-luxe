@@ -3,6 +3,7 @@ import { ArrowRight, ShoppingBag } from "lucide-react";
 import { products, formatPrice } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import AnimateOnScroll from "@/components/AnimateOnScroll";
+import WishlistButton from "@/components/WishlistButton";
 
 const newProducts = products.filter((p) => p.isNew);
 
@@ -41,6 +42,7 @@ const NewArrivals = () => {
                     <span className="absolute top-3 left-3 text-[9px] tracking-[0.15em] bg-accent text-accent-foreground px-2.5 py-1 rounded-sm font-medium">
                       NEW
                     </span>
+                    <WishlistButton productId={p.id} productName={p.name} className="absolute top-3 right-3 opacity-0 group-hover:opacity-100" />
                     <button
                       onClick={(e) => {
                         e.preventDefault();

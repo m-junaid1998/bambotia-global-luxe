@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, ShoppingBag, Heart, Minus, Plus, ChevronRight } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Minus, Plus, ChevronRight } from "lucide-react";
 import { getProductBySlug, formatPrice } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -10,6 +11,7 @@ const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const product = getProductBySlug(slug || "");
   const { addItem } = useCart();
+  const { toggleItem, isWishlisted } = useWishlist();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
@@ -134,8 +136,15 @@ const ProductDetail = () => {
                 >
                   <ShoppingBag className="w-4 h-4" /> Add to Cart
                 </button>
-                <button className="p-4 border border-border rounded text-foreground hover:text-accent hover:border-accent transition-colors">
-                  <Heart className="w-5 h-5" />
+                <button
+                  onClick={() => toggleItem(product.id, product.name)}
+                  className={`p-4 border rounded transition-colors ${
+                    isWishlisted(product.id)
+                      ? "border-red-500 bg-red-500 text-white"
+                      : "border-border text-foreground hover:text-accent hover:border-accent"
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill={isWishlisted(product.id) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                 </button>
               </div>
 

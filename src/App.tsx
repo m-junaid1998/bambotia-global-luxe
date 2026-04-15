@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/contexts/CartContext";
+import { WishlistProvider } from "@/contexts/WishlistContext";
 import Index from "./pages/Index.tsx";
 import CategoryPage from "./pages/CategoryPage.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
@@ -18,13 +19,14 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <CartProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/category/:category" element={<CategoryPage />} />
-            <Route path="/product/:slug" element={<ProductDetail />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <WishlistProvider>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/category/:category" element={<CategoryPage />} />
+              <Route path="/product/:slug" element={<ProductDetail />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </WishlistProvider>
         </CartProvider>
       </BrowserRouter>
     </TooltipProvider>
