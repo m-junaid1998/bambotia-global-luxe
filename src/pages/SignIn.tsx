@@ -78,7 +78,7 @@ const SignIn = () => {
                     Remember me
                   </Label>
                 </div>
-                <Link to="#" className="text-xs text-accent hover:underline tracking-wider">
+                <Link to="/forgot-password" className="text-xs text-accent hover:underline tracking-wider">
                   Forgot password?
                 </Link>
               </div>
