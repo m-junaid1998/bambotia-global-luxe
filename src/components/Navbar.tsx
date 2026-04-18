@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, Heart, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, Heart, ShoppingBag, Menu, X, User } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import CartDrawer from "@/components/CartDrawer";
@@ -32,6 +32,9 @@ const Navbar = () => {
             <button className="text-foreground hover:text-accent transition-colors" aria-label="Search" onClick={() => setSearchOpen(true)}>
               <Search className="w-5 h-5" />
             </button>
+            <Link to="/signin" className="hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Account">
+              <User className="w-5 h-5" />
+            </Link>
             <Link to="/wishlist" className="relative hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Wishlist">
               <Heart className="w-5 h-5" />
               {wishlistItems.length > 0 && (
@@ -68,6 +71,9 @@ const Navbar = () => {
             <Link to="/wishlist" className="flex items-center gap-2 text-sm font-medium tracking-[0.2em] text-foreground" onClick={() => setMobileOpen(false)}>
               <Heart className="w-4 h-4" /> WISHLIST
               {wishlistItems.length > 0 && <span className="text-accent text-xs">({wishlistItems.length})</span>}
+            </Link>
+            <Link to="/signin" className="flex items-center gap-2 text-sm font-medium tracking-[0.2em] text-foreground" onClick={() => setMobileOpen(false)}>
+              <User className="w-4 h-4" /> SIGN IN
             </Link>
           </div>
         </div>
