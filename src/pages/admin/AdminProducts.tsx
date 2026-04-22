@@ -276,9 +276,37 @@ const AdminProducts = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {products.map((p) => (
-            <div key={p.id} className="bg-card border border-border rounded-lg overflow-hidden group">
-              <div className="aspect-square bg-muted/30 overflow-hidden">
-                <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div
+              key={p.id}
+              className={`bg-card border border-border rounded-lg overflow-hidden group relative ${
+                !p.published ? "opacity-75" : ""
+              }`}
+            >
+              <div className="aspect-square bg-muted/30 overflow-hidden relative">
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
+                    !p.published ? "grayscale" : ""
+                  }`}
+                />
+                <span
+                  className={`absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[9px] tracking-[0.2em] font-medium backdrop-blur ${
+                    p.published
+                      ? "bg-accent/90 text-accent-foreground"
+                      : "bg-muted/90 text-muted-foreground border border-border"
+                  }`}
+                >
+                  {p.published ? (
+                    <>
+                      <Eye className="w-3 h-3" /> LIVE
+                    </>
+                  ) : (
+                    <>
+                      <EyeOff className="w-3 h-3" /> DRAFT
+                    </>
+                  )}
+                </span>
               </div>
               <div className="p-4 space-y-2">
                 <p className="text-[10px] tracking-[0.3em] text-accent uppercase">{p.category}</p>
@@ -289,6 +317,24 @@ const AdminProducts = () => {
                     <p className="text-xs text-muted-foreground">Stock: {p.stock}</p>
                   </div>
                   <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-accent"
+                      onClick={() => {
+                        togglePublished(p.id);
+                        toast.success(
+                          p.published ? "Moved to draft" : "Published to storefront"
+                        );
+                      }}
+                      aria-label={p.published ? "Unpublish product" : "Publish product"}
+                    >
+                      {p.published ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
+                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
