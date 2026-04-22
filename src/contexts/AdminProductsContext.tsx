@@ -15,6 +15,7 @@ interface AdminProductsContextValue {
   products: AdminProduct[];
   addProduct: (p: Omit<AdminProduct, "id" | "createdAt">) => void;
   removeProduct: (id: string) => void;
+  updateProduct: (id: string, p: Omit<AdminProduct, "id" | "createdAt">) => void;
 }
 
 const STORAGE_KEY = "bambotia_admin_products";
@@ -48,8 +49,14 @@ export const AdminProductsProvider = ({ children }: { children: ReactNode }) => 
     setProducts((prev) => prev.filter((p) => p.id !== id));
   };
 
+  const updateProduct: AdminProductsContextValue["updateProduct"] = (id, p) => {
+    setProducts((prev) =>
+      prev.map((prod) => (prod.id === id ? { ...prod, ...p } : prod))
+    );
+  };
+
   return (
-    <AdminProductsContext.Provider value={{ products, addProduct, removeProduct }}>
+    <AdminProductsContext.Provider value={{ products, addProduct, removeProduct, updateProduct }}>
       {children}
     </AdminProductsContext.Provider>
   );
