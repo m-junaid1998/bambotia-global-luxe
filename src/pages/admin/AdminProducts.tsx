@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Plus, Trash2, Package, Upload, Pencil, X, RefreshCw, Eye, EyeOff } from "lucide-react";
+import { Plus, Trash2, Package, Upload, Pencil, X, RefreshCw, Eye, EyeOff, Image as ImageIcon, Tag, DollarSign, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -435,12 +435,61 @@ const AdminProducts = () => {
       </div>
 
       {products.length === 0 ? (
-        <div className="bg-card border border-dashed border-border rounded-lg p-16 text-center">
-          <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="font-serif text-xl text-foreground mb-2">No products yet</h3>
-          <p className="text-sm text-muted-foreground mb-6">
-            Click "Add Product" to create your first listing.
-          </p>
+        <div className="bg-card border border-dashed border-border rounded-lg overflow-hidden">
+          <div className="px-6 sm:px-12 py-14 text-center max-w-2xl mx-auto">
+            <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
+              <Package className="w-7 h-7 text-accent" />
+            </div>
+            <p className="text-[10px] tracking-[0.4em] text-accent mb-3">GET STARTED</p>
+            <h3 className="font-serif text-2xl md:text-3xl text-foreground mb-3">
+              Your catalog is empty
+            </h3>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-8">
+              Add your first product to start building the BAMBOTIA storefront.
+              You'll need just three things to get a listing live.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8 text-left">
+              <div className="rounded-md border border-border bg-background/50 p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <ImageIcon className="w-4 h-4 text-accent" />
+                  <p className="text-[10px] tracking-[0.25em] text-muted-foreground">REQUIRED</p>
+                </div>
+                <p className="text-sm font-medium text-foreground">Product image</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Upload a JPG or PNG of your product.
+                </p>
+              </div>
+              <div className="rounded-md border border-border bg-background/50 p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Tag className="w-4 h-4 text-accent" />
+                  <p className="text-[10px] tracking-[0.25em] text-muted-foreground">REQUIRED</p>
+                </div>
+                <p className="text-sm font-medium text-foreground">Product name</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  e.g. "Royal Gold Bangle".
+                </p>
+              </div>
+              <div className="rounded-md border border-border bg-background/50 p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <DollarSign className="w-4 h-4 text-accent" />
+                  <p className="text-[10px] tracking-[0.25em] text-muted-foreground">REQUIRED</p>
+                </div>
+                <p className="text-sm font-medium text-foreground">Price in PKR</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Stock and description are optional.
+                </p>
+              </div>
+            </div>
+
+            <Button
+              onClick={openAdd}
+              className="tracking-[0.2em] text-xs h-11 px-6"
+            >
+              <Plus className="w-4 h-4" /> ADD YOUR FIRST PRODUCT
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
       ) : (
         <>
