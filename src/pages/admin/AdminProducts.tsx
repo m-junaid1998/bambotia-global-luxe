@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { useAdminProducts, AdminProduct } from "@/contexts/AdminProductsContext";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 
 const emptyForm = {
@@ -49,13 +50,64 @@ const loadDraft = (): DraftPayload | null => {
 };
 
 const AdminProducts = () => {
-  const { products, addProduct, removeProduct, updateProduct, togglePublished } = useAdminProducts();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    updateProduct,
+    togglePublished,
+    setPublishedBulk,
+  } = useAdminProducts();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [published, setPublished] = useState(true);
   const [draftRestored, setDraftRestored] = useState(false);
   const skipNextPersistRef = useRef(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  // Drop selections that no longer match an existing product
+  useEffect(() => {
+    setSelectedIds((prev) => {
+      const valid = new Set(products.map((p) => p.id));
+      let changed = false;
+      const next = new Set<string>();
+      prev.forEach((id) => {
+        if (valid.has(id)) next.add(id);
+        else changed = true;
+      });
+      return changed ? next : prev;
+    });
+  }, [products]);
+
+  const toggleSelected = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const allSelected =
+    products.length > 0 && selectedIds.size === products.length;
+
+  const toggleSelectAll = () => {
+    if (allSelected) setSelectedIds(new Set());
+    else setSelectedIds(new Set(products.map((p) => p.id)));
+  };
+
+  const handleBulkPublish = (publish: boolean) => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    setPublishedBulk(ids, publish);
+    toast.success(
+      `${ids.length} product${ids.length === 1 ? "" : "s"} ${
+        publish ? "published" : "moved to draft"
+      }`
+    );
+    setSelectedIds(new Set());
+  };
 
   // Auto-save form state to localStorage while the dialog is open
   useEffect(() => {
@@ -391,13 +443,58 @@ const AdminProducts = () => {
           </p>
         </div>
       ) : (
+        <>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-md border border-border bg-card px-4 py-3">
+          <div className="flex items-center gap-3">
+            <Checkbox
+              checked={allSelected}
+              onCheckedChange={toggleSelectAll}
+              aria-label="Select all products"
+            />
+            <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase">
+              {selectedIds.size > 0
+                ? `${selectedIds.size} selected`
+                : `Select all (${products.length})`}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={selectedIds.size === 0}
+              onClick={() => handleBulkPublish(true)}
+              className="tracking-[0.2em] text-[10px] h-9"
+            >
+              <Eye className="w-3.5 h-3.5" /> PUBLISH
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={selectedIds.size === 0}
+              onClick={() => handleBulkPublish(false)}
+              className="tracking-[0.2em] text-[10px] h-9"
+            >
+              <EyeOff className="w-3.5 h-3.5" /> DRAFT
+            </Button>
+            {selectedIds.size > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelectedIds(new Set())}
+                className="tracking-[0.2em] text-[10px] h-9 text-muted-foreground"
+              >
+                CLEAR
+              </Button>
+            )}
+          </div>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {products.map((p) => (
             <div
               key={p.id}
-              className={`bg-card border border-border rounded-lg overflow-hidden group relative ${
-                !p.published ? "opacity-75" : ""
-              }`}
+              className={`bg-card border rounded-lg overflow-hidden group relative transition-colors ${
+                selectedIds.has(p.id) ? "border-accent ring-1 ring-accent/40" : "border-border"
+              } ${!p.published ? "opacity-75" : ""}`}
             >
               <div className="aspect-square bg-muted/30 overflow-hidden relative">
                 <img
@@ -407,6 +504,13 @@ const AdminProducts = () => {
                     !p.published ? "grayscale" : ""
                   }`}
                 />
+                <div className="absolute top-2 right-2 w-8 h-8 rounded-md bg-background/90 backdrop-blur border border-border flex items-center justify-center">
+                  <Checkbox
+                    checked={selectedIds.has(p.id)}
+                    onCheckedChange={() => toggleSelected(p.id)}
+                    aria-label={`Select ${p.name}`}
+                  />
+                </div>
                 <span
                   className={`absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[9px] tracking-[0.2em] font-medium backdrop-blur ${
                     p.published
@@ -479,6 +583,7 @@ const AdminProducts = () => {
             </div>
           ))}
         </div>
+        </>
       )}
     </div>
   );
