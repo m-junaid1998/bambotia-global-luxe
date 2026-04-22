@@ -9,7 +9,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -236,18 +235,29 @@ const AdminProducts = () => {
                     <p className="text-sm font-medium text-foreground">PKR {p.price.toLocaleString()}</p>
                     <p className="text-xs text-muted-foreground">Stock: {p.stock}</p>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-muted-foreground hover:text-destructive"
-                    onClick={() => {
-                      removeProduct(p.id);
-                      toast.success("Product removed");
-                    }}
-                    aria-label="Delete product"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-foreground"
+                      onClick={() => openEdit(p)}
+                      aria-label="Edit product"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-destructive"
+                      onClick={() => {
+                        removeProduct(p.id);
+                        toast.success("Product removed");
+                      }}
+                      aria-label="Delete product"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
