@@ -211,8 +211,12 @@ const AdminProducts = () => {
           onOpenChange={(o) => {
             setOpen(o);
             if (!o) {
+              // Keep draft in localStorage; just close the dialog.
+              // Reset transient UI state without wiping the draft.
+              setDraftRestored(false);
               setEditingId(null);
               setForm(emptyForm);
+              setPublished(true);
             }
           }}
         >
@@ -225,6 +229,20 @@ const AdminProducts = () => {
                 {editingId ? "Edit Product" : "Add New Product"}
               </DialogTitle>
             </DialogHeader>
+            {draftRestored && (
+              <div className="flex items-center justify-between gap-3 rounded-md border border-accent/40 bg-accent/10 px-3 py-2">
+                <p className="text-[11px] tracking-[0.15em] text-accent-foreground/90">
+                  RESTORED FROM AUTO-SAVED DRAFT
+                </p>
+                <button
+                  type="button"
+                  onClick={discardDraft}
+                  className="text-[10px] tracking-[0.2em] text-muted-foreground hover:text-destructive transition-colors"
+                >
+                  DISCARD
+                </button>
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-4 pt-2">
               <div className="space-y-2">
                 <Label className="text-xs tracking-[0.2em]">PRODUCT IMAGE *</Label>
