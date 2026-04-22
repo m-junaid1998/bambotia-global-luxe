@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Trash2, Package, Upload, Pencil, X, RefreshCw } from "lucide-react";
+import { Plus, Trash2, Package, Upload, Pencil, X, RefreshCw, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAdminProducts, AdminProduct } from "@/contexts/AdminProductsContext";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 const emptyForm = {
@@ -30,10 +31,11 @@ const emptyForm = {
 };
 
 const AdminProducts = () => {
-  const { products, addProduct, removeProduct, updateProduct } = useAdminProducts();
+  const { products, addProduct, removeProduct, updateProduct, togglePublished } = useAdminProducts();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [published, setPublished] = useState(true);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -58,6 +60,7 @@ const AdminProducts = () => {
       stock: stock || 0,
       image: form.image,
       description: form.description,
+      published,
     };
     if (editingId) {
       updateProduct(editingId, payload);
@@ -68,12 +71,14 @@ const AdminProducts = () => {
     }
     setForm(emptyForm);
     setEditingId(null);
+    setPublished(true);
     setOpen(false);
   };
 
   const openAdd = () => {
     setEditingId(null);
     setForm(emptyForm);
+    setPublished(true);
     setOpen(true);
   };
 
@@ -87,6 +92,7 @@ const AdminProducts = () => {
       image: p.image,
       description: p.description,
     });
+    setPublished(p.published);
     setOpen(true);
   };
 
