@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Plus, Trash2, Package, Upload, Pencil, X, RefreshCw, Eye, EyeOff } from "lucide-react";
+import { Plus, Trash2, Package, Upload, Pencil, X, RefreshCw, Eye, EyeOff, CheckSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { useAdminProducts, AdminProduct } from "@/contexts/AdminProductsContext";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 
 const emptyForm = {
@@ -49,13 +50,64 @@ const loadDraft = (): DraftPayload | null => {
 };
 
 const AdminProducts = () => {
-  const { products, addProduct, removeProduct, updateProduct, togglePublished } = useAdminProducts();
+  const {
+    products,
+    addProduct,
+    removeProduct,
+    updateProduct,
+    togglePublished,
+    setPublishedBulk,
+  } = useAdminProducts();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [published, setPublished] = useState(true);
   const [draftRestored, setDraftRestored] = useState(false);
   const skipNextPersistRef = useRef(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  // Drop selections that no longer match an existing product
+  useEffect(() => {
+    setSelectedIds((prev) => {
+      const valid = new Set(products.map((p) => p.id));
+      let changed = false;
+      const next = new Set<string>();
+      prev.forEach((id) => {
+        if (valid.has(id)) next.add(id);
+        else changed = true;
+      });
+      return changed ? next : prev;
+    });
+  }, [products]);
+
+  const toggleSelected = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const allSelected =
+    products.length > 0 && selectedIds.size === products.length;
+
+  const toggleSelectAll = () => {
+    if (allSelected) setSelectedIds(new Set());
+    else setSelectedIds(new Set(products.map((p) => p.id)));
+  };
+
+  const handleBulkPublish = (publish: boolean) => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    setPublishedBulk(ids, publish);
+    toast.success(
+      `${ids.length} product${ids.length === 1 ? "" : "s"} ${
+        publish ? "published" : "moved to draft"
+      }`
+    );
+    setSelectedIds(new Set());
+  };
 
   // Auto-save form state to localStorage while the dialog is open
   useEffect(() => {
