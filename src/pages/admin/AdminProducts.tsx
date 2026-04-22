@@ -238,6 +238,25 @@ const AdminProducts = () => {
                 />
               </div>
 
+              <div className="flex items-center justify-between rounded-md border border-border bg-muted/20 p-3">
+                <div className="space-y-0.5">
+                  <Label className="text-xs tracking-[0.2em] flex items-center gap-2">
+                    {published ? (
+                      <Eye className="w-3.5 h-3.5 text-accent" />
+                    ) : (
+                      <EyeOff className="w-3.5 h-3.5 text-muted-foreground" />
+                    )}
+                    {published ? "PUBLISHED" : "DRAFT"}
+                  </Label>
+                  <p className="text-[11px] text-muted-foreground">
+                    {published
+                      ? "Visible on the storefront"
+                      : "Hidden from customers"}
+                  </p>
+                </div>
+                <Switch checked={published} onCheckedChange={setPublished} />
+              </div>
+
               <Button type="submit" className="w-full h-11 tracking-[0.2em] text-xs">
                 {editingId ? "SAVE CHANGES" : "ADD PRODUCT"}
               </Button>
