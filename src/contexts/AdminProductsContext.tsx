@@ -18,6 +18,7 @@ interface AdminProductsContextValue {
   removeProduct: (id: string) => void;
   updateProduct: (id: string, p: Omit<AdminProduct, "id" | "createdAt">) => void;
   togglePublished: (id: string) => void;
+  setPublishedBulk: (ids: string[], published: boolean) => void;
 }
 
 const STORAGE_KEY = "bambotia_admin_products";
@@ -69,8 +70,17 @@ export const AdminProductsProvider = ({ children }: { children: ReactNode }) => 
     );
   };
 
+  const setPublishedBulk = (ids: string[], published: boolean) => {
+    const idSet = new Set(ids);
+    setProducts((prev) =>
+      prev.map((prod) => (idSet.has(prod.id) ? { ...prod, published } : prod))
+    );
+  };
+
   return (
-    <AdminProductsContext.Provider value={{ products, addProduct, removeProduct, updateProduct, togglePublished }}>
+    <AdminProductsContext.Provider
+      value={{ products, addProduct, removeProduct, updateProduct, togglePublished, setPublishedBulk }}
+    >
       {children}
     </AdminProductsContext.Provider>
   );
