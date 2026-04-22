@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Trash2, Package, Upload, Pencil } from "lucide-react";
+import { Plus, Trash2, Package, Upload, Pencil, X, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -123,21 +123,49 @@ const AdminProducts = () => {
             <form onSubmit={handleSubmit} className="space-y-4 pt-2">
               <div className="space-y-2">
                 <Label className="text-xs tracking-[0.2em]">PRODUCT IMAGE *</Label>
-                <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-md border border-border bg-muted/30 flex items-center justify-center overflow-hidden flex-shrink-0">
-                    {form.image ? (
-                      <img src={form.image} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      <Package className="w-6 h-6 text-muted-foreground" />
-                    )}
-                  </div>
-                  <label className="flex-1 cursor-pointer">
-                    <div className="flex items-center justify-center gap-2 h-11 border border-dashed border-border rounded-md text-xs tracking-wider text-muted-foreground hover:bg-muted/30">
-                      <Upload className="w-4 h-4" /> {form.image ? "Replace" : "Upload"} image
+                {form.image ? (
+                  <div className="space-y-2">
+                    <div className="relative aspect-video w-full rounded-md border border-border bg-muted/30 overflow-hidden group">
+                      <img
+                        src={form.image}
+                        alt="Product preview"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setForm((f) => ({ ...f, image: "" }))}
+                        className="absolute top-2 right-2 w-8 h-8 rounded-full bg-background/90 backdrop-blur border border-border flex items-center justify-center text-foreground hover:bg-destructive hover:text-destructive-foreground transition-colors"
+                        aria-label="Remove image"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
                     </div>
-                    <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                    <label className="cursor-pointer block">
+                      <div className="flex items-center justify-center gap-2 h-10 border border-dashed border-border rounded-md text-xs tracking-[0.2em] text-muted-foreground hover:bg-muted/30 hover:text-foreground transition-colors">
+                        <RefreshCw className="w-3.5 h-3.5" /> REPLACE IMAGE
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                    </label>
+                  </div>
+                ) : (
+                  <label className="cursor-pointer block">
+                    <div className="flex flex-col items-center justify-center gap-2 aspect-video w-full border border-dashed border-border rounded-md text-xs tracking-[0.2em] text-muted-foreground hover:bg-muted/30 hover:text-foreground transition-colors">
+                      <Upload className="w-5 h-5" />
+                      <span>UPLOAD IMAGE</span>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
                   </label>
-                </div>
+                )}
               </div>
 
               <div className="space-y-2">
