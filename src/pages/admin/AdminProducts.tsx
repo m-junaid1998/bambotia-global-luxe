@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plus, Trash2, Package, Upload, Pencil, X, RefreshCw, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,12 +30,65 @@ const emptyForm = {
   description: "",
 };
 
+const DRAFT_KEY = "bambotia_admin_product_draft";
+
+type DraftPayload = {
+  form: typeof emptyForm;
+  published: boolean;
+  editingId: string | null;
+  savedAt: number;
+};
+
+const loadDraft = (): DraftPayload | null => {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    return raw ? (JSON.parse(raw) as DraftPayload) : null;
+  } catch {
+    return null;
+  }
+};
+
 const AdminProducts = () => {
   const { products, addProduct, removeProduct, updateProduct, togglePublished } = useAdminProducts();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [published, setPublished] = useState(true);
+  const [draftRestored, setDraftRestored] = useState(false);
+  const skipNextPersistRef = useRef(false);
+
+  // Auto-save form state to localStorage while the dialog is open
+  useEffect(() => {
+    if (!open) return;
+    if (skipNextPersistRef.current) {
+      skipNextPersistRef.current = false;
+      return;
+    }
+    const isEmpty =
+      !form.name &&
+      !form.price &&
+      !form.stock &&
+      !form.image &&
+      !form.description;
+    if (isEmpty && !editingId) {
+      localStorage.removeItem(DRAFT_KEY);
+      return;
+    }
+    const handle = setTimeout(() => {
+      try {
+        const payload: DraftPayload = {
+          form,
+          published,
+          editingId,
+          savedAt: Date.now(),
+        };
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
+      } catch {
+        // localStorage may be full (large base64 image) — ignore
+      }
+    }, 400);
+    return () => clearTimeout(handle);
+  }, [form, published, editingId, open]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -69,6 +122,8 @@ const AdminProducts = () => {
       addProduct(payload);
       toast.success("Product added");
     }
+    skipNextPersistRef.current = true;
+    localStorage.removeItem(DRAFT_KEY);
     setForm(emptyForm);
     setEditingId(null);
     setPublished(true);
@@ -76,24 +131,68 @@ const AdminProducts = () => {
   };
 
   const openAdd = () => {
-    setEditingId(null);
-    setForm(emptyForm);
-    setPublished(true);
+    const draft = loadDraft();
+    if (draft && !draft.editingId) {
+      setEditingId(null);
+      setForm(draft.form);
+      setPublished(draft.published);
+      setDraftRestored(true);
+      toast.info("Restored your unsaved draft");
+    } else {
+      setEditingId(null);
+      setForm(emptyForm);
+      setPublished(true);
+      setDraftRestored(false);
+    }
     setOpen(true);
   };
 
   const openEdit = (p: AdminProduct) => {
-    setEditingId(p.id);
-    setForm({
-      name: p.name,
-      category: p.category,
-      price: String(p.price),
-      stock: String(p.stock),
-      image: p.image,
-      description: p.description,
-    });
-    setPublished(p.published);
+    const draft = loadDraft();
+    if (draft && draft.editingId === p.id) {
+      setEditingId(p.id);
+      setForm(draft.form);
+      setPublished(draft.published);
+      setDraftRestored(true);
+      toast.info("Restored your unsaved changes");
+    } else {
+      setEditingId(p.id);
+      setForm({
+        name: p.name,
+        category: p.category,
+        price: String(p.price),
+        stock: String(p.stock),
+        image: p.image,
+        description: p.description,
+      });
+      setPublished(p.published);
+      setDraftRestored(false);
+    }
     setOpen(true);
+  };
+
+  const discardDraft = () => {
+    skipNextPersistRef.current = true;
+    localStorage.removeItem(DRAFT_KEY);
+    if (editingId) {
+      const original = products.find((p) => p.id === editingId);
+      if (original) {
+        setForm({
+          name: original.name,
+          category: original.category,
+          price: String(original.price),
+          stock: String(original.stock),
+          image: original.image,
+          description: original.description,
+        });
+        setPublished(original.published);
+      }
+    } else {
+      setForm(emptyForm);
+      setPublished(true);
+    }
+    setDraftRestored(false);
+    toast.success("Draft discarded");
   };
 
   return (
@@ -112,8 +211,12 @@ const AdminProducts = () => {
           onOpenChange={(o) => {
             setOpen(o);
             if (!o) {
+              // Keep draft in localStorage; just close the dialog.
+              // Reset transient UI state without wiping the draft.
+              setDraftRestored(false);
               setEditingId(null);
               setForm(emptyForm);
+              setPublished(true);
             }
           }}
         >
@@ -126,6 +229,20 @@ const AdminProducts = () => {
                 {editingId ? "Edit Product" : "Add New Product"}
               </DialogTitle>
             </DialogHeader>
+            {draftRestored && (
+              <div className="flex items-center justify-between gap-3 rounded-md border border-accent/40 bg-accent/10 px-3 py-2">
+                <p className="text-[11px] tracking-[0.15em] text-accent-foreground/90">
+                  RESTORED FROM AUTO-SAVED DRAFT
+                </p>
+                <button
+                  type="button"
+                  onClick={discardDraft}
+                  className="text-[10px] tracking-[0.2em] text-muted-foreground hover:text-destructive transition-colors"
+                >
+                  DISCARD
+                </button>
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-4 pt-2">
               <div className="space-y-2">
                 <Label className="text-xs tracking-[0.2em]">PRODUCT IMAGE *</Label>
