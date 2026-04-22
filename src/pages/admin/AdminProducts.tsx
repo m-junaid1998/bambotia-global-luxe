@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Trash2, Package, Upload } from "lucide-react";
+import { Plus, Trash2, Package, Upload, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,9 +31,10 @@ const emptyForm = {
 };
 
 const AdminProducts = () => {
-  const { products, addProduct, removeProduct } = useAdminProducts();
+  const { products, addProduct, removeProduct, updateProduct } = useAdminProducts();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -51,17 +52,43 @@ const AdminProducts = () => {
       toast.error("Please fill all required fields and add an image");
       return;
     }
-    addProduct({
+    const payload = {
       name: form.name,
       category: form.category,
       price,
       stock: stock || 0,
       image: form.image,
       description: form.description,
-    });
-    toast.success("Product added");
+    };
+    if (editingId) {
+      updateProduct(editingId, payload);
+      toast.success("Product updated");
+    } else {
+      addProduct(payload);
+      toast.success("Product added");
+    }
     setForm(emptyForm);
+    setEditingId(null);
     setOpen(false);
+  };
+
+  const openAdd = () => {
+    setEditingId(null);
+    setForm(emptyForm);
+    setOpen(true);
+  };
+
+  const openEdit = (p: AdminProduct) => {
+    setEditingId(p.id);
+    setForm({
+      name: p.name,
+      category: p.category,
+      price: String(p.price),
+      stock: String(p.stock),
+      image: p.image,
+      description: p.description,
+    });
+    setOpen(true);
   };
 
   return (
