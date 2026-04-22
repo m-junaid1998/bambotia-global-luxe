@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Trash2, Package, Upload, Pencil, X, RefreshCw } from "lucide-react";
+import { Plus, Trash2, Package, Upload, Pencil, X, RefreshCw, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAdminProducts, AdminProduct } from "@/contexts/AdminProductsContext";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 const emptyForm = {
@@ -30,10 +31,11 @@ const emptyForm = {
 };
 
 const AdminProducts = () => {
-  const { products, addProduct, removeProduct, updateProduct } = useAdminProducts();
+  const { products, addProduct, removeProduct, updateProduct, togglePublished } = useAdminProducts();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [published, setPublished] = useState(true);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -58,6 +60,7 @@ const AdminProducts = () => {
       stock: stock || 0,
       image: form.image,
       description: form.description,
+      published,
     };
     if (editingId) {
       updateProduct(editingId, payload);
@@ -68,12 +71,14 @@ const AdminProducts = () => {
     }
     setForm(emptyForm);
     setEditingId(null);
+    setPublished(true);
     setOpen(false);
   };
 
   const openAdd = () => {
     setEditingId(null);
     setForm(emptyForm);
+    setPublished(true);
     setOpen(true);
   };
 
@@ -87,6 +92,7 @@ const AdminProducts = () => {
       image: p.image,
       description: p.description,
     });
+    setPublished(p.published);
     setOpen(true);
   };
 
@@ -232,6 +238,25 @@ const AdminProducts = () => {
                 />
               </div>
 
+              <div className="flex items-center justify-between rounded-md border border-border bg-muted/20 p-3">
+                <div className="space-y-0.5">
+                  <Label className="text-xs tracking-[0.2em] flex items-center gap-2">
+                    {published ? (
+                      <Eye className="w-3.5 h-3.5 text-accent" />
+                    ) : (
+                      <EyeOff className="w-3.5 h-3.5 text-muted-foreground" />
+                    )}
+                    {published ? "PUBLISHED" : "DRAFT"}
+                  </Label>
+                  <p className="text-[11px] text-muted-foreground">
+                    {published
+                      ? "Visible on the storefront"
+                      : "Hidden from customers"}
+                  </p>
+                </div>
+                <Switch checked={published} onCheckedChange={setPublished} />
+              </div>
+
               <Button type="submit" className="w-full h-11 tracking-[0.2em] text-xs">
                 {editingId ? "SAVE CHANGES" : "ADD PRODUCT"}
               </Button>
@@ -251,9 +276,37 @@ const AdminProducts = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {products.map((p) => (
-            <div key={p.id} className="bg-card border border-border rounded-lg overflow-hidden group">
-              <div className="aspect-square bg-muted/30 overflow-hidden">
-                <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div
+              key={p.id}
+              className={`bg-card border border-border rounded-lg overflow-hidden group relative ${
+                !p.published ? "opacity-75" : ""
+              }`}
+            >
+              <div className="aspect-square bg-muted/30 overflow-hidden relative">
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
+                    !p.published ? "grayscale" : ""
+                  }`}
+                />
+                <span
+                  className={`absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[9px] tracking-[0.2em] font-medium backdrop-blur ${
+                    p.published
+                      ? "bg-accent/90 text-accent-foreground"
+                      : "bg-muted/90 text-muted-foreground border border-border"
+                  }`}
+                >
+                  {p.published ? (
+                    <>
+                      <Eye className="w-3 h-3" /> LIVE
+                    </>
+                  ) : (
+                    <>
+                      <EyeOff className="w-3 h-3" /> DRAFT
+                    </>
+                  )}
+                </span>
               </div>
               <div className="p-4 space-y-2">
                 <p className="text-[10px] tracking-[0.3em] text-accent uppercase">{p.category}</p>
@@ -264,6 +317,24 @@ const AdminProducts = () => {
                     <p className="text-xs text-muted-foreground">Stock: {p.stock}</p>
                   </div>
                   <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-accent"
+                      onClick={() => {
+                        togglePublished(p.id);
+                        toast.success(
+                          p.published ? "Moved to draft" : "Published to storefront"
+                        );
+                      }}
+                      aria-label={p.published ? "Unpublish product" : "Publish product"}
+                    >
+                      {p.published ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
+                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
