@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Trash2, Package, Upload } from "lucide-react";
+import { Plus, Trash2, Package, Upload, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +9,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -31,9 +30,10 @@ const emptyForm = {
 };
 
 const AdminProducts = () => {
-  const { products, addProduct, removeProduct } = useAdminProducts();
+  const { products, addProduct, removeProduct, updateProduct } = useAdminProducts();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -51,17 +51,43 @@ const AdminProducts = () => {
       toast.error("Please fill all required fields and add an image");
       return;
     }
-    addProduct({
+    const payload = {
       name: form.name,
       category: form.category,
       price,
       stock: stock || 0,
       image: form.image,
       description: form.description,
-    });
-    toast.success("Product added");
+    };
+    if (editingId) {
+      updateProduct(editingId, payload);
+      toast.success("Product updated");
+    } else {
+      addProduct(payload);
+      toast.success("Product added");
+    }
     setForm(emptyForm);
+    setEditingId(null);
     setOpen(false);
+  };
+
+  const openAdd = () => {
+    setEditingId(null);
+    setForm(emptyForm);
+    setOpen(true);
+  };
+
+  const openEdit = (p: AdminProduct) => {
+    setEditingId(p.id);
+    setForm({
+      name: p.name,
+      category: p.category,
+      price: String(p.price),
+      stock: String(p.stock),
+      image: p.image,
+      description: p.description,
+    });
+    setOpen(true);
   };
 
   return (
@@ -75,15 +101,24 @@ const AdminProducts = () => {
           </p>
         </div>
 
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button className="tracking-[0.2em] text-xs h-11">
-              <Plus className="w-4 h-4" /> ADD PRODUCT
-            </Button>
-          </DialogTrigger>
+        <Dialog
+          open={open}
+          onOpenChange={(o) => {
+            setOpen(o);
+            if (!o) {
+              setEditingId(null);
+              setForm(emptyForm);
+            }
+          }}
+        >
+          <Button onClick={openAdd} className="tracking-[0.2em] text-xs h-11">
+            <Plus className="w-4 h-4" /> ADD PRODUCT
+          </Button>
           <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="font-serif text-2xl">Add New Product</DialogTitle>
+              <DialogTitle className="font-serif text-2xl">
+                {editingId ? "Edit Product" : "Add New Product"}
+              </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4 pt-2">
               <div className="space-y-2">
@@ -170,7 +205,7 @@ const AdminProducts = () => {
               </div>
 
               <Button type="submit" className="w-full h-11 tracking-[0.2em] text-xs">
-                ADD PRODUCT
+                {editingId ? "SAVE CHANGES" : "ADD PRODUCT"}
               </Button>
             </form>
           </DialogContent>
@@ -200,18 +235,29 @@ const AdminProducts = () => {
                     <p className="text-sm font-medium text-foreground">PKR {p.price.toLocaleString()}</p>
                     <p className="text-xs text-muted-foreground">Stock: {p.stock}</p>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-muted-foreground hover:text-destructive"
-                    onClick={() => {
-                      removeProduct(p.id);
-                      toast.success("Product removed");
-                    }}
-                    aria-label="Delete product"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-foreground"
+                      onClick={() => openEdit(p)}
+                      aria-label="Edit product"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-destructive"
+                      onClick={() => {
+                        removeProduct(p.id);
+                        toast.success("Product removed");
+                      }}
+                      aria-label="Delete product"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
