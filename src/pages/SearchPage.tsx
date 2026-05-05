@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search } from "lucide-react";
+import { Search, SlidersHorizontal } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WishlistButton from "@/components/WishlistButton";
@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter } from "@/components/ui/sheet";
 import { useStorefrontProducts } from "@/hooks/useStorefrontProducts";
 import { formatPrice } from "@/data/products";
 
@@ -29,8 +31,86 @@ const SearchPage = () => {
   const [price, setPrice] = useState<number>(maxPrice);
   const [onlyNew, setOnlyNew] = useState(false);
 
-  const toggleCat = (k: string) =>
-    setCats((c) => (c.includes(k) ? c.filter((x) => x !== k) : [...c, k]));
+  // Mobile drafts (applied on "Apply")
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [draftCats, setDraftCats] = useState<string[]>(cats);
+  const [draftPrice, setDraftPrice] = useState<number>(price);
+  const [draftOnlyNew, setDraftOnlyNew] = useState<boolean>(onlyNew);
+
+  const toggleCat = (k: string, setter: (fn: (c: string[]) => string[]) => void) =>
+    setter((c) => (c.includes(k) ? c.filter((x) => x !== k) : [...c, k]));
+
+  const openMobile = (open: boolean) => {
+    if (open) {
+      setDraftCats(cats);
+      setDraftPrice(price);
+      setDraftOnlyNew(onlyNew);
+    }
+    setMobileOpen(open);
+  };
+
+  const applyMobile = () => {
+    setCats(draftCats);
+    setPrice(draftPrice);
+    setOnlyNew(draftOnlyNew);
+    setMobileOpen(false);
+  };
+
+  const resetMobile = () => {
+    setDraftCats([]);
+    setDraftPrice(maxPrice);
+    setDraftOnlyNew(false);
+  };
+
+  const activeCount =
+    cats.length + (onlyNew ? 1 : 0) + (price < maxPrice ? 1 : 0);
+
+  const FilterFields = ({
+    cats: fc,
+    price: fp,
+    onlyNew: fn,
+    onToggleCat,
+    onPrice,
+    onOnlyNew,
+  }: {
+    cats: string[];
+    price: number;
+    onlyNew: boolean;
+    onToggleCat: (k: string) => void;
+    onPrice: (n: number) => void;
+    onOnlyNew: (v: boolean) => void;
+  }) => (
+    <>
+      <div className="mb-8">
+        <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase mb-4">Categories</p>
+        <div className="space-y-3">
+          {CATEGORIES.map((c) => (
+            <label key={c.key} className="flex items-center gap-3 cursor-pointer">
+              <Checkbox checked={fc.includes(c.key)} onCheckedChange={() => onToggleCat(c.key)} />
+              <span className="text-sm text-foreground">{c.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className="mb-8">
+        <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase mb-4">Price Range</p>
+        <Slider value={[fp]} min={0} max={maxPrice} step={500} onValueChange={(v) => onPrice(v[0])} />
+        <div className="flex justify-between text-xs text-muted-foreground mt-3">
+          <span>PKR 0</span>
+          <span>{formatPrice(fp, "PKR")}</span>
+        </div>
+      </div>
+
+      <div>
+        <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase mb-4">Product Type</p>
+        <label className="flex items-center gap-3 cursor-pointer">
+          <Checkbox checked={fn} onCheckedChange={(v) => onOnlyNew(!!v)} />
+          <span className="text-sm text-foreground">New Arrivals</span>
+        </label>
+      </div>
+    </>
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -70,54 +150,62 @@ const SearchPage = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8">
-            {/* Filters */}
-            <aside className="bg-card border border-border rounded-md p-6 h-fit lg:sticky lg:top-28">
+            {/* Desktop Filters */}
+            <aside className="hidden lg:block bg-card border border-border rounded-md p-6 h-fit lg:sticky lg:top-28">
               <h2 className="font-serif text-xl mb-6 text-foreground">Filters</h2>
-
-              <div className="mb-8">
-                <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase mb-4">Categories</p>
-                <div className="space-y-3">
-                  {CATEGORIES.map((c) => (
-                    <label key={c.key} className="flex items-center gap-3 cursor-pointer">
-                      <Checkbox
-                        checked={cats.includes(c.key)}
-                        onCheckedChange={() => toggleCat(c.key)}
-                      />
-                      <span className="text-sm text-foreground">{c.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mb-8">
-                <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase mb-4">Price Range</p>
-                <Slider
-                  value={[price]}
-                  min={0}
-                  max={maxPrice}
-                  step={500}
-                  onValueChange={(v) => setPrice(v[0])}
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-3">
-                  <span>PKR 0</span>
-                  <span>{formatPrice(price, "PKR")}</span>
-                </div>
-              </div>
-
-              <div>
-                <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase mb-4">Product Type</p>
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <Checkbox checked={onlyNew} onCheckedChange={(v) => setOnlyNew(!!v)} />
-                  <span className="text-sm text-foreground">New Arrivals</span>
-                </label>
-              </div>
+              <FilterFields
+                cats={cats}
+                price={price}
+                onlyNew={onlyNew}
+                onToggleCat={(k) => toggleCat(k, setCats)}
+                onPrice={setPrice}
+                onOnlyNew={setOnlyNew}
+              />
             </aside>
 
             {/* Results */}
             <section>
-              <p className="text-sm text-muted-foreground mb-6 text-right">
-                {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
-              </p>
+              <div className="flex items-center justify-between mb-6 gap-4">
+                <Sheet open={mobileOpen} onOpenChange={openMobile}>
+                  <SheetTrigger asChild>
+                    <Button variant="outline" size="sm" className="lg:hidden gap-2">
+                      <SlidersHorizontal className="w-4 h-4" />
+                      Filters
+                      {activeCount > 0 && (
+                        <Badge className="ml-1 h-5 px-1.5 bg-accent text-accent-foreground hover:bg-accent">
+                          {activeCount}
+                        </Badge>
+                      )}
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="left" className="w-full sm:max-w-sm flex flex-col p-0">
+                    <SheetHeader className="px-6 pt-6 pb-4 border-b border-border">
+                      <SheetTitle className="font-serif text-2xl text-left">Filters</SheetTitle>
+                    </SheetHeader>
+                    <div className="flex-1 overflow-y-auto px-6 py-6">
+                      <FilterFields
+                        cats={draftCats}
+                        price={draftPrice}
+                        onlyNew={draftOnlyNew}
+                        onToggleCat={(k) => toggleCat(k, setDraftCats)}
+                        onPrice={setDraftPrice}
+                        onOnlyNew={setDraftOnlyNew}
+                      />
+                    </div>
+                    <SheetFooter className="px-6 py-4 border-t border-border flex-row gap-3 sm:flex-row sm:justify-stretch">
+                      <Button variant="outline" className="flex-1" onClick={resetMobile}>
+                        Reset
+                      </Button>
+                      <Button className="flex-1" onClick={applyMobile}>
+                        Apply
+                      </Button>
+                    </SheetFooter>
+                  </SheetContent>
+                </Sheet>
+                <p className="text-sm text-muted-foreground ml-auto">
+                  {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
+                </p>
+              </div>
 
               {filtered.length === 0 ? (
                 <div className="text-center py-24 border border-border rounded-md bg-card/50">
