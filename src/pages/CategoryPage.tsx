@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, ChevronRight } from "lucide-react";
-import { getProductsByCategory, formatPrice } from "@/data/products";
+import { formatPrice } from "@/data/products";
+import { useStorefrontProductsByCategory } from "@/hooks/useStorefrontProducts";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WishlistButton from "@/components/WishlistButton";
@@ -13,7 +14,7 @@ const categoryMeta: Record<string, { title: string; subtitle: string }> = {
 
 const CategoryPage = () => {
   const { category } = useParams<{ category: string }>();
-  const products = getProductsByCategory(category || "");
+  const products = useStorefrontProductsByCategory(category || "");
   const meta = categoryMeta[category || ""];
 
   if (!meta || products.length === 0) {

@@ -1,14 +1,15 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, ShoppingBag } from "lucide-react";
-import { products, formatPrice } from "@/data/products";
+import { formatPrice } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
+import { useStorefrontProducts } from "@/hooks/useStorefrontProducts";
 import AnimateOnScroll from "@/components/AnimateOnScroll";
 import WishlistButton from "@/components/WishlistButton";
 
-const newProducts = products.filter((p) => p.isNew);
-
 const NewArrivals = () => {
   const { addItem } = useCart();
+  const allProducts = useStorefrontProducts();
+  const newProducts = allProducts.filter((p) => p.isNew);
 
   return (
     <section id="new-arrivals" className="py-16 md:py-24 bg-card/50">
