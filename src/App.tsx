@@ -18,6 +18,7 @@ import AdminLogin from "./pages/admin/AdminLogin.tsx";
 import AdminLayout from "./pages/admin/AdminLayout.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import AdminProducts from "./pages/admin/AdminProducts.tsx";
+import SearchPage from "./pages/SearchPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
                   <Route path="/category/:category" element={<CategoryPage />} />
                   <Route path="/product/:slug" element={<ProductDetail />} />
                   <Route path="/wishlist" element={<WishlistPage />} />
+                  <Route path="/search" element={<SearchPage />} />
                   <Route path="/signin" element={<SignIn />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
