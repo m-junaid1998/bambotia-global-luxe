@@ -65,6 +65,19 @@ const AdminProducts = () => {
   const [draftRestored, setDraftRestored] = useState(false);
   const skipNextPersistRef = useRef(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  // Scroll to & briefly highlight a newly added product
+  useEffect(() => {
+    if (!highlightId) return;
+    const el = cardRefs.current.get(highlightId);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    const t = setTimeout(() => setHighlightId(null), 2400);
+    return () => clearTimeout(t);
+  }, [highlightId, products]);
 
   // Drop selections that no longer match an existing product
   useEffect(() => {
@@ -171,8 +184,19 @@ const AdminProducts = () => {
       updateProduct(editingId, payload);
       toast.success("Product updated");
     } else {
-      addProduct(payload);
-      toast.success("Product added");
+      const newId = addProduct(payload);
+      setHighlightId(newId);
+      toast.success("Product added", {
+        description: `${payload.name} is now in your catalog.`,
+        action: {
+          label: "View",
+          onClick: () => {
+            const el = cardRefs.current.get(newId);
+            el?.scrollIntoView({ behavior: "smooth", block: "center" });
+            setHighlightId(newId);
+          },
+        },
+      });
     }
     skipNextPersistRef.current = true;
     localStorage.removeItem(DRAFT_KEY);
@@ -541,9 +565,15 @@ const AdminProducts = () => {
           {products.map((p) => (
             <div
               key={p.id}
+              ref={(el) => {
+                if (el) cardRefs.current.set(p.id, el);
+                else cardRefs.current.delete(p.id);
+              }}
               className={`bg-card border rounded-lg overflow-hidden group relative transition-colors ${
                 selectedIds.has(p.id) ? "border-accent ring-1 ring-accent/40" : "border-border"
-              } ${!p.published ? "opacity-75" : ""}`}
+              } ${!p.published ? "opacity-75" : ""} ${
+                highlightId === p.id ? "ring-2 ring-accent shadow-lg animate-pulse" : ""
+              }`}
             >
               <div className="aspect-square bg-muted/30 overflow-hidden relative">
                 <img
