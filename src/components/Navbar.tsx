@@ -1,18 +1,17 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Search, Heart, ShoppingBag, Menu, X, User } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import CartDrawer from "@/components/CartDrawer";
-import SearchOverlay from "@/components/SearchOverlay";
 import logo from "@/assets/bambotia-logo.png";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const { totalItems } = useCart();
   const { items: wishlistItems } = useWishlist();
+  const navigate = useNavigate();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
@@ -29,7 +28,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="text-foreground hover:text-accent transition-colors" aria-label="Search" onClick={() => setSearchOpen(true)}>
+            <button className="text-foreground hover:text-accent transition-colors" aria-label="Search" onClick={() => navigate("/search")}>
               <Search className="w-5 h-5" />
             </button>
             <Link to="/signin" className="hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Account">
@@ -80,7 +79,6 @@ const Navbar = () => {
       )}
 
       <CartDrawer open={cartOpen} onOpenChange={setCartOpen} />
-      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </nav>
   );
 };
