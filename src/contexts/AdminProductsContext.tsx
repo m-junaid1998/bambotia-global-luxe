@@ -14,7 +14,7 @@ export interface AdminProduct {
 
 interface AdminProductsContextValue {
   products: AdminProduct[];
-  addProduct: (p: Omit<AdminProduct, "id" | "createdAt">) => void;
+  addProduct: (p: Omit<AdminProduct, "id" | "createdAt">) => string;
   removeProduct: (id: string) => void;
   updateProduct: (id: string, p: Omit<AdminProduct, "id" | "createdAt">) => void;
   togglePublished: (id: string) => void;
@@ -46,10 +46,9 @@ export const AdminProductsProvider = ({ children }: { children: ReactNode }) => 
   }, [products]);
 
   const addProduct: AdminProductsContextValue["addProduct"] = (p) => {
-    setProducts((prev) => [
-      { ...p, id: crypto.randomUUID(), createdAt: Date.now() },
-      ...prev,
-    ]);
+    const id = crypto.randomUUID();
+    setProducts((prev) => [{ ...p, id, createdAt: Date.now() }, ...prev]);
+    return id;
   };
 
   const removeProduct = (id: string) => {
