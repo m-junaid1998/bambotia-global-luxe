@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, ShoppingBag, Minus, Plus, ChevronRight } from "lucide-react";
-import { getProductBySlug, formatPrice } from "@/data/products";
+import { formatPrice } from "@/data/products";
+import { useStorefrontProductBySlug } from "@/hooks/useStorefrontProducts";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import Navbar from "@/components/Navbar";
@@ -9,7 +10,7 @@ import Footer from "@/components/Footer";
 
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const product = getProductBySlug(slug || "");
+  const product = useStorefrontProductBySlug(slug || "");
   const { addItem } = useCart();
   const { toggleItem, isWishlisted } = useWishlist();
   const [selectedImage, setSelectedImage] = useState(0);
