@@ -7,6 +7,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ProductReviews from "@/components/ProductReviews";
 
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -183,6 +184,8 @@ const ProductDetail = () => {
               <ArrowLeft className="w-4 h-4" /> Back to {categoryLabel}
             </Link>
           </div>
+
+          <ProductReviews productId={product.id} />
         </div>
       </main>
 
