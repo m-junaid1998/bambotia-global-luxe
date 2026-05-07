@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WishlistButton from "@/components/WishlistButton";
@@ -61,6 +61,19 @@ const SearchPage = () => {
     setDraftPrice(maxPrice);
     setDraftOnlyNew(false);
   };
+
+  const resetAll = () => {
+    setQuery("");
+    setCats([]);
+    setPrice(maxPrice);
+    setOnlyNew(false);
+  };
+
+  const hasActiveFilters =
+    query.trim().length > 0 ||
+    cats.length > 0 ||
+    onlyNew ||
+    price < maxPrice;
 
   const activeCount =
     cats.length + (onlyNew ? 1 : 0) + (price < maxPrice ? 1 : 0);
@@ -152,7 +165,15 @@ const SearchPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8">
             {/* Desktop Filters */}
             <aside className="hidden lg:block bg-card border border-border rounded-md p-6 h-fit lg:sticky lg:top-28">
-              <h2 className="font-serif text-xl mb-6 text-foreground">Filters</h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-serif text-xl text-foreground">Filters</h2>
+                {hasActiveFilters && (
+                  <Button variant="ghost" size="sm" className="h-8 gap-1 text-muted-foreground hover:text-foreground" onClick={resetAll}>
+                    <X className="w-3.5 h-3.5" />
+                    Clear
+                  </Button>
+                )}
+              </div>
               <FilterFields
                 cats={cats}
                 price={price}
@@ -161,6 +182,12 @@ const SearchPage = () => {
                 onPrice={setPrice}
                 onOnlyNew={setOnlyNew}
               />
+              {hasActiveFilters && (
+                <Button variant="outline" className="w-full mt-6 gap-1" onClick={resetAll}>
+                  <X className="w-4 h-4" />
+                  Reset all filters
+                </Button>
+              )}
             </aside>
 
             {/* Results */}
@@ -202,9 +229,17 @@ const SearchPage = () => {
                     </SheetFooter>
                   </SheetContent>
                 </Sheet>
-                <p className="text-sm text-muted-foreground ml-auto">
-                  {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
-                </p>
+                <div className="flex items-center gap-3 ml-auto">
+                  {hasActiveFilters && (
+                    <Button variant="ghost" size="sm" className="hidden sm:inline-flex h-8 gap-1 text-muted-foreground hover:text-foreground" onClick={resetAll}>
+                      <X className="w-3.5 h-3.5" />
+                      Clear
+                    </Button>
+                  )}
+                  <p className="text-sm text-muted-foreground">
+                    {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
+                  </p>
+                </div>
               </div>
 
               {filtered.length === 0 ? (
