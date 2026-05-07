@@ -229,9 +229,17 @@ const SearchPage = () => {
                     </SheetFooter>
                   </SheetContent>
                 </Sheet>
-                <p className="text-sm text-muted-foreground ml-auto">
-                  {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
-                </p>
+                <div className="flex items-center gap-3 ml-auto">
+                  {hasActiveFilters && (
+                    <Button variant="ghost" size="sm" className="hidden sm:inline-flex h-8 gap-1 text-muted-foreground hover:text-foreground" onClick={resetAll}>
+                      <X className="w-3.5 h-3.5" />
+                      Clear
+                    </Button>
+                  )}
+                  <p className="text-sm text-muted-foreground">
+                    {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
+                  </p>
+                </div>
               </div>
 
               {filtered.length === 0 ? (
