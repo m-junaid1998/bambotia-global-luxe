@@ -62,6 +62,19 @@ const SearchPage = () => {
     setDraftOnlyNew(false);
   };
 
+  const resetAll = () => {
+    setQuery("");
+    setCats([]);
+    setPrice(maxPrice);
+    setOnlyNew(false);
+  };
+
+  const hasActiveFilters =
+    query.trim().length > 0 ||
+    cats.length > 0 ||
+    onlyNew ||
+    price < maxPrice;
+
   const activeCount =
     cats.length + (onlyNew ? 1 : 0) + (price < maxPrice ? 1 : 0);
 
