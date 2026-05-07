@@ -27,20 +27,16 @@ const Footer = () => (
         <div>
           <h4 className="font-heading text-sm font-semibold text-foreground mb-4 tracking-wider">ABOUT</h4>
           <ul className="space-y-2.5 text-sm text-muted-foreground">
-            <li><a href="#" className="hover:text-accent transition-colors">Our Story</a></li>
-            <li><a href="#" className="hover:text-accent transition-colors">Craftsmanship</a></li>
-            <li><a href="#" className="hover:text-accent transition-colors">Press</a></li>
-            <li><a href="#" className="hover:text-accent transition-colors">Blog</a></li>
+            <li><Link to="/our-story" className="hover:text-accent transition-colors">Our Story</Link></li>
           </ul>
         </div>
 
         <div>
           <h4 className="font-heading text-sm font-semibold text-foreground mb-4 tracking-wider">SUPPORT</h4>
           <ul className="space-y-2.5 text-sm text-muted-foreground">
-            <li><a href="#" className="hover:text-accent transition-colors">Contact Us</a></li>
-            <li><a href="#" className="hover:text-accent transition-colors">Shipping & Returns</a></li>
-            <li><a href="#" className="hover:text-accent transition-colors">FAQs</a></li>
-            <li><a href="#" className="hover:text-accent transition-colors">Size Guide</a></li>
+            <li><Link to="/contact" className="hover:text-accent transition-colors">Contact Us</Link></li>
+            <li><Link to="/shipping-returns" className="hover:text-accent transition-colors">Shipping & Returns</Link></li>
+            <li><Link to="/faqs" className="hover:text-accent transition-colors">FAQs</Link></li>
           </ul>
         </div>
       </div>
@@ -74,9 +70,8 @@ const Footer = () => (
           © 2026 BAMBOTIA. All rights reserved.
         </p>
         <div className="flex gap-6 text-xs text-muted-foreground">
-          <a href="#" className="hover:text-accent transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-accent transition-colors">Terms of Service</a>
-          <a href="#" className="hover:text-accent transition-colors">Accessibility</a>
+          <Link to="/privacy-policy" className="hover:text-accent transition-colors">Privacy Policy</Link>
+          <Link to="/terms-of-service" className="hover:text-accent transition-colors">Terms of Service</Link>
         </div>
       </div>
     </div>
