@@ -19,6 +19,12 @@ import AdminLayout from "./pages/admin/AdminLayout.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import AdminProducts from "./pages/admin/AdminProducts.tsx";
 import SearchPage from "./pages/SearchPage.tsx";
+import OurStory from "./pages/OurStory.tsx";
+import Contact from "./pages/Contact.tsx";
+import ShippingReturns from "./pages/ShippingReturns.tsx";
+import FAQs from "./pages/FAQs.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
+import TermsOfService from "./pages/TermsOfService.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -39,6 +45,12 @@ const App = () => (
                   <Route path="/product/:slug" element={<ProductDetail />} />
                   <Route path="/wishlist" element={<WishlistPage />} />
                   <Route path="/search" element={<SearchPage />} />
+                  <Route path="/our-story" element={<OurStory />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/shipping-returns" element={<ShippingReturns />} />
+                  <Route path="/faqs" element={<FAQs />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms-of-service" element={<TermsOfService />} />
                   <Route path="/signin" element={<SignIn />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
