@@ -158,6 +158,10 @@ const ProductReviews = ({ productId }: { productId: string }) => {
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [lightbox, setLightbox] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setAll(loadAll());
@@ -194,16 +198,43 @@ const ProductReviews = ({ productId }: { productId: string }) => {
       title: title.trim(),
       comment: comment.trim(),
       createdAt: Date.now(),
+      photos: photos.length ? photos : undefined,
     };
     const updated = [next, ...all];
-    setAll(updated);
-    saveAll(updated);
+    try {
+      saveAll(updated);
+      setAll(updated);
+    } catch {
+      toast.error("Could not save your photos — they may be too large.");
+      return;
+    }
     setName("");
     setRating(0);
     setTitle("");
     setComment("");
+    setPhotos([]);
     setShowForm(false);
     toast.success("Thank you! Your review has been posted.");
+  };
+
+  const handleFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const remaining = MAX_PHOTOS - photos.length;
+    if (remaining <= 0) {
+      toast.error(`You can attach up to ${MAX_PHOTOS} photos.`);
+      return;
+    }
+    const list = Array.from(files).slice(0, remaining);
+    setUploading(true);
+    try {
+      const encoded = await Promise.all(list.map(fileToCompressedDataUrl));
+      setPhotos((p) => [...p, ...encoded]);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not process image.");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   };
 
   return (
