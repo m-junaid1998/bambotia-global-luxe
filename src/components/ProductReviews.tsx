@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { Star } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Star, ImagePlus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "sonner";
 
 export interface Review {
@@ -14,9 +15,39 @@ export interface Review {
   title: string;
   comment: string;
   createdAt: number;
+  photos?: string[];
 }
 
 const STORAGE_KEY = "bambotia_reviews_v1";
+const MAX_PHOTOS = 4;
+const MAX_EDGE = 1024;
+const MAX_FILE_BYTES = 8 * 1024 * 1024;
+
+const fileToCompressedDataUrl = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    if (!file.type.startsWith("image/")) return reject(new Error("Not an image"));
+    if (file.size > MAX_FILE_BYTES) return reject(new Error("Image is too large (max 8MB)"));
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Failed to read file"));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("Failed to load image"));
+      img.onload = () => {
+        const scale = Math.min(1, MAX_EDGE / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas not supported"));
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", 0.82));
+      };
+      img.src = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  });
 
 const seedReviews: Review[] = [
   {
@@ -127,6 +158,10 @@ const ProductReviews = ({ productId }: { productId: string }) => {
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [lightbox, setLightbox] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setAll(loadAll());
@@ -163,16 +198,43 @@ const ProductReviews = ({ productId }: { productId: string }) => {
       title: title.trim(),
       comment: comment.trim(),
       createdAt: Date.now(),
+      photos: photos.length ? photos : undefined,
     };
     const updated = [next, ...all];
-    setAll(updated);
-    saveAll(updated);
+    try {
+      saveAll(updated);
+      setAll(updated);
+    } catch {
+      toast.error("Could not save your photos — they may be too large.");
+      return;
+    }
     setName("");
     setRating(0);
     setTitle("");
     setComment("");
+    setPhotos([]);
     setShowForm(false);
     toast.success("Thank you! Your review has been posted.");
+  };
+
+  const handleFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const remaining = MAX_PHOTOS - photos.length;
+    if (remaining <= 0) {
+      toast.error(`You can attach up to ${MAX_PHOTOS} photos.`);
+      return;
+    }
+    const list = Array.from(files).slice(0, remaining);
+    setUploading(true);
+    try {
+      const encoded = await Promise.all(list.map(fileToCompressedDataUrl));
+      setPhotos((p) => [...p, ...encoded]);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not process image.");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   };
 
   return (
@@ -254,6 +316,45 @@ const ProductReviews = ({ productId }: { productId: string }) => {
               rows={4}
             />
           </div>
+          <div>
+            <label className="block text-xs tracking-wider text-muted-foreground mb-2">
+              ADD PHOTOS (OPTIONAL — UP TO {MAX_PHOTOS})
+            </label>
+            <div className="flex flex-wrap items-center gap-3">
+              {photos.map((src, i) => (
+                <div key={i} className="relative w-20 h-20 rounded-md overflow-hidden border border-border">
+                  <img src={src} alt={`Upload ${i + 1}`} className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => setPhotos((p) => p.filter((_, idx) => idx !== i))}
+                    className="absolute top-1 right-1 w-5 h-5 rounded-full bg-background/80 backdrop-blur flex items-center justify-center text-foreground hover:bg-background"
+                    aria-label="Remove photo"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+              {photos.length < MAX_PHOTOS && (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="w-20 h-20 rounded-md border border-dashed border-border flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-accent hover:border-accent transition-colors disabled:opacity-50"
+                >
+                  <ImagePlus className="w-5 h-5" />
+                  <span className="text-[10px] tracking-wider">{uploading ? "..." : "ADD"}</span>
+                </button>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => handleFiles(e.target.files)}
+              />
+            </div>
+          </div>
           <div className="flex justify-end">
             <Button type="submit" className="rounded-full px-8">
               Submit review
@@ -282,11 +383,38 @@ const ProductReviews = ({ productId }: { productId: string }) => {
                   <h4 className="text-sm font-semibold text-foreground mt-2">{r.title}</h4>
                 )}
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">{r.comment}</p>
+                {r.photos && r.photos.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {r.photos.map((src, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setLightbox(src)}
+                        className="w-20 h-20 rounded-md overflow-hidden border border-border hover:border-accent transition-colors"
+                      >
+                        <img
+                          src={src}
+                          alt={`${r.name} review photo ${i + 1}`}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      <Dialog open={!!lightbox} onOpenChange={(o) => !o && setLightbox(null)}>
+        <DialogContent className="max-w-3xl p-2 bg-background border-border">
+          {lightbox && (
+            <img src={lightbox} alt="Review photo" className="w-full h-auto rounded-sm" />
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
