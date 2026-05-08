@@ -69,6 +69,7 @@ const PageShell = ({ eyebrow, title, subtitle, seoTitle, seoDescription, childre
     </main>
     <Footer />
   </div>
-);
+  );
+};
 
 export default PageShell;
