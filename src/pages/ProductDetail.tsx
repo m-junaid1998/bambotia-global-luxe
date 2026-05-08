@@ -8,6 +8,7 @@ import { useWishlist } from "@/contexts/WishlistContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductReviews from "@/components/ProductReviews";
+import Seo from "@/components/Seo";
 
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -30,6 +31,11 @@ const ProductDetail = () => {
 
   const categoryLabel = product.category.charAt(0).toUpperCase() + product.category.slice(1);
 
+  const seoTitle = `${product.name} — ${categoryLabel} | BAMBOTIA`;
+  const seoDescription =
+    product.description.replace(/\s+/g, " ").trim() ||
+    `Shop the ${product.name} at BAMBOTIA — ${formatPrice(product.price, product.currency)}.`;
+
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
       addItem({
@@ -45,6 +51,12 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={seoTitle}
+        description={seoDescription}
+        image={product.images[0]}
+        type="product"
+      />
       <Navbar />
 
       <main className="pt-24 pb-20">
