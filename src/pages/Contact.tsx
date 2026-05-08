@@ -15,6 +15,8 @@ const Contact = () => {
       eyebrow="GET IN TOUCH"
       title="Contact Us"
       subtitle="Our concierge team is here to help — typically replying within 24 hours."
+      seoTitle="Contact BAMBOTIA — Concierge & Support"
+      seoDescription="Reach BAMBOTIA's concierge team for orders, custom pieces & support. Email, phone or visit our Lahore atelier."
     >
       <div className="grid md:grid-cols-3 gap-6 not-prose mb-10">
         {[
