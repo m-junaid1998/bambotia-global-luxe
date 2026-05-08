@@ -1,7 +1,13 @@
 import PageShell from "@/components/PageShell";
 
 const PrivacyPolicy = () => (
-  <PageShell eyebrow="LEGAL" title="Privacy Policy" subtitle="Last updated: May 2026">
+  <PageShell
+    eyebrow="LEGAL"
+    title="Privacy Policy"
+    subtitle="Last updated: May 2026"
+    seoTitle="Privacy Policy | BAMBOTIA"
+    seoDescription="How BAMBOTIA collects, uses and protects your personal information. Your data, your rights, our commitments."
+  >
     <p>
       BAMBOTIA ("we", "us") respects your privacy. This policy explains what
       personal information we collect, how we use it, and the choices you have.
