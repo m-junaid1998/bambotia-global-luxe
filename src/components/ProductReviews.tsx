@@ -316,6 +316,45 @@ const ProductReviews = ({ productId }: { productId: string }) => {
               rows={4}
             />
           </div>
+          <div>
+            <label className="block text-xs tracking-wider text-muted-foreground mb-2">
+              ADD PHOTOS (OPTIONAL — UP TO {MAX_PHOTOS})
+            </label>
+            <div className="flex flex-wrap items-center gap-3">
+              {photos.map((src, i) => (
+                <div key={i} className="relative w-20 h-20 rounded-md overflow-hidden border border-border">
+                  <img src={src} alt={`Upload ${i + 1}`} className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => setPhotos((p) => p.filter((_, idx) => idx !== i))}
+                    className="absolute top-1 right-1 w-5 h-5 rounded-full bg-background/80 backdrop-blur flex items-center justify-center text-foreground hover:bg-background"
+                    aria-label="Remove photo"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+              {photos.length < MAX_PHOTOS && (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="w-20 h-20 rounded-md border border-dashed border-border flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-accent hover:border-accent transition-colors disabled:opacity-50"
+                >
+                  <ImagePlus className="w-5 h-5" />
+                  <span className="text-[10px] tracking-wider">{uploading ? "..." : "ADD"}</span>
+                </button>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => handleFiles(e.target.files)}
+              />
+            </div>
+          </div>
           <div className="flex justify-end">
             <Button type="submit" className="rounded-full px-8">
               Submit review
@@ -344,11 +383,38 @@ const ProductReviews = ({ productId }: { productId: string }) => {
                   <h4 className="text-sm font-semibold text-foreground mt-2">{r.title}</h4>
                 )}
                 <p className="text-sm text-muted-foreground leading-relaxed mt-1">{r.comment}</p>
+                {r.photos && r.photos.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {r.photos.map((src, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setLightbox(src)}
+                        className="w-20 h-20 rounded-md overflow-hidden border border-border hover:border-accent transition-colors"
+                      >
+                        <img
+                          src={src}
+                          alt={`${r.name} review photo ${i + 1}`}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      <Dialog open={!!lightbox} onOpenChange={(o) => !o && setLightbox(null)}>
+        <DialogContent className="max-w-3xl p-2 bg-background border-border">
+          {lightbox && (
+            <img src={lightbox} alt="Review photo" className="w-full h-auto rounded-sm" />
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
