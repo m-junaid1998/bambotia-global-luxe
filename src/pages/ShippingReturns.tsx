@@ -5,6 +5,8 @@ const ShippingReturns = () => (
     eyebrow="LOGISTICS"
     title="Shipping & Returns"
     subtitle="Everything you need to know about delivery and our return policy."
+    seoTitle="Shipping & Returns | BAMBOTIA"
+    seoDescription="BAMBOTIA shipping & returns: 2–4 day Pakistan delivery, worldwide DHL Express, 14-day returns on eligible items."
   >
     <h2>Shipping</h2>
     <ul>

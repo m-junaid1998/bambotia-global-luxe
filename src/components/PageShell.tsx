@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { ReactNode, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,10 +8,46 @@ interface PageShellProps {
   eyebrow?: string;
   title: string;
   subtitle?: string;
+  seoTitle?: string;
+  seoDescription?: string;
   children: ReactNode;
 }
 
-const PageShell = ({ eyebrow, title, subtitle, children }: PageShellProps) => (
+const upsertMeta = (name: string, content: string, attr: "name" | "property" = "name") => {
+  let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);
+  if (!el) {
+    el = document.createElement("meta");
+    el.setAttribute(attr, name);
+    document.head.appendChild(el);
+  }
+  el.setAttribute("content", content);
+};
+
+const upsertCanonical = (href: string) => {
+  let el = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  if (!el) {
+    el = document.createElement("link");
+    el.setAttribute("rel", "canonical");
+    document.head.appendChild(el);
+  }
+  el.setAttribute("href", href);
+};
+
+const PageShell = ({ eyebrow, title, subtitle, seoTitle, seoDescription, children }: PageShellProps) => {
+  const location = useLocation();
+  useEffect(() => {
+    const finalTitle = seoTitle ?? `${title} | BAMBOTIA`;
+    const finalDesc = seoDescription ?? subtitle ?? "BAMBOTIA — Global Luxury meets Pakistani Elegance.";
+    document.title = finalTitle.length > 60 ? finalTitle.slice(0, 57) + "..." : finalTitle;
+    upsertMeta("description", finalDesc.length > 160 ? finalDesc.slice(0, 157) + "..." : finalDesc);
+    upsertMeta("og:title", finalTitle, "property");
+    upsertMeta("og:description", finalDesc, "property");
+    upsertMeta("twitter:title", finalTitle);
+    upsertMeta("twitter:description", finalDesc);
+    upsertCanonical(window.location.origin + location.pathname);
+  }, [title, subtitle, seoTitle, seoDescription, location.pathname]);
+
+  return (
   <div className="min-h-screen bg-background">
     <Navbar />
     <main className="pt-24 pb-20">
@@ -33,6 +69,7 @@ const PageShell = ({ eyebrow, title, subtitle, children }: PageShellProps) => (
     </main>
     <Footer />
   </div>
-);
+  );
+};
 
 export default PageShell;

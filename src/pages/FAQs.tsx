@@ -38,6 +38,8 @@ const FAQs = () => (
     eyebrow="HELP CENTER"
     title="Frequently Asked Questions"
     subtitle="Quick answers to the things our clients ask most."
+    seoTitle="FAQs | BAMBOTIA Help Center"
+    seoDescription="Answers to common questions about BAMBOTIA orders, shipping, payment, jewellery care, bespoke pieces and returns."
   >
     <div className="not-prose">
       <Accordion type="single" collapsible className="w-full">

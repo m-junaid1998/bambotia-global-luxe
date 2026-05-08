@@ -5,6 +5,8 @@ const OurStory = () => (
     eyebrow="ABOUT BAMBOTIA"
     title="Our Story"
     subtitle="Where global luxury meets Pakistani elegance."
+    seoTitle="Our Story | BAMBOTIA"
+    seoDescription="Discover BAMBOTIA — where global luxury meets Pakistani elegance. Crafted jewellery, cosmetics & purses, made with intention."
   >
     <p>
       BAMBOTIA was born from a simple belief: every woman deserves pieces that
