@@ -1,7 +1,13 @@
 import PageShell from "@/components/PageShell";
 
 const TermsOfService = () => (
-  <PageShell eyebrow="LEGAL" title="Terms of Service" subtitle="Last updated: May 2026">
+  <PageShell
+    eyebrow="LEGAL"
+    title="Terms of Service"
+    subtitle="Last updated: May 2026"
+    seoTitle="Terms of Service | BAMBOTIA"
+    seoDescription="The terms governing your use of bambotia.com — orders, pricing, intellectual property and liability."
+  >
     <p>
       By accessing or using bambotia.com, you agree to be bound by these terms.
       Please read them carefully.
