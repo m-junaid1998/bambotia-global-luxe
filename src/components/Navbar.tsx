@@ -18,7 +18,12 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link to="/" className="flex-shrink-0">
-            <img src={logo} alt="Bambotia" className="h-12 md:h-14 w-auto" />
+            <img
+              src={logo}
+              alt="Bambotia"
+              className="h-12 md:h-14 w-auto"
+              style={{ filter: "sepia(1) saturate(2.5) hue-rotate(0deg) brightness(1.1)" }}
+            />
           </Link>
 
           <div className="hidden md:flex items-center gap-10">
