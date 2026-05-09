@@ -1,4 +1,5 @@
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +19,7 @@ interface CartDrawerProps {
 
 const CartDrawer = ({ open, onOpenChange }: CartDrawerProps) => {
   const { items, addItem, removeItem, decrementItem, totalItems, totalPrice } = useCart();
+  const navigate = useNavigate();
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -93,7 +95,13 @@ const CartDrawer = ({ open, onOpenChange }: CartDrawerProps) => {
                   PKR {totalPrice.toLocaleString()}
                 </span>
               </div>
-              <Button className="w-full h-12 text-sm tracking-[0.15em] font-medium">
+              <Button
+                onClick={() => {
+                  onOpenChange(false);
+                  navigate("/checkout");
+                }}
+                className="w-full h-12 text-sm tracking-[0.15em] font-medium"
+              >
                 PROCEED TO CHECKOUT
               </Button>
               <button
