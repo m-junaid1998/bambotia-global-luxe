@@ -38,14 +38,14 @@ const SignUp = () => {
                   </Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input id="firstName" type="text" placeholder="Aisha" className="pl-10 h-12" required />
+                    <Input id="firstName" type="text" placeholder="ENTER FIRST NAME" className="pl-10 h-12" required />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName" className="text-xs tracking-[0.2em] text-foreground">
                     LAST NAME
                   </Label>
-                  <Input id="lastName" type="text" placeholder="Khan" className="h-12" required />
+                  <Input id="lastName" type="text" placeholder="ENTER LAST NAME" className="h-12" required />
                 </div>
               </div>
 
@@ -108,13 +108,11 @@ const SignUp = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 ">
               <Button variant="outline" className="h-11 text-xs tracking-wider">
                 Google
               </Button>
-              <Button variant="outline" className="h-11 text-xs tracking-wider">
-                Apple
-              </Button>
+              
             </div>
           </div>
 

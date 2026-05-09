@@ -99,13 +99,11 @@ const SignIn = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1">
               <Button variant="outline" className="h-11 text-xs tracking-wider">
                 Google
               </Button>
-              <Button variant="outline" className="h-11 text-xs tracking-wider">
-                Apple
-              </Button>
+             
             </div>
           </div>
 
