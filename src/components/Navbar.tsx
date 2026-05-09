@@ -4,7 +4,7 @@ import { Search, Heart, ShoppingBag, Menu, X, User } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import CartDrawer from "@/components/CartDrawer";
-import logo from "@/assets/Bambotialogo.png";
+import logo from "@/assets/logo.png";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
