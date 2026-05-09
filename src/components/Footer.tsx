@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { Instagram, Facebook, Twitter, ArrowRight } from "lucide-react";
-import logo from "@/assets/bambotia-logo.png";
+import logo from "@/assets/logo.png";
 
 const Footer = () => (
   <footer className="border-t border-border bg-card pt-16 pb-8">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
         <div className="col-span-2">
-          <img src={logo} alt="Bambotia" className="h-14 w-auto mb-4" />
+          <img src={logo} alt="Bambotia" className="h-[6em] w-auto mb-4" />
           <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
             Global Luxury meets Pakistani Elegance. Premium jewellery, cosmetics & designer purses curated for the modern woman.
           </p>

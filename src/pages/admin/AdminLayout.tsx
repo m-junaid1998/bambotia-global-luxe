@@ -2,7 +2,7 @@ import { Navigate, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { LayoutDashboard, Package, LogOut, Home } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/bambotia-logo.png";
+import logo from "@/assets/logo.png";
 
 const navItems = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -24,7 +24,7 @@ const AdminLayout = () => {
     <div className="min-h-screen bg-background flex w-full">
       <aside className="w-64 border-r border-border bg-card hidden md:flex flex-col">
         <div className="p-6 border-b border-border">
-          <img src={logo} alt="Bambotia" className="h-10 w-auto mb-3" />
+          <img src={logo} alt="Bambotia" className="h-[6em] w-auto mb-3" />
           <p className="text-[10px] tracking-[0.4em] text-accent">ADMIN PANEL</p>
         </div>
         <nav className="flex-1 p-4 space-y-1">
