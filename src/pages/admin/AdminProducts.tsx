@@ -1,5 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { Plus, Trash2, Package, Upload, Pencil, X, RefreshCw, Eye, EyeOff, Image as ImageIcon, Tag, DollarSign, ArrowRight } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Package,
+  Upload,
+  Pencil,
+  X,
+  RefreshCw,
+  Eye,
+  EyeOff,
+  Image as ImageIcon,
+  Tag,
+  DollarSign,
+  ArrowRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,7 +31,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAdminProducts, AdminProduct } from "@/contexts/AdminProductsContext";
+import {
+  useAdminProducts,
+  AdminProduct,
+} from "@/contexts/AdminProductsContext";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
@@ -117,7 +134,7 @@ const AdminProducts = () => {
     toast.success(
       `${ids.length} product${ids.length === 1 ? "" : "s"} ${
         publish ? "published" : "moved to draft"
-      }`
+      }`,
     );
     setSelectedIds(new Set());
   };
@@ -159,7 +176,8 @@ const AdminProducts = () => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => setForm((f) => ({ ...f, image: reader.result as string }));
+    reader.onload = () =>
+      setForm((f) => ({ ...f, image: reader.result as string }));
     reader.readAsDataURL(file);
   };
 
@@ -275,10 +293,15 @@ const AdminProducts = () => {
     <div className="space-y-8 max-w-7xl">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <p className="text-[10px] tracking-[0.4em] text-accent mb-2">CATALOG</p>
-          <h1 className="font-serif text-3xl md:text-4xl text-foreground">Products</h1>
+          <p className="text-[10px] tracking-[0.4em] text-accent mb-2">
+            CATALOG
+          </p>
+          <h1 className="font-serif text-3xl md:text-4xl text-foreground">
+            Products
+          </h1>
           <p className="text-sm text-muted-foreground mt-2">
-            Manage your product catalog. {products.length} custom product{products.length === 1 ? "" : "s"}.
+            Manage your product catalog. {products.length} custom product
+            {products.length === 1 ? "" : "s"}.
           </p>
         </div>
 
@@ -321,7 +344,9 @@ const AdminProducts = () => {
             )}
             <form onSubmit={handleSubmit} className="space-y-4 pt-2">
               <div className="space-y-2">
-                <Label className="text-xs tracking-[0.2em]">PRODUCT IMAGE *</Label>
+                <Label className="text-xs tracking-[0.2em]">
+                  PRODUCT IMAGE *
+                </Label>
                 {form.image ? (
                   <div className="space-y-2">
                     <div className="relative aspect-video w-full rounded-md border border-border bg-muted/30 overflow-hidden group">
@@ -368,7 +393,9 @@ const AdminProducts = () => {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs tracking-[0.2em]">PRODUCT NAME *</Label>
+                <Label className="text-xs tracking-[0.2em]">
+                  PRODUCT NAME *
+                </Label>
                 <Input
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -383,7 +410,12 @@ const AdminProducts = () => {
                   <Label className="text-xs tracking-[0.2em]">CATEGORY *</Label>
                   <Select
                     value={form.category}
-                    onValueChange={(v) => setForm({ ...form, category: v as AdminProduct["category"] })}
+                    onValueChange={(v) =>
+                      setForm({
+                        ...form,
+                        category: v as AdminProduct["category"],
+                      })
+                    }
                   >
                     <SelectTrigger className="h-11">
                       <SelectValue />
@@ -401,7 +433,9 @@ const AdminProducts = () => {
                     type="number"
                     min="0"
                     value={form.stock}
-                    onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, stock: e.target.value })
+                    }
                     placeholder="0"
                     className="h-11"
                   />
@@ -409,7 +443,9 @@ const AdminProducts = () => {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs tracking-[0.2em]">PRICE (PKR) *</Label>
+                <Label className="text-xs tracking-[0.2em]">
+                  PRICE (PKR) *
+                </Label>
                 <Input
                   type="number"
                   min="0"
@@ -421,11 +457,36 @@ const AdminProducts = () => {
                 />
               </div>
 
+              <div className="grid grid-cols-3 gap-4 items-end">
+              
+                <div className="flex flex-col gap-2">
+                  <Label className="text-xs tracking-[0.2em]">
+                    REGULAR PRICE
+                  </Label>
+                  <Input placeholder="Regular Price" />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Label className="text-xs tracking-[0.2em]">SALE PRICE</Label>
+                  <Input placeholder="Sale Price" />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Label className="text-xs tracking-[0.2em]">DISCOUNT</Label>
+
+                  <div className="h-10 flex items-center text-red-500 font-semibold border rounded-md px-3">
+                    0%
+                  </div>
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <Label className="text-xs tracking-[0.2em]">DESCRIPTION</Label>
                 <Textarea
                   value={form.description}
-                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, description: e.target.value })
+                  }
                   placeholder="Short product description..."
                   rows={3}
                 />
@@ -450,7 +511,10 @@ const AdminProducts = () => {
                 <Switch checked={published} onCheckedChange={setPublished} />
               </div>
 
-              <Button type="submit" className="w-full h-11 tracking-[0.2em] text-xs">
+              <Button
+                type="submit"
+                className="w-full h-11 tracking-[0.2em] text-xs"
+              >
                 {editingId ? "SAVE CHANGES" : "ADD PRODUCT"}
               </Button>
             </form>
@@ -464,7 +528,9 @@ const AdminProducts = () => {
             <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
               <Package className="w-7 h-7 text-accent" />
             </div>
-            <p className="text-[10px] tracking-[0.4em] text-accent mb-3">GET STARTED</p>
+            <p className="text-[10px] tracking-[0.4em] text-accent mb-3">
+              GET STARTED
+            </p>
             <h3 className="font-serif text-2xl md:text-3xl text-foreground mb-3">
               Your catalog is empty
             </h3>
@@ -477,9 +543,13 @@ const AdminProducts = () => {
               <div className="rounded-md border border-border bg-background/50 p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <ImageIcon className="w-4 h-4 text-accent" />
-                  <p className="text-[10px] tracking-[0.25em] text-muted-foreground">REQUIRED</p>
+                  <p className="text-[10px] tracking-[0.25em] text-muted-foreground">
+                    REQUIRED
+                  </p>
                 </div>
-                <p className="text-sm font-medium text-foreground">Product image</p>
+                <p className="text-sm font-medium text-foreground">
+                  Product image
+                </p>
                 <p className="text-xs text-muted-foreground mt-1">
                   Upload a JPG or PNG of your product.
                 </p>
@@ -487,9 +557,13 @@ const AdminProducts = () => {
               <div className="rounded-md border border-border bg-background/50 p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Tag className="w-4 h-4 text-accent" />
-                  <p className="text-[10px] tracking-[0.25em] text-muted-foreground">REQUIRED</p>
+                  <p className="text-[10px] tracking-[0.25em] text-muted-foreground">
+                    REQUIRED
+                  </p>
                 </div>
-                <p className="text-sm font-medium text-foreground">Product name</p>
+                <p className="text-sm font-medium text-foreground">
+                  Product name
+                </p>
                 <p className="text-xs text-muted-foreground mt-1">
                   e.g. "Royal Gold Bangle".
                 </p>
@@ -497,9 +571,13 @@ const AdminProducts = () => {
               <div className="rounded-md border border-border bg-background/50 p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <DollarSign className="w-4 h-4 text-accent" />
-                  <p className="text-[10px] tracking-[0.25em] text-muted-foreground">REQUIRED</p>
+                  <p className="text-[10px] tracking-[0.25em] text-muted-foreground">
+                    REQUIRED
+                  </p>
                 </div>
-                <p className="text-sm font-medium text-foreground">Price in PKR</p>
+                <p className="text-sm font-medium text-foreground">
+                  Price in PKR
+                </p>
                 <p className="text-xs text-muted-foreground mt-1">
                   Stock and description are optional.
                 </p>
@@ -517,151 +595,167 @@ const AdminProducts = () => {
         </div>
       ) : (
         <>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-md border border-border bg-card px-4 py-3">
-          <div className="flex items-center gap-3">
-            <Checkbox
-              checked={allSelected}
-              onCheckedChange={toggleSelectAll}
-              aria-label="Select all products"
-            />
-            <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase">
-              {selectedIds.size > 0
-                ? `${selectedIds.size} selected`
-                : `Select all (${products.length})`}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={selectedIds.size === 0}
-              onClick={() => handleBulkPublish(true)}
-              className="tracking-[0.2em] text-[10px] h-9"
-            >
-              <Eye className="w-3.5 h-3.5" /> PUBLISH
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={selectedIds.size === 0}
-              onClick={() => handleBulkPublish(false)}
-              className="tracking-[0.2em] text-[10px] h-9"
-            >
-              <EyeOff className="w-3.5 h-3.5" /> DRAFT
-            </Button>
-            {selectedIds.size > 0 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setSelectedIds(new Set())}
-                className="tracking-[0.2em] text-[10px] h-9 text-muted-foreground"
-              >
-                CLEAR
-              </Button>
-            )}
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {products.map((p) => (
-            <div
-              key={p.id}
-              ref={(el) => {
-                if (el) cardRefs.current.set(p.id, el);
-                else cardRefs.current.delete(p.id);
-              }}
-              className={`bg-card border rounded-lg overflow-hidden group relative transition-colors ${
-                selectedIds.has(p.id) ? "border-accent ring-1 ring-accent/40" : "border-border"
-              } ${!p.published ? "opacity-75" : ""} ${
-                highlightId === p.id ? "ring-2 ring-accent shadow-lg animate-pulse" : ""
-              }`}
-            >
-              <div className="aspect-square bg-muted/30 overflow-hidden relative">
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
-                    !p.published ? "grayscale" : ""
-                  }`}
-                />
-                <div className="absolute top-2 right-2 w-8 h-8 rounded-md bg-background/90 backdrop-blur border border-border flex items-center justify-center">
-                  <Checkbox
-                    checked={selectedIds.has(p.id)}
-                    onCheckedChange={() => toggleSelected(p.id)}
-                    aria-label={`Select ${p.name}`}
-                  />
-                </div>
-                <span
-                  className={`absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[9px] tracking-[0.2em] font-medium backdrop-blur ${
-                    p.published
-                      ? "bg-accent/90 text-accent-foreground"
-                      : "bg-muted/90 text-muted-foreground border border-border"
-                  }`}
-                >
-                  {p.published ? (
-                    <>
-                      <Eye className="w-3 h-3" /> LIVE
-                    </>
-                  ) : (
-                    <>
-                      <EyeOff className="w-3 h-3" /> DRAFT
-                    </>
-                  )}
-                </span>
-              </div>
-              <div className="p-4 space-y-2">
-                <p className="text-[10px] tracking-[0.3em] text-accent uppercase">{p.category}</p>
-                <h3 className="font-serif text-lg text-foreground line-clamp-1">{p.name}</h3>
-                <div className="flex items-center justify-between pt-2">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">PKR {p.price.toLocaleString()}</p>
-                    <p className="text-xs text-muted-foreground">Stock: {p.stock}</p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-muted-foreground hover:text-accent"
-                      onClick={() => {
-                        togglePublished(p.id);
-                        toast.success(
-                          p.published ? "Moved to draft" : "Published to storefront"
-                        );
-                      }}
-                      aria-label={p.published ? "Unpublish product" : "Publish product"}
-                    >
-                      {p.published ? (
-                        <EyeOff className="w-4 h-4" />
-                      ) : (
-                        <Eye className="w-4 h-4" />
-                      )}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-muted-foreground hover:text-foreground"
-                      onClick={() => openEdit(p)}
-                      aria-label="Edit product"
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-muted-foreground hover:text-destructive"
-                      onClick={() => {
-                        removeProduct(p.id);
-                        toast.success("Product removed");
-                      }}
-                      aria-label="Delete product"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-md border border-border bg-card px-4 py-3">
+            <div className="flex items-center gap-3">
+              <Checkbox
+                checked={allSelected}
+                onCheckedChange={toggleSelectAll}
+                aria-label="Select all products"
+              />
+              <p className="text-xs tracking-[0.2em] text-muted-foreground uppercase">
+                {selectedIds.size > 0
+                  ? `${selectedIds.size} selected`
+                  : `Select all (${products.length})`}
+              </p>
             </div>
-          ))}
-        </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={selectedIds.size === 0}
+                onClick={() => handleBulkPublish(true)}
+                className="tracking-[0.2em] text-[10px] h-9"
+              >
+                <Eye className="w-3.5 h-3.5" /> PUBLISH
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={selectedIds.size === 0}
+                onClick={() => handleBulkPublish(false)}
+                className="tracking-[0.2em] text-[10px] h-9"
+              >
+                <EyeOff className="w-3.5 h-3.5" /> DRAFT
+              </Button>
+              {selectedIds.size > 0 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSelectedIds(new Set())}
+                  className="tracking-[0.2em] text-[10px] h-9 text-muted-foreground"
+                >
+                  CLEAR
+                </Button>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {products.map((p) => (
+              <div
+                key={p.id}
+                ref={(el) => {
+                  if (el) cardRefs.current.set(p.id, el);
+                  else cardRefs.current.delete(p.id);
+                }}
+                className={`bg-card border rounded-lg overflow-hidden group relative transition-colors ${
+                  selectedIds.has(p.id)
+                    ? "border-accent ring-1 ring-accent/40"
+                    : "border-border"
+                } ${!p.published ? "opacity-75" : ""} ${
+                  highlightId === p.id
+                    ? "ring-2 ring-accent shadow-lg animate-pulse"
+                    : ""
+                }`}
+              >
+                <div className="aspect-square bg-muted/30 overflow-hidden relative">
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
+                      !p.published ? "grayscale" : ""
+                    }`}
+                  />
+                  <div className="absolute top-2 right-2 w-8 h-8 rounded-md bg-background/90 backdrop-blur border border-border flex items-center justify-center">
+                    <Checkbox
+                      checked={selectedIds.has(p.id)}
+                      onCheckedChange={() => toggleSelected(p.id)}
+                      aria-label={`Select ${p.name}`}
+                    />
+                  </div>
+                  <span
+                    className={`absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-1 rounded-full text-[9px] tracking-[0.2em] font-medium backdrop-blur ${
+                      p.published
+                        ? "bg-accent/90 text-accent-foreground"
+                        : "bg-muted/90 text-muted-foreground border border-border"
+                    }`}
+                  >
+                    {p.published ? (
+                      <>
+                        <Eye className="w-3 h-3" /> LIVE
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff className="w-3 h-3" /> DRAFT
+                      </>
+                    )}
+                  </span>
+                </div>
+                <div className="p-4 space-y-2">
+                  <p className="text-[10px] tracking-[0.3em] text-accent uppercase">
+                    {p.category}
+                  </p>
+                  <h3 className="font-serif text-lg text-foreground line-clamp-1">
+                    {p.name}
+                  </h3>
+                  <div className="flex items-center justify-between pt-2">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">
+                        PKR {p.price.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Stock: {p.stock}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-muted-foreground hover:text-accent"
+                        onClick={() => {
+                          togglePublished(p.id);
+                          toast.success(
+                            p.published
+                              ? "Moved to draft"
+                              : "Published to storefront",
+                          );
+                        }}
+                        aria-label={
+                          p.published ? "Unpublish product" : "Publish product"
+                        }
+                      >
+                        {p.published ? (
+                          <EyeOff className="w-4 h-4" />
+                        ) : (
+                          <Eye className="w-4 h-4" />
+                        )}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-muted-foreground hover:text-foreground"
+                        onClick={() => openEdit(p)}
+                        aria-label="Edit product"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-muted-foreground hover:text-destructive"
+                        onClick={() => {
+                          removeProduct(p.id);
+                          toast.success("Product removed");
+                        }}
+                        aria-label="Delete product"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </>
       )}
     </div>
