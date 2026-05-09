@@ -22,7 +22,6 @@ const Navbar = () => {
               src={logo}
               alt="Bambotia"
               className="h-12 md:h-14 w-auto"
-              style={{ filter: "sepia(1) saturate(2.5) hue-rotate(0deg) brightness(1.1)" }}
             />
           </Link>
 
