@@ -6,7 +6,7 @@ import AnimateOnScroll from "@/components/AnimateOnScroll";
 const HeroSection = () => {
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-20">
-      <div className="absolute inset-0 bg-gradient-to-r from-background via-background to-transparent z-10" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background via-background to-transparent z-2" />
 
       <div className="absolute right-0 top-0 bottom-0 w-full md:w-3/5">
         <img
