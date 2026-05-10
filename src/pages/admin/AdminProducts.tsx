@@ -35,6 +35,7 @@ import {
   useAdminProducts,
   AdminProduct,
 } from "@/contexts/AdminProductsContext";
+import { SUBCATEGORIES } from "@/data/products";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
@@ -42,7 +43,9 @@ import { toast } from "sonner";
 const emptyForm = {
   name: "",
   category: "jewellery" as AdminProduct["category"],
+  subcategory: "",
   price: "",
+  regularPrice: "",
   stock: "",
   image: "",
   description: "",
@@ -184,15 +187,22 @@ const AdminProducts = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const price = Number(form.price);
+    const regularPrice = Number(form.regularPrice) || 0;
     const stock = Number(form.stock);
     if (!form.name || !price || !form.image) {
       toast.error("Please fill all required fields and add an image");
       return;
     }
+    if (regularPrice && regularPrice < price) {
+      toast.error("Regular price must be greater than sale price");
+      return;
+    }
     const payload = {
       name: form.name,
       category: form.category,
+      subcategory: form.subcategory || undefined,
       price,
+      regularPrice: regularPrice || undefined,
       stock: stock || 0,
       image: form.image,
       description: form.description,
@@ -254,7 +264,9 @@ const AdminProducts = () => {
       setForm({
         name: p.name,
         category: p.category,
+        subcategory: p.subcategory ?? "",
         price: String(p.price),
+        regularPrice: p.regularPrice ? String(p.regularPrice) : "",
         stock: String(p.stock),
         image: p.image,
         description: p.description,
@@ -274,7 +286,9 @@ const AdminProducts = () => {
         setForm({
           name: original.name,
           category: original.category,
+          subcategory: original.subcategory ?? "",
           price: String(original.price),
+          regularPrice: original.regularPrice ? String(original.regularPrice) : "",
           stock: String(original.stock),
           image: original.image,
           description: original.description,
