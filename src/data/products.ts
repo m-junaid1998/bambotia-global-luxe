@@ -16,7 +16,9 @@ export interface Product {
   slug: string;
   name: string;
   category: "jewellery" | "cosmetics" | "purses";
+  subcategory?: string;
   price: number;
+  regularPrice?: number;
   currency: string;
   images: string[];
   description: string;
@@ -31,6 +33,8 @@ export const products: Product[] = [
     name: "Emerald Jhumka Earrings",
     category: "jewellery",
     price: 12500,
+    regularPrice: 15600,
+    subcategory: "Earrings",
     currency: "PKR",
     images: [earringsImg],
     description: "Handcrafted gold jhumka earrings adorned with natural emerald stones. A timeless piece that embodies Pakistani bridal elegance.",
@@ -43,6 +47,8 @@ export const products: Product[] = [
     name: "Heritage Gold Bangles",
     category: "jewellery",
     price: 18000,
+    regularPrice: 22500,
+    subcategory: "Bangles",
     currency: "PKR",
     images: [banglesImg],
     description: "Set of intricately designed gold bangles featuring traditional Pakistani filigree patterns. Perfect for festive occasions.",
@@ -55,6 +61,8 @@ export const products: Product[] = [
     name: "Royal Emerald Necklace",
     category: "jewellery",
     price: 35000,
+    regularPrice: 43800,
+    subcategory: "Necklaces",
     currency: "PKR",
     images: [necklaceImg],
     description: "A statement necklace featuring a large emerald pendant surrounded by intricate gold filigree work. The centerpiece of any bridal set.",
@@ -66,6 +74,8 @@ export const products: Product[] = [
     name: "Emerald Filigree Ring",
     category: "jewellery",
     price: 9500,
+    regularPrice: 11900,
+    subcategory: "Rings",
     currency: "PKR",
     images: [ringImg],
     description: "A stunning emerald-cut stone set in an ornate gold filigree band. A bold yet elegant statement piece.",
@@ -77,6 +87,8 @@ export const products: Product[] = [
     name: "Velvet Rose Lipstick Duo",
     category: "cosmetics",
     price: 3200,
+    regularPrice: 4000,
+    subcategory: "Lipstick",
     currency: "PKR",
     images: [lipstickImg],
     description: "Two luxurious matte lipsticks in complementary rose shades. Long-wearing formula with vitamin E for hydrated, velvety lips.",
@@ -89,6 +101,8 @@ export const products: Product[] = [
     name: "Earth Luxe Eyeshadow Palette",
     category: "cosmetics",
     price: 4800,
+    regularPrice: 6000,
+    subcategory: "Eyeshadow",
     currency: "PKR",
     images: [eyeshadowImg],
     description: "A curated palette of 10 earth-tone shades in matte and shimmer finishes. Highly pigmented and blendable for effortless glam.",
@@ -100,6 +114,8 @@ export const products: Product[] = [
     name: "Silk Glow Foundation",
     category: "cosmetics",
     price: 3800,
+    regularPrice: 4800,
+    subcategory: "Foundation",
     currency: "PKR",
     images: [foundationImg],
     description: "A lightweight, buildable foundation that delivers a natural, dewy finish. Infused with hyaluronic acid for all-day hydration.",
@@ -111,6 +127,8 @@ export const products: Product[] = [
     name: "Rose Gold Brush Collection",
     category: "cosmetics",
     price: 5500,
+    regularPrice: 6900,
+    subcategory: "Brushes",
     currency: "PKR",
     images: [brushesImg],
     description: "A professional 8-piece brush set with rose gold ferrules and ultra-soft synthetic bristles. Comes in an elegant glass holder.",
@@ -123,6 +141,8 @@ export const products: Product[] = [
     name: "Emerald Satin Clutch",
     category: "purses",
     price: 8900,
+    regularPrice: 11100,
+    subcategory: "Clutches",
     currency: "PKR",
     images: [clutchImg],
     description: "A luxurious satin clutch in deep emerald green with a gold-tone clasp. The perfect evening companion for formal occasions.",
@@ -135,6 +155,8 @@ export const products: Product[] = [
     name: "Bordeaux Leather Tote",
     category: "purses",
     price: 14500,
+    regularPrice: 18100,
+    subcategory: "Totes",
     currency: "PKR",
     images: [toteImg],
     description: "A structured tote in rich burgundy leather with gold hardware accents. Spacious enough for work and stylish enough for evening.",
@@ -146,6 +168,8 @@ export const products: Product[] = [
     name: "Champagne Gold Crossbody",
     category: "purses",
     price: 7200,
+    regularPrice: 9000,
+    subcategory: "Crossbody",
     currency: "PKR",
     images: [crossbodyImg],
     description: "A compact crossbody bag in champagne gold leather with a delicate chain strap. Effortlessly chic for day-to-night transitions.",
@@ -157,6 +181,8 @@ export const products: Product[] = [
     name: "Noir Mini Chain Bag",
     category: "purses",
     price: 6800,
+    regularPrice: 8500,
+    subcategory: "Mini Bags",
     currency: "PKR",
     images: [minibagImg],
     description: "A structured mini bag in noir leather with a bold gold clasp and chain strap. Compact luxury for the modern woman.",
@@ -167,3 +193,14 @@ export const products: Product[] = [
 export const getProductBySlug = (slug: string) => products.find((p) => p.slug === slug);
 export const getProductsByCategory = (cat: string) => products.filter((p) => p.category === cat);
 export const formatPrice = (price: number, currency: string) => `${currency} ${price.toLocaleString()}`;
+
+export const getDiscountPercent = (regular?: number, sale?: number) => {
+  if (!regular || !sale || regular <= sale) return 0;
+  return Math.round(((regular - sale) / regular) * 100);
+};
+
+export const SUBCATEGORIES: Record<Product["category"], string[]> = {
+  jewellery: ["Earrings", "Bangles", "Necklaces", "Rings", "Bridal Sets"],
+  cosmetics: ["Lipstick", "Eyeshadow", "Foundation", "Brushes", "Skincare"],
+  purses: ["Clutches", "Totes", "Crossbody", "Mini Bags"],
+};
