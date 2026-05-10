@@ -16,7 +16,9 @@ export interface Product {
   slug: string;
   name: string;
   category: "jewellery" | "cosmetics" | "purses";
+  subcategory?: string;
   price: number;
+  regularPrice?: number;
   currency: string;
   images: string[];
   description: string;
@@ -167,3 +169,14 @@ export const products: Product[] = [
 export const getProductBySlug = (slug: string) => products.find((p) => p.slug === slug);
 export const getProductsByCategory = (cat: string) => products.filter((p) => p.category === cat);
 export const formatPrice = (price: number, currency: string) => `${currency} ${price.toLocaleString()}`;
+
+export const getDiscountPercent = (regular?: number, sale?: number) => {
+  if (!regular || !sale || regular <= sale) return 0;
+  return Math.round(((regular - sale) / regular) * 100);
+};
+
+export const SUBCATEGORIES: Record<Product["category"], string[]> = {
+  jewellery: ["Earrings", "Bangles", "Necklaces", "Rings", "Bridal Sets"],
+  cosmetics: ["Lipstick", "Eyeshadow", "Foundation", "Brushes", "Skincare"],
+  purses: ["Clutches", "Totes", "Crossbody", "Mini Bags"],
+};
