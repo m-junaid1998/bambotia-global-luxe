@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, ChevronRight } from "lucide-react";
-import { formatPrice } from "@/data/products";
+import { formatPrice, getDiscountPercent } from "@/data/products";
 import { useStorefrontProductsByCategory } from "@/hooks/useStorefrontProducts";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -76,10 +76,27 @@ const CategoryPage = () => {
                   )}
                   <WishlistButton productId={p.id} productName={p.name} className="absolute top-3 right-3 opacity-0 group-hover:opacity-100" />
                 </div>
+                {p.subcategory && (
+                  <p className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase mb-0.5">
+                    {p.subcategory}
+                  </p>
+                )}
                 <h3 className="font-heading text-sm md:text-base font-medium text-foreground mb-1 group-hover:text-accent transition-colors">
                   {p.name}
                 </h3>
-                <p className="text-sm text-accent font-medium">{formatPrice(p.price, p.currency)}</p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="text-sm text-accent font-medium">{formatPrice(p.price, p.currency)}</p>
+                  {p.regularPrice && p.regularPrice > p.price && (
+                    <>
+                      <p className="text-xs text-muted-foreground line-through">
+                        {formatPrice(p.regularPrice, p.currency)}
+                      </p>
+                      <span className="text-[10px] font-semibold text-red-500">
+                        -{getDiscountPercent(p.regularPrice, p.price)}%
+                      </span>
+                    </>
+                  )}
+                </div>
               </Link>
             ))}
           </div>
