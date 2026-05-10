@@ -428,6 +428,7 @@ const AdminProducts = () => {
                       setForm({
                         ...form,
                         category: v as AdminProduct["category"],
+                        subcategory: "",
                       })
                     }
                   >
@@ -442,54 +443,82 @@ const AdminProducts = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs tracking-[0.2em]">STOCK</Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={form.stock}
-                    onChange={(e) =>
-                      setForm({ ...form, stock: e.target.value })
+                  <Label className="text-xs tracking-[0.2em]">SUB-CATEGORY</Label>
+                  <Select
+                    value={form.subcategory || "__none"}
+                    onValueChange={(v) =>
+                      setForm({ ...form, subcategory: v === "__none" ? "" : v })
                     }
-                    placeholder="0"
-                    className="h-11"
-                  />
+                  >
+                    <SelectTrigger className="h-11">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__none">None</SelectItem>
+                      {SUBCATEGORIES[form.category].map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs tracking-[0.2em]">
-                  PRICE (PKR) *
-                </Label>
+                <Label className="text-xs tracking-[0.2em]">STOCK</Label>
                 <Input
                   type="number"
                   min="0"
-                  value={form.price}
-                  onChange={(e) => setForm({ ...form, price: e.target.value })}
-                  placeholder="12500"
+                  value={form.stock}
+                  onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                  placeholder="0"
                   className="h-11"
-                  required
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-4 items-end">
-              
                 <div className="flex flex-col gap-2">
                   <Label className="text-xs tracking-[0.2em]">
                     REGULAR PRICE
                   </Label>
-                  <Input placeholder="Regular Price" />
+                  <Input
+                    type="number"
+                    min="0"
+                    value={form.regularPrice}
+                    onChange={(e) =>
+                      setForm({ ...form, regularPrice: e.target.value })
+                    }
+                    placeholder="15000"
+                    className="h-10"
+                  />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <Label className="text-xs tracking-[0.2em]">SALE PRICE</Label>
-                  <Input placeholder="Sale Price" />
+                  <Label className="text-xs tracking-[0.2em]">SALE PRICE *</Label>
+                  <Input
+                    type="number"
+                    min="0"
+                    value={form.price}
+                    onChange={(e) =>
+                      setForm({ ...form, price: e.target.value })
+                    }
+                    placeholder="12500"
+                    className="h-10"
+                    required
+                  />
                 </div>
 
                 <div className="flex flex-col gap-2">
                   <Label className="text-xs tracking-[0.2em]">DISCOUNT</Label>
 
                   <div className="h-10 flex items-center text-red-500 font-semibold border rounded-md px-3">
-                    0%
+                    {(() => {
+                      const r = Number(form.regularPrice);
+                      const s = Number(form.price);
+                      if (!r || !s || r <= s) return "0%";
+                      return `${Math.round(((r - s) / r) * 100)}%`;
+                    })()}
                   </div>
                 </div>
               </div>
