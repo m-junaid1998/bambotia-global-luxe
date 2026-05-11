@@ -21,6 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/contexts/CartContext";
+import { useOrders } from "@/contexts/OrdersContext";
 import type { OrderConfirmationState } from "@/pages/OrderConfirmation";
 
 const FREE_SHIPPING_THRESHOLD = 5000;
@@ -53,6 +54,7 @@ const Checkout = () => {
   const navigate = useNavigate();
 
   const { items, totalPrice, totalItems, addItem, decrementItem, clearCart } = useCart();
+  const { addOrder } = useOrders();
   const [form, setForm] = useState<FormState>(initialForm);
   const [errors, setErrors] = useState<
     Partial<Record<keyof FormState, string>>
@@ -99,30 +101,45 @@ const Checkout = () => {
     setSubmitting(false);
 
     const orderNumber = `BMB-${Date.now().toString().slice(-8)}`;
-    const confirmation: OrderConfirmationState = {
-      orderNumber,
-      placedAt: Date.now(),
-      customer: {
+    const placedAt = Date.now();
+    const customer = {
         fullName: form.fullName,
         phone: form.phone,
         city: form.city,
         area: form.area,
         address: form.address,
         notes: form.notes || undefined,
-      },
-      items: items.map((i) => ({
+    };
+    const orderItems = items.map((i) => ({
         productId: i.productId,
         name: i.name,
         price: i.price,
         currency: i.currency,
         image: i.image,
         quantity: i.quantity,
-      })),
+    }));
+    const estimatedDelivery = "3–5 business days across Pakistan";
+    addOrder({
+      orderNumber,
+      placedAt,
+      customer,
+      items: orderItems,
       subtotal: totalPrice,
       shipping,
       total: grandTotal,
       paymentMethod: "Cash on Delivery",
-      estimatedDelivery: "3–5 business days across Pakistan",
+      estimatedDelivery,
+    });
+    const confirmation: OrderConfirmationState = {
+      orderNumber,
+      placedAt,
+      customer,
+      items: orderItems,
+      subtotal: totalPrice,
+      shipping,
+      total: grandTotal,
+      paymentMethod: "Cash on Delivery",
+      estimatedDelivery,
     };
     toast.success("Order placed! We'll call to confirm shortly.");
     clearCart();
