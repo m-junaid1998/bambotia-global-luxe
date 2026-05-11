@@ -21,6 +21,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/contexts/CartContext";
+import type { OrderConfirmationState } from "@/pages/OrderConfirmation";
 
 const FREE_SHIPPING_THRESHOLD = 5000;
 const SHIPPING_FEE = 250;
@@ -51,7 +52,7 @@ const initialForm: FormState = {
 const Checkout = () => {
   const navigate = useNavigate();
 
-  const { items, totalPrice, totalItems, addItem, decrementItem } = useCart();
+  const { items, totalPrice, totalItems, addItem, decrementItem, clearCart } = useCart();
   const [form, setForm] = useState<FormState>(initialForm);
   const [errors, setErrors] = useState<
     Partial<Record<keyof FormState, string>>
@@ -96,8 +97,36 @@ const Checkout = () => {
     setSubmitting(true);
     await new Promise((r) => setTimeout(r, 900));
     setSubmitting(false);
+
+    const orderNumber = `BMB-${Date.now().toString().slice(-8)}`;
+    const confirmation: OrderConfirmationState = {
+      orderNumber,
+      placedAt: Date.now(),
+      customer: {
+        fullName: form.fullName,
+        phone: form.phone,
+        city: form.city,
+        area: form.area,
+        address: form.address,
+        notes: form.notes || undefined,
+      },
+      items: items.map((i) => ({
+        productId: i.productId,
+        name: i.name,
+        price: i.price,
+        currency: i.currency,
+        image: i.image,
+        quantity: i.quantity,
+      })),
+      subtotal: totalPrice,
+      shipping,
+      total: grandTotal,
+      paymentMethod: "Cash on Delivery",
+      estimatedDelivery: "3–5 business days across Pakistan",
+    };
     toast.success("Order placed! We'll call to confirm shortly.");
-    navigate("/");
+    clearCart();
+    navigate("/order-confirmation", { state: confirmation, replace: true });
   };
 
   return (
