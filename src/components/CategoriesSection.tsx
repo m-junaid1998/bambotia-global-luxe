@@ -14,7 +14,13 @@ const jewelleryProducts = products.filter((p) => p.category === "jewellery");
 const cosmeticsProducts = products.filter((p) => p.category === "cosmetics");
 const pursesProducts = products.filter((p) => p.category === "purses");
 
-const ProductCard = ({ product, delay = 0 }: { product: typeof products[0]; delay?: number }) => (
+const ProductCard = ({
+  product,
+  delay = 0,
+}: {
+  product: (typeof products)[0];
+  delay?: number;
+}) => (
   <AnimateOnScroll animation="fade-up" delay={delay}>
     <Link to={`/product/${product.slug}`} className="group block">
       <div className="relative overflow-hidden rounded-sm aspect-square mb-3 bg-card">
@@ -31,17 +37,23 @@ const ProductCard = ({ product, delay = 0 }: { product: typeof products[0]; dela
             NEW
           </span>
         )}
-        <WishlistButton productId={product.id} productName={product.name} className="absolute top-2 right-2 opacity-0 group-hover:opacity-100" />
+        <WishlistButton
+          productId={product.id}
+          productName={product.name}
+          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100"
+        />
       </div>
       <h4 className="text-xs md:text-sm font-medium text-foreground group-hover:text-accent transition-colors leading-tight mb-0.5">
         {product.name}
       </h4>
-      <p className="text-xs text-accent font-medium">{formatPrice(product.price, product.currency)}</p>
+      <p className="text-xs text-accent font-medium">
+        {formatPrice(product.price, product.currency)}
+      </p>
     </Link>
   </AnimateOnScroll>
 );
 
-const TabProductCard = ({ product }: { product: typeof products[0] }) => {
+const TabProductCard = ({ product }: { product: (typeof products)[0] }) => {
   const { addItem } = useCart();
   return (
     <div className="group block">
@@ -71,38 +83,48 @@ const TabProductCard = ({ product }: { product: typeof products[0] }) => {
           >
             <ShoppingBag className="w-3.5 h-3.5" />
           </button>
-          <WishlistButton productId={product.id} productName={product.name} className="absolute top-2 right-2 opacity-0 group-hover:opacity-100" />
+          <WishlistButton
+            productId={product.id}
+            productName={product.name}
+            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100"
+          />
         </div>
       </Link>
       <Link to={`/product/${product.slug}`}>
         <h4 className="text-xs md:text-sm font-medium text-foreground group-hover:text-accent transition-colors leading-tight mb-0.5">
           {product.name}
         </h4>
-        <p className="text-xs text-accent font-medium">{formatPrice(product.price, product.currency)}</p>
+        <p className="text-xs text-accent font-medium">
+          {formatPrice(product.price, product.currency)}
+        </p>
       </Link>
     </div>
   );
 };
 
 const CategoriesSection = () => {
-  const [activeTab, setActiveTab] = useState<"jewellery" | "cosmetics" | "purses">("jewellery");
+  const [activeTab, setActiveTab] = useState<
+    "jewellery" | "cosmetics" | "purses"
+  >("jewellery");
   const tabProducts = products.filter((p) => p.category === activeTab);
 
   return (
     <section id="categories" className="py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20 md:space-y-28">
-
         {/* ───── JEWELLERY with feature image ───── */}
         <div>
           <AnimateOnScroll animation="fade-up">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-8">
               <div>
-                <p className="text-xs tracking-[0.25em] text-accent mb-2">COLLECTION</p>
+                <p className="text-xs tracking-[0.25em] text-accent mb-2">
+                  COLLECTION
+                </p>
                 <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground">
                   Luxury Jewellery
                 </h2>
                 <p className="text-sm text-muted-foreground mt-2 max-w-md">
-                  Exquisitely crafted pieces that blend contemporary elegance with traditional Pakistani filigree artistry.
+                  Exquisitely crafted pieces that blend contemporary elegance
+                  with traditional Pakistani filigree artistry.
                 </p>
               </div>
               <Link
@@ -121,7 +143,11 @@ const CategoriesSection = () => {
                 <ProductCard key={p.id} product={p} delay={i * 100} />
               ))}
             </div>
-            <AnimateOnScroll animation="fade-left" delay={200} className="col-span-2 md:col-span-2">
+            <AnimateOnScroll
+              animation="fade-left"
+              delay={200}
+              className="col-span-2 md:col-span-2"
+            >
               <Link to="/category/jewellery" className="group block h-full">
                 <div className="relative overflow-hidden rounded-sm h-full min-h-[300px] bg-gradient-to-br from-amber-100/10 to-amber-200/5">
                   <img
@@ -154,9 +180,13 @@ const CategoriesSection = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/50 to-transparent" />
               <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-12">
-                <p className="text-xs tracking-[0.25em] text-accent mb-2">BEAUTY</p>
+                <p className="text-xs tracking-[0.25em] text-accent mb-2">
+                  BEAUTY
+                </p>
                 <h2 className="font-heading text-2xl md:text-4xl font-bold text-foreground mb-2">
-                  Professional<br />Cosmetics
+                  Professional
+                  <br />
+                  Cosmetics
                 </h2>
                 <span className="inline-flex items-center gap-1.5 text-sm text-accent font-medium group-hover:underline">
                   Explore Collection <ArrowRight className="w-4 h-4" />
@@ -174,14 +204,14 @@ const CategoriesSection = () => {
 
         {/* ───── Category Tab Bar with Products ───── */}
         <AnimateOnScroll animation="fade-in">
-          <div>
-            <div className="flex items-center justify-center mb-8">
-              <div className="flex items-center gap-0 border border-border rounded-sm overflow-hidden">
+          <div className="w-full">
+            <div className="flex justify-center mb-6 md:mb-8 px-2">
+              <div className="flex w-full max-w-fit overflow-x-auto border border-border rounded-sm scrollbar-hide">
                 {(["jewellery", "cosmetics", "purses"] as const).map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActiveTab(cat)}
-                    className={`px-6 md:px-10 py-3 text-xs tracking-[0.2em] font-medium border-r border-border last:border-r-0 transition-colors ${
+                    className={`flex-1 whitespace-nowrap px-4 sm:px-6 md:px-10 py-3 text-[10px] sm:text-xs tracking-[0.15em] sm:tracking-[0.2em] font-medium border-r border-border last:border-r-0 transition-colors ${
                       activeTab === cat
                         ? "bg-accent text-accent-foreground"
                         : "text-muted-foreground hover:text-accent hover:bg-card"
@@ -192,8 +222,7 @@ const CategoriesSection = () => {
                 ))}
               </div>
             </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 px-2 sm:px-0">
               {tabProducts.map((p) => (
                 <TabProductCard key={p.id} product={p} />
               ))}
@@ -207,14 +236,23 @@ const CategoriesSection = () => {
             <div className="flex flex-col md:flex-row items-center justify-between px-6 md:px-12 py-8 md:py-10 gap-6">
               <div className="flex items-center gap-6">
                 <div className="hidden md:block w-24 h-24 rounded-full border-2 border-accent/30 flex-shrink-0 overflow-hidden">
-                  <img src={cosmeticsImg} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={cosmeticsImg}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
-                  <p className="text-xs tracking-[0.2em] text-accent mb-1">FLAT DISCOUNT ON ALL ORDERS</p>
+                  <p className="text-xs tracking-[0.2em] text-accent mb-1">
+                    FLAT DISCOUNT ON ALL ORDERS
+                  </p>
                   <h3 className="font-heading text-xl md:text-2xl font-bold text-foreground">
-                    Beauty, Jewellery & Accessories — <span className="text-accent">All in One Place</span>
+                    Beauty, Jewellery & Accessories —{" "}
+                    <span className="text-accent">All in One Place</span>
                   </h3>
-                  <p className="text-sm text-muted-foreground mt-1">Free shipping on orders above PKR 5,000</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Free shipping on orders above PKR 5,000
+                  </p>
                 </div>
               </div>
               <Link
@@ -244,12 +282,17 @@ const CategoriesSection = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/30 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
-                <p className="text-xs tracking-[0.25em] text-accent mb-2">DESIGNER COLLECTION</p>
+                <p className="text-xs tracking-[0.25em] text-accent mb-2">
+                  DESIGNER COLLECTION
+                </p>
                 <h2 className="font-heading text-2xl md:text-4xl font-bold text-foreground mb-2">
-                  Designer<br />Ladies' Purses
+                  Designer
+                  <br />
+                  Ladies' Purses
                 </h2>
                 <p className="text-sm text-muted-foreground mb-4 max-w-sm">
-                  Luxury crafted for the modern woman — statement pieces for every occasion.
+                  Luxury crafted for the modern woman — statement pieces for
+                  every occasion.
                 </p>
                 <span className="inline-flex items-center gap-1.5 text-sm text-accent font-medium group-hover:underline">
                   Explore Purses <ArrowRight className="w-4 h-4" />

@@ -7,7 +7,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetDescription,
+  SheetDescription
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 
