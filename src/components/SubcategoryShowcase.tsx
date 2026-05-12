@@ -44,7 +44,7 @@ const SubcategoryShowcase = () => {
   if (subcategories.length === 0) return null;
 
   return (
-    <section className="py-4 bg-background">
+    <section className="py-8 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimateOnScroll animation="fade-up">
           <div className="text-center mb-10">
