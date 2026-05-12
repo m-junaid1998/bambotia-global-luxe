@@ -175,23 +175,24 @@ const OrderConfirmation = () => {
               <h2 className="font-heading text-xl text-foreground mb-5">
                 Order Summary
               </h2>
-              <div className="space-y-4 max-h-[260px] overflow-y-auto pr-1">
+              <div className="space-y-4 max-h-[260px] overflow-y-auto pr-4 scrollbar-premium">
                 {items.map((item) => (
-                  <div key={item.productId} className="flex gap-3">
+                  <div key={item.productId} className="flex gap-4 items-center">
                     <img
                       src={item.image}
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded-md bg-muted border border-border shrink-0"
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-foreground line-clamp-2">
+                      <p className="text-sm text-foreground line-clamp-2 font-medium">
                         {item.name}
                       </p>
                       <p className="text-xs text-muted-foreground mt-0.5">
                         Qty {item.quantity}
                       </p>
                     </div>
-                    <p className="text-sm text-foreground whitespace-nowrap">
+                    {/* Price section with a bit more margin-left */}
+                    <p className="text-sm text-foreground font-semibold whitespace-nowrap ml-2">
                       PKR {(item.price * item.quantity).toLocaleString()}
                     </p>
                   </div>
