@@ -9,6 +9,7 @@ import ringImg from "@/assets/product-ring.jpg";
 import AnimateOnScroll from "@/components/AnimateOnScroll";
 import WishlistButton from "@/components/WishlistButton";
 import { useState } from "react";
+import SubcategoryShowcase from "./SubcategoryShowcase";
 
 const jewelleryProducts = products.filter((p) => p.category === "jewellery");
 const cosmeticsProducts = products.filter((p) => p.category === "cosmetics");
@@ -109,9 +110,9 @@ const CategoriesSection = () => {
   const tabProducts = products.filter((p) => p.category === activeTab);
 
   return (
-    <section id="categories" className="py-16 md:py-24">
+    <section id="categories" className="py-12">
+   <SubcategoryShowcase/>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20 md:space-y-28">
-        {/* ───── JEWELLERY with feature image ───── */}
         <div>
           <AnimateOnScroll animation="fade-up">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-8">

@@ -14,7 +14,6 @@ const Index = () => (
     <HeroSection />
     <StatsBar />
     <CategoriesSection />
-    <SubcategoryShowcase />
     <NewArrivals />
     <ShopTheLook />
     <Testimonials />

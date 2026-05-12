@@ -13,21 +13,30 @@ const SubcategoryShowcase = () => {
 
   // Build subcategory list dynamically from available products
   const subcategories = useMemo(() => {
-    const map = new Map<string, { name: string; category: Product["category"]; image: string }>();
+    const map = new Map<
+      string,
+      { name: string; category: Product["category"]; image: string }
+    >();
     for (const p of allProducts) {
       if (!p.subcategory) continue;
       if (!map.has(p.subcategory)) {
-        map.set(p.subcategory, { name: p.subcategory, category: p.category, image: p.images[0] });
+        map.set(p.subcategory, {
+          name: p.subcategory,
+          category: p.category,
+          image: p.images[0],
+        });
       }
     }
     return Array.from(map.values());
   }, [allProducts]);
 
-  const [active, setActive] = useState<string | null>(subcategories[0]?.name ?? null);
+  const [active, setActive] = useState<string | null>(
+    subcategories[0]?.name ?? null,
+  );
 
   const featured = useMemo(
     () => allProducts.filter((p) => p.subcategory === active).slice(0, 4),
-    [allProducts, active]
+    [allProducts, active],
   );
 
   const activeMeta = subcategories.find((s) => s.name === active);
@@ -35,11 +44,13 @@ const SubcategoryShowcase = () => {
   if (subcategories.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="py-4 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimateOnScroll animation="fade-up">
           <div className="text-center mb-10">
-            <p className="text-xs tracking-[0.3em] text-accent mb-3">SHOP BY CATEGORY</p>
+            <p className="text-xs tracking-[0.3em] text-accent mb-3">
+              SHOP BY CATEGORY
+            </p>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">
               Explore Our Collections
             </h2>
@@ -58,26 +69,34 @@ const SubcategoryShowcase = () => {
                 <button
                   key={s.name}
                   onClick={() => setActive(s.name)}
-                  className="group flex flex-col items-center gap-2 flex-shrink-0 focus:outline-none"
+                  className="group flex flex-col items-center gap-3 flex-shrink-0 min-w-[88px] md:min-w-[102px] focus:outline-none"
                   aria-pressed={isActive}
                 >
                   <span
-                    className={`relative block w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden bg-background/90 backdrop-blur-md border transition-all duration-300 ${
-                      isActive
-                        ? "border-accent shadow-[0_8px_30px_-8px_hsl(var(--accent)/0.5)] scale-105 ring-2 ring-accent/30 ring-offset-2 ring-offset-background"
-                        : "border-border shadow-md group-hover:border-accent/60 group-hover:scale-105"
-                    }`}
+                    className={`relative block w-20 h-20 md:w-24 md:h-24 rounded-full transition-all duration-300 `}
                   >
-                    <img
-                      src={s.image}
-                      alt={s.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      loading="lazy"
+                    <span
+                      className={`absolute inset-0 rounded-full border transition-all duration-300 ${
+                        isActive
+                          ? "border-accent shadow-[0_8px_20px_-9px_hsl(var(--accent)/0.8)]"
+                          : "border-border group-hover:border-accent/60"
+                      }`}
                     />
+
+                    <span className="absolute inset-[2px] rounded-full overflow-hidden bg-background">
+                      <img
+                        src={s.image}
+                        alt={s.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                      />
+                    </span>
                   </span>
                   <span
                     className={`text-xs md:text-sm font-medium tracking-wide transition-colors ${
-                      isActive ? "text-accent" : "text-foreground group-hover:text-accent"
+                      isActive
+                        ? "text-accent"
+                        : "text-foreground group-hover:text-accent"
                     }`}
                   >
                     {s.name}
@@ -137,7 +156,9 @@ const SubcategoryShowcase = () => {
                     {p.name}
                   </h3>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-sm text-accent font-medium">{formatPrice(p.price, p.currency)}</p>
+                    <p className="text-sm text-accent font-medium">
+                      {formatPrice(p.price, p.currency)}
+                    </p>
                     {p.regularPrice && p.regularPrice > p.price && (
                       <>
                         <p className="text-xs text-muted-foreground line-through">
