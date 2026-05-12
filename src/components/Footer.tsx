@@ -3,12 +3,35 @@ import { Instagram, Facebook, Twitter, ArrowRight } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const Footer = () => {
-const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
-};
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const quickLinks = [
+    {
+      name: "Jewellery",
+      path: "/category/jewellery",
+      type: "link",
+    },
+    {
+      name: "Cosmetics",
+      path: "/category/cosmetics",
+      type: "link",
+    },
+    {
+      name: "Purses",
+      path: "/category/purses",
+      type: "link",
+    },
+    {
+      name: "New Arrivals",
+      path: "/#new-arrivals",
+      type: "anchor",
+    },
+  ];
 
   return (
     <footer className="border-t border-border bg-card pt-16 pb-8">
@@ -31,45 +54,27 @@ const scrollToTop = () => {
             </h4>
 
             <ul className="space-y-2.5 text-sm text-muted-foreground">
-              <li>
-                <Link
-                  to="/category/jewellery"
-                  onClick={scrollToTop}
-                  className="hover:text-accent transition-colors"
-                >
-                  Jewellery
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/category/cosmetics"
-                  onClick={scrollToTop}
-                  className="hover:text-accent transition-colors"
-                >
-                  Cosmetics
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/category/purses"
-                  onClick={scrollToTop}
-                  className="hover:text-accent transition-colors"
-                >
-                  Purses
-                </Link>
-              </li>
-
-              <li>
-                <a
-                  href="/#new-arrivals"
-                  onClick={scrollToTop}
-                  className="hover:text-accent transition-colors"
-                >
-                  New Arrivals
-                </a>
-              </li>
+              {quickLinks?.map((item, index) => (
+                <li key={index}>
+                  {item.type === "link" ? (
+                    <Link
+                      to={item.path}
+                      onClick={scrollToTop}
+                      className="hover:text-accent transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <a
+                      href={item.path}
+                      onClick={scrollToTop}
+                      className="hover:text-accent transition-colors"
+                    >
+                      {item.name}
+                    </a>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
 
