@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, ShoppingBag } from "lucide-react";
-import { formatPrice } from "@/data/products";
+import { formatPrice, getDiscountPercent } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useStorefrontProducts } from "@/hooks/useStorefrontProducts";
 import AnimateOnScroll from "@/components/AnimateOnScroll";
@@ -71,9 +71,16 @@ const NewArrivals = () => {
                   </h3>
                   <div className="flex items-center gap-2">
                     <p className="text-sm text-accent font-medium">{formatPrice(p.price, p.currency)}</p>
-                    <p className="text-xs text-muted-foreground line-through">
-                      {formatPrice(Math.round(p.price * 1.25), p.currency)}
-                    </p>
+                    {p.regularPrice && p.regularPrice > p.price && (
+                      <>
+                        <p className="text-xs text-muted-foreground line-through">
+                          {formatPrice(p.regularPrice, p.currency)}
+                        </p>
+                        <span className="text-[10px] font-semibold text-red-500">
+                          -{getDiscountPercent(p.regularPrice, p.price)}%
+                        </span>
+                      </>
+                    )}
                   </div>
                 </Link>
               </div>

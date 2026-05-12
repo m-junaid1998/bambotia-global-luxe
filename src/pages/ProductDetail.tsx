@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, ShoppingBag, Minus, Plus, ChevronRight } from "lucide-react";
-import { formatPrice } from "@/data/products";
+import { formatPrice, getDiscountPercent } from "@/data/products";
 import { useStorefrontProductBySlug } from "@/hooks/useStorefrontProducts";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
@@ -114,9 +114,21 @@ const ProductDetail = () => {
                 {product.name}
               </h1>
 
-              <p className="text-2xl font-heading text-gradient-gold mb-6">
-                {formatPrice(product.price, product.currency)}
-              </p>
+              <div className="flex items-center gap-3 flex-wrap mb-6">
+                <p className="text-2xl font-heading text-gradient-gold">
+                  {formatPrice(product.price, product.currency)}
+                </p>
+                {product.regularPrice && product.regularPrice > product.price && (
+                  <>
+                    <p className="text-base text-muted-foreground line-through">
+                      {formatPrice(product.regularPrice, product.currency)}
+                    </p>
+                    <span className="text-xs font-semibold text-red-500 bg-red-500/10 px-2 py-1 rounded">
+                      -{getDiscountPercent(product.regularPrice, product.price)}% OFF
+                    </span>
+                  </>
+                )}
+              </div>
 
               <p className="text-muted-foreground leading-relaxed mb-8">
                 {product.description}

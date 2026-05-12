@@ -1,4 +1,6 @@
-import { TrendingUp, TrendingDown, ShoppingBag, Users, DollarSign, Eye, Package, Percent } from "lucide-react";
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
+import { TrendingUp, TrendingDown, ShoppingBag, Users, DollarSign, Eye, Package, Percent, Clock, ArrowRight } from "lucide-react";
 import {
   Area,
   AreaChart,
@@ -11,6 +13,7 @@ import {
   YAxis,
 } from "recharts";
 import { useAdminProducts } from "@/contexts/AdminProductsContext";
+import { useOrders, STATUS_META } from "@/contexts/OrdersContext";
 
 const revenueData = [
   { month: "Jan", revenue: 245000, orders: 32 },
@@ -73,6 +76,18 @@ const StatCard = ({
 
 const AdminDashboard = () => {
   const { products } = useAdminProducts();
+  const { orders } = useOrders();
+
+  const orderStats = useMemo(() => {
+    const active = orders.filter((o) => o.status !== "cancelled");
+    const revenue = active.reduce((s, o) => s + o.total, 0);
+    const pending = orders.filter((o) => o.status === "pending").length;
+    const customers = new Set(orders.map((o) => o.customer.phone.replace(/\s+/g, ""))).size;
+    const aov = active.length ? Math.round(revenue / active.length) : 0;
+    return { revenue, count: orders.length, pending, customers, aov };
+  }, [orders]);
+
+  const recent = orders.slice(0, 5);
 
   return (
     <div className="space-y-8 max-w-7xl">
@@ -85,10 +100,52 @@ const AdminDashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={DollarSign} label="TOTAL REVENUE" value="PKR 3.4M" change="+12.5%" />
-        <StatCard icon={ShoppingBag} label="ORDERS" value="445" change="+8.2%" />
-        <StatCard icon={Users} label="CUSTOMERS" value="1,284" change="+18.4%" />
-        <StatCard icon={DollarSign} label="AVG. ORDER VALUE" value="PKR 7,640" change="+3.1%" />
+        <StatCard icon={DollarSign} label="TOTAL REVENUE" value={`PKR ${orderStats.revenue.toLocaleString()}`} change={orderStats.count ? "live" : "—"} />
+        <StatCard icon={ShoppingBag} label="ORDERS" value={String(orderStats.count)} change={`${orderStats.pending} pending`} positive={orderStats.pending === 0} />
+        <StatCard icon={Users} label="CUSTOMERS" value={String(orderStats.customers)} change={orderStats.customers ? "live" : "—"} />
+        <StatCard icon={DollarSign} label="AVG. ORDER VALUE" value={orderStats.aov ? `PKR ${orderStats.aov.toLocaleString()}` : "—"} change={orderStats.count ? "live" : "—"} />
+      </div>
+
+      {/* Recent orders */}
+      <div className="bg-card border border-border rounded-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="text-[10px] tracking-[0.4em] text-accent mb-1">FULFILLMENT</p>
+            <h3 className="font-serif text-xl text-foreground">Recent Orders</h3>
+          </div>
+          <Link to="/admin/orders" className="text-xs text-accent inline-flex items-center gap-1 hover:underline">
+            View all <ArrowRight className="w-3 h-3" />
+          </Link>
+        </div>
+        {recent.length === 0 ? (
+          <p className="text-sm text-muted-foreground py-6 text-center">No orders yet.</p>
+        ) : (
+          <div className="divide-y divide-border">
+            {recent.map((o) => (
+              <Link
+                key={o.id}
+                to="/admin/orders"
+                className="flex items-center justify-between py-3 hover:bg-muted/30 -mx-2 px-2 rounded-md transition-colors"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-9 h-9 rounded-full bg-accent/15 text-accent flex items-center justify-center">
+                    <Clock className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm text-foreground truncate">{o.orderNumber} · {o.customer.fullName}</p>
+                    <p className="text-xs text-muted-foreground">{new Date(o.placedAt).toLocaleString("en-PK", { dateStyle: "medium", timeStyle: "short" })}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 shrink-0">
+                  <span className={`text-[10px] tracking-[0.15em] uppercase border rounded-full px-2 py-0.5 ${STATUS_META[o.status].className}`}>
+                    {STATUS_META[o.status].label}
+                  </span>
+                  <span className="text-sm text-foreground font-medium">PKR {o.total.toLocaleString()}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

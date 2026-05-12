@@ -7,6 +7,7 @@ import { CartProvider } from "@/contexts/CartContext";
 import { WishlistProvider } from "@/contexts/WishlistContext";
 import { AdminProvider } from "@/contexts/AdminContext";
 import { AdminProductsProvider } from "@/contexts/AdminProductsContext";
+import { OrdersProvider } from "@/contexts/OrdersContext";
 import Index from "./pages/Index.tsx";
 import CategoryPage from "./pages/CategoryPage.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
@@ -18,6 +19,12 @@ import AdminLogin from "./pages/admin/AdminLogin.tsx";
 import AdminLayout from "./pages/admin/AdminLayout.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import AdminProducts from "./pages/admin/AdminProducts.tsx";
+import AdminOrders from "./pages/admin/AdminOrders.tsx";
+import AdminCustomers from "./pages/admin/AdminCustomers.tsx";
+import AdminCategories from "./pages/admin/AdminCategories.tsx";
+import AdminDiscounts from "./pages/admin/AdminDiscounts.tsx";
+import AdminAnalytics from "./pages/admin/AdminAnalytics.tsx";
+import AdminSettings from "./pages/admin/AdminSettings.tsx";
 import SearchPage from "./pages/SearchPage.tsx";
 import OurStory from "./pages/OurStory.tsx";
 import Contact from "./pages/Contact.tsx";
@@ -26,6 +33,7 @@ import FAQs from "./pages/FAQs.tsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
 import TermsOfService from "./pages/TermsOfService.tsx";
 import Checkout from "./pages/Checkout.tsx";
+import OrderConfirmation from "./pages/OrderConfirmation.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -38,8 +46,9 @@ const App = () => (
       <BrowserRouter>
         <AdminProvider>
           <AdminProductsProvider>
-            <CartProvider>
-              <WishlistProvider>
+            <OrdersProvider>
+              <CartProvider>
+                <WishlistProvider>
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/category/:category" element={<CategoryPage />} />
@@ -53,18 +62,26 @@ const App = () => (
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/terms-of-service" element={<TermsOfService />} />
                   <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/order-confirmation" element={<OrderConfirmation />} />
                   <Route path="/signin" element={<SignIn />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/admin/login" element={<AdminLogin />} />
                   <Route path="/admin" element={<AdminLayout />}>
                     <Route index element={<AdminDashboard />} />
+                    <Route path="orders" element={<AdminOrders />} />
+                    <Route path="customers" element={<AdminCustomers />} />
                     <Route path="products" element={<AdminProducts />} />
+                    <Route path="categories" element={<AdminCategories />} />
+                    <Route path="discounts" element={<AdminDiscounts />} />
+                    <Route path="analytics" element={<AdminAnalytics />} />
+                    <Route path="settings" element={<AdminSettings />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-              </WishlistProvider>
-            </CartProvider>
+                </WishlistProvider>
+              </CartProvider>
+            </OrdersProvider>
           </AdminProductsProvider>
         </AdminProvider>
       </BrowserRouter>

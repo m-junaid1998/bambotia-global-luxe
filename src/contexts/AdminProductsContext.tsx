@@ -4,7 +4,9 @@ export interface AdminProduct {
   id: string;
   name: string;
   category: "jewellery" | "cosmetics" | "purses";
+  subcategory?: string;
   price: number;
+  regularPrice?: number;
   stock: number;
   image: string;
   description: string;
