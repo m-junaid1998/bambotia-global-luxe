@@ -95,6 +95,20 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  .scrollbar-premium::-webkit-scrollbar {
+    width: 5px; 
+  }
+  .scrollbar-premium::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+  .scrollbar-premium::-webkit-scrollbar-thumb {
+    background: #064e3b; 
+    border-radius: 20px;
+  }
+  .scrollbar-premium::-webkit-scrollbar-thumb:hover {
+    background: #042f24; 
+  }
 }
 
 @media print {
