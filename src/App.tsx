@@ -22,7 +22,6 @@ import AdminProducts from "./pages/admin/AdminProducts.tsx";
 import AdminOrders from "./pages/admin/AdminOrders.tsx";
 import AdminCustomers from "./pages/admin/AdminCustomers.tsx";
 import AdminCategories from "./pages/admin/AdminCategories.tsx";
-import AdminDiscounts from "./pages/admin/AdminDiscounts.tsx";
 import AdminAnalytics from "./pages/admin/AdminAnalytics.tsx";
 import AdminSettings from "./pages/admin/AdminSettings.tsx";
 import SearchPage from "./pages/SearchPage.tsx";
@@ -73,7 +72,6 @@ const App = () => (
                     <Route path="customers" element={<AdminCustomers />} />
                     <Route path="products" element={<AdminProducts />} />
                     <Route path="categories" element={<AdminCategories />} />
-                    <Route path="discounts" element={<AdminDiscounts />} />
                     <Route path="analytics" element={<AdminAnalytics />} />
                     <Route path="settings" element={<AdminSettings />} />
                   </Route>
