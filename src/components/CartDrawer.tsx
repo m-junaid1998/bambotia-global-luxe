@@ -25,7 +25,7 @@ const CartDrawer = ({ open, onOpenChange }: CartDrawerProps) => {
       <SheetContent className="flex flex-col w-full sm:max-w-md">
         <SheetHeader>
           <SheetTitle className="font-serif text-xl tracking-wide">
-            Shopping Bag ({totalItems})
+            Shopping Bag {(totalItems)}
           </SheetTitle>
           <SheetDescription className="sr-only">Your cart items</SheetDescription>
         </SheetHeader>
@@ -40,7 +40,7 @@ const CartDrawer = ({ open, onOpenChange }: CartDrawerProps) => {
           </div>
         ) : (
           <>
-            <div className="flex-1 overflow-y-auto -mx-6 px-6 space-y-4 py-4">
+            <div className="flex-1 overflow-y-auto scrollbar-premium pr-4 space-y-4 py-4">
               {items.map((item) => (
                 <div key={item.productId} className="flex gap-4">
                   <img

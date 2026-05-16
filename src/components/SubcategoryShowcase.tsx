@@ -120,19 +120,33 @@ const SubcategoryShowcase = () => {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                     />
+
+                    {/* NEW Badge */}
                     {p.isNew && (
                       <span className="absolute top-3 left-3 text-[9px] tracking-[0.15em] bg-accent text-accent-foreground px-2.5 py-1 rounded-sm font-medium">
                         NEW
                       </span>
                     )}
+
+                    {/* Discount Badge */}
+                    {p.regularPrice && p.regularPrice > p.price && (
+                      <div className="absolute bottom-3 left-3 bg-red-500/90 backdrop-blur-sm text-white px-3 py-1.5 rounded-md text-[10px] font-semibold shadow-md">
+                        -{getDiscountPercent(p.regularPrice, p.price)}% OFF
+                      </div>
+                    )}
+
+                    {/* Wishlist */}
                     <WishlistButton
                       productId={p.id}
                       productName={p.name}
                       className="absolute top-3 right-3 opacity-0 group-hover:opacity-100"
                     />
+
+                    {/* Add to Cart */}
                     <button
                       onClick={(e) => {
                         e.preventDefault();
+
                         addItem({
                           productId: p.id,
                           name: p.name,
@@ -148,26 +162,25 @@ const SubcategoryShowcase = () => {
                     </button>
                   </div>
                 </Link>
+
                 <Link to={`/product/${p.slug}`}>
                   <p className="text-[10px] text-muted-foreground tracking-wider mb-0.5 uppercase">
                     {p.subcategory}
                   </p>
+
                   <h3 className="text-sm font-medium text-foreground mb-0.5 group-hover:text-accent transition-colors">
                     {p.name}
                   </h3>
+
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="text-sm text-accent font-medium">
                       {formatPrice(p.price, p.currency)}
                     </p>
+
                     {p.regularPrice && p.regularPrice > p.price && (
-                      <>
-                        <p className="text-xs text-muted-foreground line-through">
-                          {formatPrice(p.regularPrice, p.currency)}
-                        </p>
-                        <span className="text-[10px] font-semibold text-red-500">
-                          -{getDiscountPercent(p.regularPrice, p.price)}%
-                        </span>
-                      </>
+                      <p className="text-xs text-muted-foreground line-through">
+                        {formatPrice(p.regularPrice, p.currency)}
+                      </p>
                     )}
                   </div>
                 </Link>

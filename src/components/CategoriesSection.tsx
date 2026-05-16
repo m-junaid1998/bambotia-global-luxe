@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, ShoppingBag } from "lucide-react";
-import { products, formatPrice } from "@/data/products";
+import { products, formatPrice, getDiscountPercent } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import jewelleryImg from "@/assets/category-jewellery.jpg";
 import cosmeticsImg from "@/assets/category-cosmetics.jpg";
@@ -14,7 +14,6 @@ import SubcategoryShowcase from "./SubcategoryShowcase";
 const jewelleryProducts = products.filter((p) => p.category === "jewellery");
 const cosmeticsProducts = products.filter((p) => p.category === "cosmetics");
 const pursesProducts = products.filter((p) => p.category === "purses");
-
 const ProductCard = ({
   product,
   delay = 0,
@@ -33,29 +32,55 @@ const ProductCard = ({
           width={400}
           height={400}
         />
+
+        {/* NEW Badge */}
         {product.isNew && (
           <span className="absolute top-2 left-2 text-[9px] tracking-[0.15em] bg-accent text-accent-foreground px-2 py-0.5 rounded-sm font-medium">
             NEW
           </span>
         )}
+
+        {/* Discount Badge */}
+        {product.regularPrice && product.regularPrice > product.price && (
+          <div className="absolute bottom-2 left-2 bg-red-500/90 backdrop-blur-sm text-white px-2.5 py-1 rounded-md text-[10px] font-semibold shadow-md">
+            -{getDiscountPercent(product.regularPrice, product.price)}% OFF
+          </div>
+        )}
+
+        {/* Wishlist */}
         <WishlistButton
           productId={product.id}
           productName={product.name}
           className="absolute top-2 right-2 opacity-0 group-hover:opacity-100"
         />
       </div>
+
       <h4 className="text-xs md:text-sm font-medium text-foreground group-hover:text-accent transition-colors leading-tight mb-0.5">
         {product.name}
       </h4>
-      <p className="text-xs text-accent font-medium">
-        {formatPrice(product.price, product.currency)}
-      </p>
+
+      <div className="flex items-center gap-2 flex-wrap">
+        <p className="text-xs text-accent font-medium">
+          {formatPrice(product.price, product.currency)}
+        </p>
+
+        {product.regularPrice && product.regularPrice > product.price && (
+          <p className="text-[11px] text-muted-foreground line-through">
+            {formatPrice(product.regularPrice, product.currency)}
+          </p>
+        )}
+      </div>
     </Link>
   </AnimateOnScroll>
 );
 
-const TabProductCard = ({ product }: { product: (typeof products)[0] }) => {
+const TabProductCard = ({
+  product,
+}: {
+  product: (typeof products)[0];
+}) => {
   const { addItem } = useCart();
+
   return (
     <div className="group block">
       <Link to={`/product/${product.slug}`}>
@@ -68,9 +93,25 @@ const TabProductCard = ({ product }: { product: (typeof products)[0] }) => {
             width={400}
             height={400}
           />
+
+          {/* Discount Badge */}
+          {product.regularPrice &&
+            product.regularPrice > product.price && (
+              <div className="absolute bottom-2 left-2 bg-red-500/90 backdrop-blur-sm text-white px-2.5 py-1 rounded-md text-[10px] font-semibold shadow-md">
+                -
+                {getDiscountPercent(
+                  product.regularPrice,
+                  product.price,
+                )}
+                % OFF
+              </div>
+            )}
+
+          {/* Add To Cart */}
           <button
             onClick={(e) => {
               e.preventDefault();
+
               addItem({
                 productId: product.id,
                 name: product.name,
@@ -84,6 +125,8 @@ const TabProductCard = ({ product }: { product: (typeof products)[0] }) => {
           >
             <ShoppingBag className="w-3.5 h-3.5" />
           </button>
+
+          {/* Wishlist */}
           <WishlistButton
             productId={product.id}
             productName={product.name}
@@ -91,13 +134,30 @@ const TabProductCard = ({ product }: { product: (typeof products)[0] }) => {
           />
         </div>
       </Link>
+
       <Link to={`/product/${product.slug}`}>
         <h4 className="text-xs md:text-sm font-medium text-foreground group-hover:text-accent transition-colors leading-tight mb-0.5">
           {product.name}
         </h4>
-        <p className="text-xs text-accent font-medium">
-          {formatPrice(product.price, product.currency)}
-        </p>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          <p className="text-xs text-accent font-medium">
+            {formatPrice(
+              product.price,
+              product.currency,
+            )}
+          </p>
+
+          {product.regularPrice &&
+            product.regularPrice > product.price && (
+              <p className="text-[11px] text-muted-foreground line-through">
+                {formatPrice(
+                  product.regularPrice,
+                  product.currency,
+                )}
+              </p>
+            )}
+        </div>
       </Link>
     </div>
   );
@@ -111,7 +171,7 @@ const CategoriesSection = () => {
 
   return (
     <section id="categories" className="py-12">
-   <SubcategoryShowcase/>
+      <SubcategoryShowcase />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20 md:space-y-28">
         <div>
           <AnimateOnScroll animation="fade-up">

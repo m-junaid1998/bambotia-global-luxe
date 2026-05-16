@@ -99,7 +99,6 @@ const AdminProducts = () => {
     return () => clearTimeout(t);
   }, [highlightId, products]);
 
-  // Drop selections that no longer match an existing product
   useEffect(() => {
     setSelectedIds((prev) => {
       const valid = new Set(products.map((p) => p.id));

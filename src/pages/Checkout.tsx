@@ -33,7 +33,9 @@ const checkoutSchema = z.object({
     .string()
     .trim()
     .regex(/^\+92\s?3\d{2}[\s-]?\d{7}$/, "Use format +92 3XX XXXXXXX"),
+  country: z.string().trim().min(2, "Area / Town is required").max(80),
   city: z.string().trim().min(2, "City is required").max(60),
+  postalcode: z.string().trim().max(10).optional().or(z.literal("")),
   area: z.string().trim().min(2, "Area / Town is required").max(80),
   address: z.string().trim().min(8, "Please enter a complete address").max(250),
   notes: z.string().trim().max(400).optional().or(z.literal("")),
@@ -44,7 +46,9 @@ type FormState = z.infer<typeof checkoutSchema>;
 const initialForm: FormState = {
   fullName: "",
   phone: "+92 ",
+  country: "",
   city: "",
+  postalcode: "",
   area: "",
   address: "",
   notes: "",
@@ -53,7 +57,8 @@ const initialForm: FormState = {
 const Checkout = () => {
   const navigate = useNavigate();
 
-  const { items, totalPrice, totalItems, addItem, decrementItem, clearCart } = useCart();
+  const { items, totalPrice, totalItems, addItem, decrementItem, clearCart } =
+    useCart();
   const { addOrder } = useOrders();
   const [form, setForm] = useState<FormState>(initialForm);
   const [errors, setErrors] = useState<
@@ -103,20 +108,22 @@ const Checkout = () => {
     const orderNumber = `BMB-${Date.now().toString().slice(-8)}`;
     const placedAt = Date.now();
     const customer = {
-        fullName: form.fullName,
-        phone: form.phone,
-        city: form.city,
-        area: form.area,
-        address: form.address,
-        notes: form.notes || undefined,
+      fullName: form.fullName,
+      phone: form.phone,
+      country: form.country,
+      city: form.city,
+      postalcode: form.postalcode,
+      area: form.area,
+      address: form.address,
+      notes: form.notes || undefined,
     };
     const orderItems = items.map((i) => ({
-        productId: i.productId,
-        name: i.name,
-        price: i.price,
-        currency: i.currency,
-        image: i.image,
-        quantity: i.quantity,
+      productId: i.productId,
+      name: i.name,
+      price: i.price,
+      currency: i.currency,
+      image: i.image,
+      quantity: i.quantity,
     }));
     const estimatedDelivery = "3–5 business days across Pakistan";
     addOrder({
@@ -223,6 +230,23 @@ const Checkout = () => {
                   </div>
 
                   <div>
+                    <Label htmlFor="pakistan">Country</Label>
+                    <Input
+                      id="country"
+                      autoComplete="pakistan"
+                      value={form.country}
+                      onChange={(e) => update("country", e.target.value)}
+                      placeholder="Enter Country"
+                      className="mt-1.5 h-11"
+                    />
+                    {errors.country && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.country}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
                     <Label htmlFor="city">City</Label>
                     <Input
                       id="city"
@@ -235,6 +259,22 @@ const Checkout = () => {
                     {errors.city && (
                       <p className="text-xs text-destructive mt-1">
                         {errors.city}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <Label htmlFor="postalcode">Postal Code</Label>
+                    <Input
+                      id="postalcode"
+                      autoComplete="address-level2"
+                      value={form.postalcode}
+                      onChange={(e) => update("postalcode", e.target.value)}
+                      placeholder="Postal Code (Optional)"
+                      className="mt-1.5 h-11"
+                    />
+                    {errors.postalcode && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.postalcode}
                       </p>
                     )}
                   </div>
@@ -391,16 +431,18 @@ const Checkout = () => {
                               className="w-32 h-32 object-cover rounded-md bg-muted border border-border"
                             />
                           </div>
-                          <div className="flex-1 min-w-0">
+                          <div className=" flex flex-col flex-1 gap-10 min-w-0">
                             <p className="text-sm text-foreground line-clamp-2">
                               {item.name}
                             </p>
 
+
+<div className="mt-2 flex flex-col gap-2">
                             <p className="text-xs text-muted-foreground mt-0.5">
                               Qty {item.quantity}
                             </p>
 
-                            <div className="flex items-center gap-2 border border-border rounded-md mt-2 w-fit">
+                            <div className="flex items-center gap-2 border border-border rounded-md mt-1 w-fit">
                               <button
                                 onClick={() => decrementItem(item.productId)}
                                 className="p-1.5 hover:bg-muted transition-colors"
@@ -430,6 +472,7 @@ const Checkout = () => {
                               >
                                 <Plus className="w-3 h-3" />
                               </button>
+                            </div>
                             </div>
                           </div>
                         </div>

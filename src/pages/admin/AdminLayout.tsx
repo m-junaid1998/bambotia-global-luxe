@@ -34,7 +34,6 @@ const navItems = [
   { to: "/admin/customers", label: "Customers", icon: Users, end: false },
   { to: "/admin/products", label: "Products", icon: Package, end: false },
   { to: "/admin/categories", label: "Categories", icon: FolderTree, end: false },
-  { to: "/admin/discounts", label: "Discounts", icon: Tags, end: false },
   { to: "/admin/analytics", label: "Analytics", icon: BarChart3, end: false },
   { to: "/admin/settings", label: "Settings", icon: Settings, end: false },
 ];

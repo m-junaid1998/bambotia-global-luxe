@@ -55,6 +55,8 @@ const OrderConfirmation = () => {
     window.print();
   };
 
+ 
+
   if (!state?.orderNumber) {
     return <Navigate to="/" replace />;
   }
