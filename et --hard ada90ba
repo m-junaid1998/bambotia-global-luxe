@@ -1,0 +1,193 @@
+[33mcea213f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m test
+[33m82afc4f[m npm i
+[33m2aa1df6[m Merge branch 'main' of https://github.com/m-junaid1998/bambotia-global-luxe
+[33ma79a24d[m add print invoice
+[33mabbd9c6[m changes
+[33m5a09672[m update frontend
+[33mada90ba[m add vercel.json file
+[33m501f648[m update
+[33m436b943[m remove admin discount
+[33m38a5e8c[m update index.html
+[33m1765e68[m chage scrollbar
+[33m0ee31d8[m add scrollbar
+[33mac63f81[m order confirmation
+[33m3395ce2[m add printinvoice
+[33me7ecb4a[m update css
+[33m0e80e1a[m short same logic
+[33md9c1cdf[m update padding
+[33me29a541[m update
+[33m452c2f9[m Merge branch 'main' of https://github.com/m-junaid1998/bambotia-global-luxe
+[33m531d02e[m update code
+[33m7d21b09[m Added admin panel & orders
+[33m12c2f51[m Changes
+[33m4fd5cd5[m Changes
+[33m3ae32ba[m Changes
+[33mc2ac6a7[m Changes
+[33mafc5e85[m Changes
+[33m07ea956[m Changes
+[33m5a0e990[m Changes
+[33mb943559[m Changes
+[33mb70c30a[m Changes
+[33m2ddebf3[m Changes
+[33m225e4e7[m Changes
+[33m997f0f6[m Added order confirmation page
+[33m5b0b82c[m Changes
+[33mf73ae25[m Changes
+[33mf24d438[m Changes
+[33me1953c9[m Changes
+[33m1f86031[m Hid scrollbar on subcats
+[33mec84983[m Changes
+[33md816096[m Added luxury subcategory tabs
+[33m11e320a[m Changes
+[33me904b23[m Changes
+[33m1184c51[m Added regular/sale price & subcat
+[33ma851f3c[m Changes
+[33mbd79797[m Changes
+[33ma87ed5f[m Changes
+[33m502460a[m Changes
+[33m097f4ac[m Changes
+[33mfbc725c[m Changes
+[33mabcfa63[m add regular , sale price and discount
+[33m8350f81[m add counter
+[33m80f9600[m add logo and change height
+[33m9de8224[m change z -inndex
+[33m391b378[m add scrollToTop
+[33mb91fa17[m remove  SheetFooter
+[33mbd4d732[m remove apple button
+[33mb78c5bb[m update logo
+[33mf8a2c27[m add logo
+[33mcc94a55[m Added Shopify-style checkout
+[33mb2fd648[m Changes
+[33mc20b2e7[m Changes
+[33m817f0fc[m Changes
+[33m9738c5a[m Update logo import in Navbar component
+[33m60b7704[m add logo
+[33m6bc1492[m Update logo import in Navbar component
+[33m400f33e[m add image
+[33m7bd979d[m Reverted navbar to dark
+[33mb8335d5[m Changes
+[33mb47c08d[m Changes
+[33mf4de671[m Changes
+[33m9b3cd06[m Styled header with beige/gold/green
+[33m1ce6d4a[m Changes
+[33md2a34eb[m Remove inline style from logo image in Navbar
+[33m4cdff73[m Added golden logo header
+[33m2e74813[m Changes
+[33m81478cd[m Update site info for publish
+[33mf2bb13c[m Added SEO & sitemap to prod
+[33m01e0273[m Changes
+[33ma1c8a7f[m Changes
+[33m3c8ba4f[m Changes
+[33m56d942a[m Changes
+[33m91a0c61[m Added photo upload to reviews
+[33m2decee8[m Changes
+[33mda18d1f[m Changes
+[33m4827baf[m Changes
+[33mfe77575[m Added SEO to footer pages
+[33mdfa8fd7[m Changes
+[33mfe6e9b1[m Changes
+[33m14b3797[m Changes
+[33mdfcbe39[m Changes
+[33m1392f6d[m Changes
+[33m4b29efe[m Changes
+[33mf3e2619[m Changes
+[33ma418009[m Changes
+[33m1461d15[m Added product reviews
+[33md3d16d8[m Changes
+[33m68eb4a4[m Changes
+[33m1cbdfb7[m Added footer routes & pages
+[33ma8919b1[m Changes
+[33m973f047[m Changes
+[33md93a457[m Changes
+[33m973816e[m Changes
+[33m3548593[m Changes
+[33m1f54cb3[m Changes
+[33mbead68a[m Changes
+[33m63bb6a6[m Changes
+[33m4eb803d[m Changes
+[33m018d71b[m Added reset filters button
+[33mfc4758a[m Changes
+[33m27a02c9[m Changes
+[33mab46eb2[m Changes
+[33mfddcd12[m Changes
+[33mbd8d918[m Added mobile filter drawer
+[33mdcd97ea[m Changes
+[33mdea92c8[m Added full-page search route
+[33m591ff75[m Changes
+[33m09d3034[m Changes
+[33mb4448ff[m Changes
+[33mb77b418[m Added success toast with View
+[33mba41aac[m Changes
+[33m5af6aec[m Changes
+[33m37b2833[m Synced admin products to store
+[33medb6c1a[m Changes
+[33m10d3cf4[m Changes
+[33mf393409[m Added guided empty state
+[33m28edef9[m Changes
+[33me8d113d[m Added bulk publish/draft actions
+[33m3244852[m Changes
+[33mcb9dfe8[m Changes
+[33mdd9ec42[m Changes
+[33m1034b8a[m Changes
+[33m1feaf60[m Added auto-save draft to dialog
+[33m9d504b1[m Changes
+[33m9a3ca83[m Changes
+[33maaa0b08[m Added product draft toggle
+[33ma82b983[m Changes
+[33m7c1cddb[m Changes
+[33m0409b1d[m Changes
+[33m97b8340[m Changes
+[33md61af40[m Enhanced admin image preview
+[33mdb1ec85[m Changes
+[33m200afe1[m Added admin product editing
+[33m1b10ab0[m Changes
+[33mdbc1548[m Changes
+[33mfa3a45f[m Changes
+[33m553e916[m Changes
+[33mf50d01a[m Work in progress
+[33m2b9b420[m Added admin auth & panel
+[33m0539aab[m Changes
+[33mc7cbc1f[m Added forgot-password page
+[33me62e535[m Changes
+[33m452b907[m Added UI-only sign pages
+[33m907af86[m Changes
+[33m7a32d97[m Changes
+[33m830d7b8[m Added wishlist page route
+[33mb6cfd13[m Changes
+[33mced052a[m Changes
+[33m82ad4ae[m Redesigned search overlay
+[33me567655[m Changes
+[33mb83a0eb[m Added wishlist with hearts
+[33mb10100d[m Changes
+[33mcd4891f[m Changes
+[33m8897dd8[m Added search overlay with filters
+[33m77337c7[m Changes
+[33m7771e2a[m Changes
+[33m8cdfb57[m Changes
+[33mb13738e[m Changes
+[33m8f019c2[m Work in progress
+[33m729d943[m Updated homepage pixel-perfect
+[33m9e030aa[m Changes
+[33m3a90949[m Added slide-out cart drawer
+[33m68f7540[m Changes
+[33mf23d877[m Changes
+[33mb1579bb[m Work in progress
+[33m24aa33b[m Added scroll-triggered animations
+[33m85eae94[m Changes
+[33m7e95e3a[m Redesigned homepage layout
+[33m96cd174[m Changes
+[33m84db0ab[m Work in progress
+[33mf3479a1[m Add product detail pages
+[33m3b7c01d[m Add product detail pages
+[33m739e2b0[m Add product images assets
+[33m9e8af02[m Add product detail pages
+[33m1755505[m Implement full Bambotia UI
+[33mb51468c[m Luxury UI implemented
+[33mc16e326[m Refresh design system and assets
+[33m2a70210[m Updated design system and assets
+[33mbdded74[m Update bun.lock and assets
+[33mad7af28[m Update lockfile and assets
+[33m345f8ac[m Update lockfile and assets
+[33m78dac16[m Changes
+[33mbc6a45f[m Work in progress
+[33m95d05da[m template: vite_react_shadcn_ts_2026-03-20
