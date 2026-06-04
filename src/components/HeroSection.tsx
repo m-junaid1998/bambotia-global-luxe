@@ -16,7 +16,7 @@ const HeroSection = () => {
       />
 
       {/* Hero Image Container */}
-      <div className="absolute right-0 top-0 bottom-0 w-full md:w-3/5 h-full z-0">
+      <div className="absolute inset-0 md:right-0 md:left-auto md:top-0 md:bottom-0 md:w-3/5 h-full z-0">
         <img
           src={heroImage}
           alt="Luxury fashion model wearing Bambotia jewellery"
@@ -25,11 +25,12 @@ const HeroSection = () => {
           height={1280}
         />
         
-        {/* Mobile vs Desktop v4 Blending Fix: Isse dynamic color dumping bilkul khatam ho jayegi */}
-        <div 
-          className="absolute inset-0 z-1 md:hidden pointer-events-none" 
+        {/* Mobile overlay: darken image so text reads clearly while keeping the model fully visible */}
+        <div
+          className="absolute inset-0 z-1 md:hidden pointer-events-none"
           style={{
-            background: "linear-gradient(to top, var(--background) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)"
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.55) 100%)",
           }}
         />
         <div 
