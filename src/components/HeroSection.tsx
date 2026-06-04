@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles, Eye } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-model.jpg";
 import AnimateOnScroll from "@/components/AnimateOnScroll";
@@ -75,13 +75,13 @@ const HeroSection = () => {
                 href="#new-arrivals"
                 className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-accent text-accent-foreground font-medium text-sm tracking-wider rounded hover:opacity-90 transition-opacity w-full sm:w-auto"
               >
-                New Arrivals <Sparkles className="w-4 h-4" />
+                Explore Collection <ArrowRight className="w-4 h-4" />
               </a>
               <a
-                href="#shop-the-look"
+                href="#new-arrivals"
                 className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 border border-foreground/20 text-foreground font-medium text-sm tracking-wider rounded hover:border-accent hover:text-accent transition-colors w-full sm:w-auto"
               >
-                Shop the Look <Eye className="w-4 h-4" />
+                New Arrivals <Star className="w-4 h-4" />
               </a>
             </div>
           </AnimateOnScroll>
