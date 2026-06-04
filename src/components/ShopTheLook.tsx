@@ -11,7 +11,7 @@ const looks = [
 ];
 
 const ShopTheLook = () => (
-  <section className="py-16 md:py-24">
+  <section id="shop-the-look" className="py-16 md:py-24">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <AnimateOnScroll animation="fade-up">
         <div className="text-center mb-12">
