@@ -1,5 +1,4 @@
 import { ArrowRight, Star } from "lucide-react";
-import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-model.jpg";
 import AnimateOnScroll from "@/components/AnimateOnScroll";
 
@@ -7,11 +6,11 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-[90vh] md:min-h-[calc(100vh-5rem)] flex items-center overflow-hidden pt-20 md:pt-0 bg-background">
       {/* Hero Image Background */}
-      <div className="absolute inset-0 h-full z-0">
+      <div className="absolute inset-0 md:left-auto md:w-[72%] h-full z-0">
         <img
           src={heroImage}
           alt="Luxury fashion model wearing Bambotia jewellery"
-          className="w-full h-full object-cover object-center md:object-[78%_32%]"
+          className="w-full h-full object-cover object-center md:object-[50%_30%]"
           width={1024}
           height={1280}
         />
@@ -25,10 +24,10 @@ const HeroSection = () => {
           }}
         />
         <div 
-          className="absolute inset-0 z-1 hidden md:block pointer-events-none" 
+          className="fixed inset-x-0 top-20 bottom-0 z-1 hidden md:block pointer-events-none" 
           style={{
             background:
-              "linear-gradient(to right, hsl(var(--background)) 0%, hsl(var(--background) / 0.96) 25%, hsl(var(--background) / 0.78) 43%, hsl(var(--background) / 0.42) 62%, hsl(var(--background) / 0.14) 100%), linear-gradient(to bottom, hsl(var(--background) / 0.25) 0%, transparent 42%, hsl(var(--background) / 0.22) 100%)",
+              "linear-gradient(to right, hsl(var(--background)) 0%, hsl(var(--background)) 29%, hsl(var(--background) / 0.9) 43%, hsl(var(--background) / 0.48) 61%, hsl(var(--background) / 0.2) 100%), linear-gradient(to bottom, hsl(var(--background) / 0.22) 0%, transparent 45%, hsl(var(--background) / 0.18) 100%)",
           }}
         />
       </div>
