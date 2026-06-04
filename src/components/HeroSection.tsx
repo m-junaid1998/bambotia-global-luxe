@@ -4,9 +4,10 @@ import AnimateOnScroll from "@/components/AnimateOnScroll";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-[90vh] md:min-h-[calc(100vh-5rem)] flex items-center overflow-hidden pt-20 md:pt-0 bg-background">
-      {/* Hero Image Background */}
-      <div className="absolute inset-0 md:left-auto md:w-[72%] h-full z-0">
+     <section className="relative min-h-[90vh] md:min-h-screen flex items-center overflow-hidden pt-20 bg-background">
+
+        
+      <div className="absolute right-0 top-0 bottom-0 w-full md:w-3/5 h-full z-0">
         <img
           src={heroImage}
           alt="Luxury fashion model wearing Bambotia jewellery"
