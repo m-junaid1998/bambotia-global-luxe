@@ -17,20 +17,21 @@ const HeroSection = () => {
         
         {/* Mobile overlay: darken image so text reads clearly while keeping the model fully visible */}
         <div
-          className="absolute inset-0 z-1 md:hidden pointer-events-none"
+          className="absolute inset-0 z-[1] md:hidden pointer-events-none"
           style={{
             background:
               "linear-gradient(to bottom, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.55) 100%)",
           }}
         />
-        <div 
-          className="fixed inset-x-0 top-20 bottom-0 z-1 hidden md:block pointer-events-none" 
-          style={{
-            background:
-              "linear-gradient(to right, hsl(var(--background)) 0%, hsl(var(--background)) 29%, hsl(var(--background) / 0.9) 43%, hsl(var(--background) / 0.48) 61%, hsl(var(--background) / 0.2) 100%), linear-gradient(to bottom, hsl(var(--background) / 0.22) 0%, transparent 45%, hsl(var(--background) / 0.18) 100%)",
-          }}
-        />
       </div>
+
+      <div 
+        className="absolute inset-0 z-10 hidden md:block pointer-events-none" 
+        style={{
+          background:
+            "linear-gradient(to right, hsl(var(--background)) 0%, hsl(var(--background)) 29%, hsl(var(--background) / 0.9) 43%, hsl(var(--background) / 0.48) 61%, hsl(var(--background) / 0.2) 100%), linear-gradient(to bottom, hsl(var(--background) / 0.22) 0%, transparent 45%, hsl(var(--background) / 0.18) 100%)",
+        }}
+      />
 
       {/* Main Content Area */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 md:py-0">
