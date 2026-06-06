@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { toast } from "sonner";
+import { feedback } from "@/lib/feedback";
 
 interface WishlistContextType {
   items: string[];
@@ -15,9 +16,11 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
   const toggleItem = (productId: string, productName: string) => {
     setItems((prev) => {
       if (prev.includes(productId)) {
+        feedback("wishlistRemove");
         toast.success(`${productName} removed from wishlist`);
         return prev.filter((id) => id !== productId);
       }
+      feedback("wishlistAdd");
       toast.success(`${productName} added to wishlist`);
       return [...prev, productId];
     });

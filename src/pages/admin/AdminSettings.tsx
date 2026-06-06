@@ -1,4 +1,5 @@
 import { ADMIN_DEMO_CREDENTIALS } from "@/contexts/AdminContext";
+import FeedbackSettings from "@/components/FeedbackSettings";
 
 const AdminSettings = () => (
   <div className="space-y-8 max-w-3xl">
@@ -19,6 +20,13 @@ const AdminSettings = () => (
           <dd className="text-foreground">Owner</dd>
         </div>
       </dl>
+    </div>
+    <div className="bg-background/90 backdrop-blur-md border border-border rounded-2xl p-6 shadow-sm">
+      <h3 className="font-serif text-xl text-foreground mb-1">Tactile Feedback</h3>
+      <p className="text-sm text-muted-foreground mb-4">
+        Premium click sounds and vibration for every interaction.
+      </p>
+      <FeedbackSettings variant="inline" />
     </div>
   </div>
 );

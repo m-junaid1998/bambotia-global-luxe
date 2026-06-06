@@ -5,6 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import CartDrawer from "@/components/CartDrawer";
 import logo from "@/assets/logo.png";
+import FeedbackSettings from "@/components/FeedbackSettings";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -31,6 +32,7 @@ const Navbar = () => {
             <button className="text-foreground hover:text-accent transition-colors" aria-label="Search" onClick={() => navigate("/search")}>
               <Search className="w-5 h-5" />
             </button>
+            <FeedbackSettings />
             <Link to="/signin" className="hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Account">
               <User className="w-5 h-5" />
             </Link>

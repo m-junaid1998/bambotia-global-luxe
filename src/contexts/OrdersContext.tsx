@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useMemo } from "react";
+import { feedback } from "@/lib/feedback";
 
 export type OrderStatus =
   | "pending"
@@ -98,10 +99,12 @@ export const OrdersProvider = ({ children }: { children: ReactNode }) => {
       timeline: [{ status: "pending", at: Date.now(), note: "Order placed" }],
     };
     setOrders((prev) => [order, ...prev]);
+    feedback("orderPlaced");
     return order;
   };
 
   const updateStatus: OrdersContextValue["updateStatus"] = (id, status, note) => {
+    feedback("adminStatus");
     setOrders((prev) =>
       prev.map((o) =>
         o.id === id

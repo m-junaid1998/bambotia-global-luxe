@@ -8,6 +8,7 @@ import { WishlistProvider } from "@/contexts/WishlistContext";
 import { AdminProvider } from "@/contexts/AdminContext";
 import { AdminProductsProvider } from "@/contexts/AdminProductsContext";
 import { OrdersProvider } from "@/contexts/OrdersContext";
+import { FeedbackProvider } from "@/contexts/FeedbackContext";
 import Index from "./pages/Index.tsx";
 import CategoryPage from "./pages/CategoryPage.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
@@ -43,6 +44,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <FeedbackProvider>
         <AdminProvider>
           <AdminProductsProvider>
             <OrdersProvider>
@@ -82,6 +84,7 @@ const App = () => (
             </OrdersProvider>
           </AdminProductsProvider>
         </AdminProvider>
+        </FeedbackProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
