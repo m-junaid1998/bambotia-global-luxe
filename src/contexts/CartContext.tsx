@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { toast } from "sonner";
+import { feedback } from "@/lib/feedback";
 
 interface CartItem {
   productId: string;
@@ -26,6 +27,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
   const addItem = (item: Omit<CartItem, "quantity">) => {
+    feedback("cartAdd");
     setItems((prev) => {
       const existing = prev.find((i) => i.productId === item.productId);
       if (existing) {
@@ -40,6 +42,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeItem = (productId: string) => {
+    feedback("cartRemove");
     setItems((prev) => prev.filter((i) => i.productId !== productId));
   };
 
