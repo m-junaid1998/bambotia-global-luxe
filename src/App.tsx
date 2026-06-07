@@ -9,7 +9,7 @@ import { AdminProvider } from "@/contexts/AdminContext";
 import { AdminProductsProvider } from "@/contexts/AdminProductsContext";
 import { OrdersProvider } from "@/contexts/OrdersContext";
 import { FeedbackProvider } from "@/contexts/FeedbackContext";
-import { ThemeProvider } from "@/contexts/ThemeContext";
+
 import Index from "./pages/Index.tsx";
 import CategoryPage from "./pages/CategoryPage.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
@@ -45,7 +45,6 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <ThemeProvider>
         <FeedbackProvider>
         <AdminProvider>
           <AdminProductsProvider>
@@ -87,7 +86,6 @@ const App = () => (
           </AdminProductsProvider>
         </AdminProvider>
         </FeedbackProvider>
-        </ThemeProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
