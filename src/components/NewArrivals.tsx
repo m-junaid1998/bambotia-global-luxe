@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, ShoppingBag, Star } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { formatPrice, getDiscountPercent } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useStorefrontProducts } from "@/hooks/useStorefrontProducts";
