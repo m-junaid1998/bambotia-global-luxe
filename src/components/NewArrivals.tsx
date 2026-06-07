@@ -30,7 +30,7 @@ const NewArrivals = () => {
           </div>
         </AnimateOnScroll>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {newProducts.map((p, i) => {
             const discount = p.regularPrice ? getDiscountPercent(p.regularPrice, p.price) : 0;
             // Deterministic rating + variant swatches from product id
