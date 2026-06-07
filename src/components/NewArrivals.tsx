@@ -64,14 +64,7 @@ const NewArrivals = () => {
                     to={`/product/${p.slug}`}
                     className="relative block aspect-square overflow-hidden bg-muted/40"
                   >
-                    <p className="absolute top-2 left-2 sm:top-3 sm:left-4 z-10 text-[8px] sm:text-[10px] font-semibold tracking-[0.12em] sm:tracking-[0.18em] text-accent uppercase">
-                      {discount > 0
-                        ? `WAS ${formatPrice(
-                            p.regularPrice!,
-                            p.currency
-                          )}`
-                        : "JUST ARRIVED"}
-                    </p>
+               
 
                     <img
                       src={p.images[0]}
