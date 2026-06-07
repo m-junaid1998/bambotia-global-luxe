@@ -6,6 +6,7 @@
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant light (&:is(.light *));
 
 @theme inline {
   --color-border: hsl(var(--border));
@@ -39,6 +40,9 @@
   --color-deep-teal: hsl(var(--deep-teal));
   --color-gold: hsl(var(--gold));
   --color-cream: hsl(var(--cream));
+
+  --color-cta: hsl(var(--cta));
+  --color-cta-foreground: hsl(var(--cta-foreground));
 
   --color-sidebar: hsl(var(--sidebar-background));
   --color-sidebar-foreground: hsl(var(--sidebar-foreground));
@@ -132,6 +136,46 @@
     --sidebar-accent-foreground: 40 30% 90%;
     --sidebar-border: 160 15% 18%;
     --sidebar-ring: 38 35% 55%;
+
+    --cta: 38 45% 62%;
+    --cta-foreground: 160 30% 6%;
+  }
+
+  /* Zero Lifestyle inspired light theme — applied when <html class="light"> */
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 8%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 8%;
+    --primary: 0 0% 8%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 0 0% 8%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 258 60% 58%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 14% 91%;
+    --input: 220 14% 91%;
+    --ring: 258 60% 58%;
+    --rose-gold: 258 60% 58%;
+    --deep-teal: 0 0% 8%;
+    --gold: 258 60% 58%;
+    --cream: 0 0% 98%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 8%;
+    --sidebar-primary: 0 0% 8%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 0 0% 8%;
+    --sidebar-border: 220 14% 91%;
+    --sidebar-ring: 258 60% 58%;
+    --cta: 0 75% 50%;
+    --cta-foreground: 0 0% 100%;
   }
 }
 
