@@ -34,9 +34,7 @@ const Navbar = () => {
               <Search className="w-5 h-5" />
             </button>
             <FeedbackSettings />
-            <Link to="/signin" className="hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Account">
-              <User className="w-5 h-5" />
-            </Link>
+         
             <Link to="/wishlist" className="relative hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Wishlist">
               <Heart className="w-5 h-5" />
               {wishlistItems.length > 0 && (
@@ -60,6 +58,9 @@ const Navbar = () => {
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
+               <Link to="/signin" className="hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Account">
+              <User className="w-5 h-5" />
+            </Link>
           </div>
         </div>
       </div>
