@@ -62,7 +62,7 @@ const NewArrivals = () => {
                     className="relative block aspect-square overflow-hidden bg-muted/40"
                   >
                  {p.isNew && (
-                 <span className="absolute top-1.3 left-1.3 sm:top-3 sm:left-4 z-10 px-1.8 py-0.5 text-[8px] sm:text-[9px] font-semibold tracking-[0.15em] bg-accent text-accent-foreground rounded-full uppercase shadow">
+                 <span className="absolute top-1.5 left-1.5 sm:top-3 sm:left-4 z-10 px-2 py-0.5 text-[8px] sm:text-[9px] font-semibold tracking-[0.15em] bg-accent text-accent-foreground rounded-full uppercase shadow">
                   NEW
                  </span>
                   )}
