@@ -1,89 +1,97 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Heart, ShoppingBag, Menu, X, User } from "lucide-react";
+import { Search, Heart, ShoppingBag, Menu, User } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import CartDrawer from "@/components/CartDrawer";
-import logo from "@/assets/logo.png";
+import MobileDrawer from "@/components/MobileDrawer";
+import ThemeToggle from "@/components/ThemeToggle";
 import FeedbackSettings from "@/components/FeedbackSettings";
-
+import logo from "@/assets/logo.png";
 
 const Navbar = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const { totalItems } = useCart();
   const { items: wishlistItems } = useWishlist();
   const navigate = useNavigate();
 
+  const Badge = ({ count }: { count: number }) =>
+    count > 0 ? (
+      <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-accent text-accent-foreground text-[10px] font-bold flex items-center justify-center">
+        {count}
+      </span>
+    ) : null;
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <Link to="/" className="flex-shrink-0">
-            <img src={logo} alt="Bambotia" className="h-[3.2em] mt-2 md:h-[4.2em] w-auto  transition-all duration-200 hover:scale-105" />
-          </Link>
-
-          <div className="hidden md:flex items-center gap-10">
-            <Link to="/category/jewellery" className="text-sm font-medium tracking-[0.2em] text-foreground hover:text-accent transition-colors">JEWELLERY</Link>
-            <Link to="/category/cosmetics" className="text-sm font-medium tracking-[0.2em] text-foreground hover:text-accent transition-colors">COSMETICS</Link>
-            <Link to="/category/purses" className="text-sm font-medium tracking-[0.2em] text-foreground hover:text-accent transition-colors">PURSES</Link>
+    <>
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* ===== Mobile (3-zone) ===== */}
+          <div className="md:hidden grid grid-cols-3 items-center h-16">
+            <div className="flex justify-start">
+              <button
+                onClick={() => setDrawerOpen(true)}
+                aria-label="Open menu"
+                className="text-foreground hover:text-accent transition-colors p-1"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="flex justify-center">
+              <Link to="/" aria-label="Home">
+                <img src={logo} alt="Bambotia" className="h-12 w-auto" />
+              </Link>
+            </div>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setCartOpen(true)}
+                aria-label="Cart"
+                className="relative text-foreground hover:text-accent transition-colors p-1"
+              >
+                <ShoppingBag className="w-6 h-6" />
+                <Badge count={totalItems} />
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button className="text-foreground hover:text-accent transition-colors" aria-label="Search" onClick={() => navigate("/search")}>
-              <Search className="w-5 h-5" />
-            </button>
-            <FeedbackSettings />
-         
-            <Link to="/wishlist" className="relative hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Wishlist">
-              <Heart className="w-5 h-5" />
-              {wishlistItems.length > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-accent text-accent-foreground text-[10px] font-bold flex items-center justify-center">
-                  {wishlistItems.length}
-                </span>
-              )}
+          {/* ===== Desktop ===== */}
+          <div className="hidden md:flex items-center justify-between h-20">
+            <Link to="/" className="flex-shrink-0">
+              <img src={logo} alt="Bambotia" className="h-[4.2em] w-auto transition-transform hover:scale-105" />
             </Link>
-            <button className="relative text-foreground hover:text-accent transition-colors" aria-label="Cart" onClick={() => setCartOpen(true)}>
-              <ShoppingBag className="w-5 h-5" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-accent text-accent-foreground text-[10px] font-bold flex items-center justify-center">
-                  {totalItems}
-                </span>
-              )}
-            </button>
-            <button
-              className="md:hidden text-foreground"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Menu"
-            >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-               <Link to="/signin" className="hidden md:block text-foreground hover:text-accent transition-colors" aria-label="Account">
-              <User className="w-5 h-5" />
-            </Link>
+
+            <div className="flex items-center gap-10">
+              <Link to="/category/jewellery" className="text-sm font-medium tracking-[0.2em] text-foreground hover:text-accent transition-colors">JEWELLERY</Link>
+              <Link to="/category/cosmetics" className="text-sm font-medium tracking-[0.2em] text-foreground hover:text-accent transition-colors">COSMETICS</Link>
+              <Link to="/category/purses" className="text-sm font-medium tracking-[0.2em] text-foreground hover:text-accent transition-colors">PURSES</Link>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <button onClick={() => navigate("/search")} aria-label="Search" className="text-foreground hover:text-accent transition-colors">
+                <Search className="w-5 h-5" />
+              </button>
+              <ThemeToggle />
+              <FeedbackSettings />
+              <Link to="/wishlist" aria-label="Wishlist" className="relative text-foreground hover:text-accent transition-colors">
+                <Heart className="w-5 h-5" />
+                <Badge count={wishlistItems.length} />
+              </Link>
+              <Link to="/signin" aria-label="Account" className="text-foreground hover:text-accent transition-colors">
+                <User className="w-5 h-5" />
+              </Link>
+              <button onClick={() => setCartOpen(true)} aria-label="Cart" className="relative text-foreground hover:text-accent transition-colors">
+                <ShoppingBag className="w-5 h-5" />
+                <Badge count={totalItems} />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </nav>
 
-      {mobileOpen && (
-        <div className="md:hidden bg-background border-t border-border">
-          <div className="px-4 py-6 space-y-4">
-            <Link to="/category/jewellery" className="block text-sm font-medium tracking-[0.2em] text-foreground" onClick={() => setMobileOpen(false)}>JEWELLERY</Link>
-            <Link to="/category/cosmetics" className="block text-sm font-medium tracking-[0.2em] text-foreground" onClick={() => setMobileOpen(false)}>COSMETICS</Link>
-            <Link to="/category/purses" className="block text-sm font-medium tracking-[0.2em] text-foreground" onClick={() => setMobileOpen(false)}>PURSES</Link>
-            <Link to="/wishlist" className="flex items-center gap-2 text-sm font-medium tracking-[0.2em] text-foreground" onClick={() => setMobileOpen(false)}>
-              <Heart className="w-4 h-4" /> WISHLIST
-              {wishlistItems.length > 0 && <span className="text-accent text-xs">({wishlistItems.length})</span>}
-            </Link>
-            <Link to="/signin" className="flex items-center gap-2 text-sm font-medium tracking-[0.2em] text-foreground" onClick={() => setMobileOpen(false)}>
-              <User className="w-4 h-4" /> SIGN IN
-            </Link>
-          </div>
-        </div>
-      )}
-
+      <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
       <CartDrawer open={cartOpen} onOpenChange={setCartOpen} />
-    </nav>
+    </>
   );
 };
 
