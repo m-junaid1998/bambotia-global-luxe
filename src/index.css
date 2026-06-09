@@ -141,6 +141,30 @@
     --cta-foreground: 160 30% 6%;
   }
 
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 10%;
+    --card: 240 10% 98%;
+    --card-foreground: 240 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 10%;
+    --primary: 252 60% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 10% 95%;
+    --secondary-foreground: 240 10% 15%;
+    --muted: 240 10% 96%;
+    --muted-foreground: 240 5% 40%;
+    --accent: 252 60% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 10% 90%;
+    --input: 240 10% 90%;
+    --ring: 252 60% 55%;
+    --cta: 0 75% 55%;
+    --cta-foreground: 0 0% 100%;
+  }
+
 }
 
 @layer base {
