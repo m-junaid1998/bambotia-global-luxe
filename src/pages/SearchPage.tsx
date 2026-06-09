@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -21,12 +21,15 @@ const CATEGORIES = [
 
 const SearchPage = () => {
   const products = useStorefrontProducts();
+  const navigate = useNavigate();
   const maxPrice = useMemo(
     () => Math.max(50000, ...products.map((p) => p.price)),
     [products]
   );
 
   const [query, setQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(-1);
   const [cats, setCats] = useState<string[]>([]);
   const [price, setPrice] = useState<number>(maxPrice);
   const [onlyNew, setOnlyNew] = useState(false);
@@ -136,6 +139,45 @@ const SearchPage = () => {
     });
   }, [products, query, cats, price, onlyNew]);
 
+  const suggestions = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [] as typeof products;
+    return products
+      .filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q)
+      )
+      .slice(0, 6);
+  }, [products, query]);
+
+  const matchingCategories = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [] as { key: string; label: string }[];
+    return CATEGORIES.filter((c) => c.label.toLowerCase().includes(q));
+  }, [query]);
+
+  const suggestionItems = useMemo(
+    () => [
+      ...matchingCategories.map((c) => ({ type: "category" as const, ...c })),
+      ...suggestions.map((p) => ({ type: "product" as const, product: p })),
+    ],
+    [matchingCategories, suggestions]
+  );
+
+  const pickSuggestion = (i: number) => {
+    const item = suggestionItems[i];
+    if (!item) return;
+    setShowSuggestions(false);
+    setActiveIdx(-1);
+    if (item.type === "product") {
+      navigate(`/product/${item.product.slug}`);
+    } else {
+      setQuery(item.label);
+      setCats([item.key]);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -156,10 +198,89 @@ const SearchPage = () => {
             <Input
               autoFocus
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setShowSuggestions(true);
+                setActiveIdx(-1);
+              }}
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+              onKeyDown={(e) => {
+                if (!showSuggestions || suggestionItems.length === 0) return;
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setActiveIdx((i) => (i + 1) % suggestionItems.length);
+                } else if (e.key === "ArrowUp") {
+                  e.preventDefault();
+                  setActiveIdx((i) => (i <= 0 ? suggestionItems.length - 1 : i - 1));
+                } else if (e.key === "Enter" && activeIdx >= 0) {
+                  e.preventDefault();
+                  pickSuggestion(activeIdx);
+                } else if (e.key === "Escape") {
+                  setShowSuggestions(false);
+                }
+              }}
               placeholder="Search for jewellery, cosmetics, purses..."
               className="h-14 pl-12 text-base bg-card border-border"
             />
+            {showSuggestions && query.trim() && suggestionItems.length > 0 && (
+              <div className="absolute z-30 left-0 right-0 mt-2 bg-card border border-border rounded-md shadow-lg overflow-hidden">
+                {matchingCategories.length > 0 && (
+                  <div className="px-4 pt-3 pb-1 text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
+                    Categories
+                  </div>
+                )}
+                {suggestionItems.map((item, i) => {
+                  const active = i === activeIdx;
+                  if (item.type === "category") {
+                    return (
+                      <button
+                        key={`c-${item.key}`}
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => pickSuggestion(i)}
+                        onMouseEnter={() => setActiveIdx(i)}
+                        className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm transition-colors ${
+                          active ? "bg-accent/10 text-accent" : "text-foreground hover:bg-muted/50"
+                        }`}
+                      >
+                        <Search className="w-4 h-4 text-muted-foreground" />
+                        <span>{item.label}</span>
+                      </button>
+                    );
+                  }
+                  const p = item.product;
+                  return (
+                    <button
+                      key={`p-${p.id}`}
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => pickSuggestion(i)}
+                      onMouseEnter={() => setActiveIdx(i)}
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
+                        active ? "bg-accent/10" : "hover:bg-muted/50"
+                      }`}
+                    >
+                      <img
+                        src={p.images[0]}
+                        alt={p.name}
+                        className="w-10 h-10 rounded object-cover bg-muted"
+                        loading="lazy"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-foreground truncate">{p.name}</p>
+                        <p className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
+                          {p.category}
+                        </p>
+                      </div>
+                      <span className="text-xs font-medium text-foreground whitespace-nowrap">
+                        {formatPrice(p.price, p.currency)}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8">
