@@ -5,7 +5,6 @@ import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import CartDrawer from "@/components/CartDrawer";
 import MobileDrawer from "@/components/MobileDrawer";
-import ThemeToggle from "@/components/ThemeToggle";
 import FeedbackSettings from "@/components/FeedbackSettings";
 import logo from "@/assets/logo.png";
 
@@ -78,7 +77,7 @@ const Navbar = () => {
               <button onClick={() => navigate("/search")} aria-label="Search" className="text-foreground hover:text-accent transition-colors">
                 <Search className="w-5 h-5" />
               </button>
-              <ThemeToggle />
+      
               <FeedbackSettings />
               <Link to="/wishlist" aria-label="Wishlist" className="relative text-foreground hover:text-accent transition-colors">
                 <Heart className="w-5 h-5" />
