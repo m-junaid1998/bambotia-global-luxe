@@ -43,7 +43,14 @@ const Navbar = () => {
                 <img src={logo} alt="Bambotia" className="h-12 w-auto" />
               </Link>
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end items-center gap-3">
+              <button
+                onClick={() => navigate("/search")}
+                aria-label="Search"
+                className="text-foreground hover:text-accent transition-colors p-1"
+              >
+                <Search className="w-6 h-6" />
+              </button>
               <button
                 onClick={() => setCartOpen(true)}
                 aria-label="Cart"
