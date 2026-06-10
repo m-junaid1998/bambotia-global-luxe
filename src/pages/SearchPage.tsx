@@ -28,11 +28,18 @@ const SearchPage = () => {
   );
 
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeIdx, setActiveIdx] = useState(-1);
   const [cats, setCats] = useState<string[]>([]);
   const [price, setPrice] = useState<number>(maxPrice);
   const [onlyNew, setOnlyNew] = useState(false);
+
+  // Debounce typeahead query
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query), 200);
+    return () => clearTimeout(timer);
+  }, [query]);
 
   // Mobile drafts (applied on "Apply")
   const [mobileOpen, setMobileOpen] = useState(false);
