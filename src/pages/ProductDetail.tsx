@@ -243,8 +243,8 @@ const ProductDetail = () => {
             </Link>
           </div>
 
-          <ProductReviews productId={product.id} />
           <RelatedProducts product={product} />
+          <ProductReviews productId={product.id} />
         </div>
       </main>
 
