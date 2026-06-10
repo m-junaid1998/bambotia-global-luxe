@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -28,11 +28,35 @@ const SearchPage = () => {
   );
 
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeIdx, setActiveIdx] = useState(-1);
   const [cats, setCats] = useState<string[]>([]);
   const [price, setPrice] = useState<number>(maxPrice);
   const [onlyNew, setOnlyNew] = useState(false);
+
+  // Debounce typeahead query
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query), 200);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const HighlightText = ({ text, query }: { text: string; query: string }) => {
+    if (!query.trim()) return <>{text}</>;
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const parts = text.split(new RegExp(`(${escaped})`, "gi"));
+    return (
+      <>
+        {parts.map((part, i) =>
+          part.toLowerCase() === query.toLowerCase() ? (
+            <span key={i} className="text-accent font-semibold">{part}</span>
+          ) : (
+            <span key={i}>{part}</span>
+          )
+        )}
+      </>
+    );
+  };
 
   // Mobile drafts (applied on "Apply")
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -140,7 +164,7 @@ const SearchPage = () => {
   }, [products, query, cats, price, onlyNew]);
 
   const suggestions = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = debouncedQuery.trim().toLowerCase();
     if (!q) return [] as typeof products;
     return products
       .filter(
@@ -149,13 +173,13 @@ const SearchPage = () => {
           p.category.toLowerCase().includes(q)
       )
       .slice(0, 6);
-  }, [products, query]);
+  }, [products, debouncedQuery]);
 
   const matchingCategories = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = debouncedQuery.trim().toLowerCase();
     if (!q) return [] as { key: string; label: string }[];
     return CATEGORIES.filter((c) => c.label.toLowerCase().includes(q));
-  }, [query]);
+  }, [debouncedQuery]);
 
   const suggestionItems = useMemo(
     () => [
@@ -245,7 +269,7 @@ const SearchPage = () => {
                         }`}
                       >
                         <Search className="w-4 h-4 text-muted-foreground" />
-                        <span>{item.label}</span>
+                        <span><HighlightText text={item.label} query={debouncedQuery} /></span>
                       </button>
                     );
                   }
@@ -268,7 +292,9 @@ const SearchPage = () => {
                         loading="lazy"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-foreground truncate">{p.name}</p>
+                        <p className="text-sm text-foreground truncate">
+                          <HighlightText text={p.name} query={debouncedQuery} />
+                        </p>
                         <p className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
                           {p.category}
                         </p>
