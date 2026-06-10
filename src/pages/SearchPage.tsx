@@ -164,7 +164,7 @@ const SearchPage = () => {
   }, [products, query, cats, price, onlyNew]);
 
   const suggestions = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = debouncedQuery.trim().toLowerCase();
     if (!q) return [] as typeof products;
     return products
       .filter(
@@ -173,13 +173,13 @@ const SearchPage = () => {
           p.category.toLowerCase().includes(q)
       )
       .slice(0, 6);
-  }, [products, query]);
+  }, [products, debouncedQuery]);
 
   const matchingCategories = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = debouncedQuery.trim().toLowerCase();
     if (!q) return [] as { key: string; label: string }[];
     return CATEGORIES.filter((c) => c.label.toLowerCase().includes(q));
-  }, [query]);
+  }, [debouncedQuery]);
 
   const suggestionItems = useMemo(
     () => [
