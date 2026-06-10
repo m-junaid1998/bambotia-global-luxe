@@ -16,7 +16,7 @@ import Footer from "@/components/Footer";
 import ProductReviews from "@/components/ProductReviews";
 import Seo from "@/components/Seo";
 import RelatedProducts from "@/components/RelatedProducts";
-import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
+
 
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -32,11 +32,9 @@ const ProductDetail = () => {
   const { toggleItem, isWishlisted } = useWishlist();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const { track } = useRecentlyViewed();
+ 
 
-  useEffect(() => {
-    if (product) track(product.id);
-  }, [product, track]);
+  
 
   if (!product) {
     return (
