@@ -269,7 +269,7 @@ const SearchPage = () => {
                         }`}
                       >
                         <Search className="w-4 h-4 text-muted-foreground" />
-                        <span>{item.label}</span>
+                        <span><HighlightText text={item.label} query={debouncedQuery} /></span>
                       </button>
                     );
                   }
@@ -292,7 +292,9 @@ const SearchPage = () => {
                         loading="lazy"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-foreground truncate">{p.name}</p>
+                        <p className="text-sm text-foreground truncate">
+                          <HighlightText text={p.name} query={debouncedQuery} />
+                        </p>
                         <p className="text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
                           {p.category}
                         </p>
