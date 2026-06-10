@@ -16,8 +16,6 @@ import Footer from "@/components/Footer";
 import ProductReviews from "@/components/ProductReviews";
 import Seo from "@/components/Seo";
 import RelatedProducts from "@/components/RelatedProducts";
-import FrequentlyBoughtTogether from "@/components/FrequentlyBoughtTogether";
-import RecentlyViewed from "@/components/RecentlyViewed";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 
 const ProductDetail = () => {
@@ -248,10 +246,7 @@ const ProductDetail = () => {
           </div>
 
           <ProductReviews productId={product.id} />
-
-          <FrequentlyBoughtTogether product={product} />
           <RelatedProducts product={product} />
-          <RecentlyViewed excludeId={product.id} />
         </div>
       </main>
 
