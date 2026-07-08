@@ -39,7 +39,7 @@ const Navbar = () => {
             </div>
             <div className="flex justify-center">
               <Link to="/" aria-label="Home">
-                <img src={logo} alt="Bambotia" className="h-12 w-auto" />
+                <img src={logo} alt="Bambotia" width={48} height={48} className="h-12 w-auto" />
               </Link>
             </div>
             <div className="flex justify-end items-center gap-3">
@@ -64,7 +64,7 @@ const Navbar = () => {
           {/* ===== Desktop ===== */}
           <div className="hidden md:flex items-center justify-between h-20">
             <Link to="/" className="flex-shrink-0">
-              <img src={logo} alt="Bambotia" className="h-[4.2em] w-auto transition-transform hover:scale-105" />
+              <img src={logo} alt="Bambotia" width={101} height={67} className="h-[4.2em] w-auto transition-transform hover:scale-105" />
             </Link>
 
             <div className="flex items-center gap-10">
