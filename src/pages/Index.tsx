@@ -11,12 +11,14 @@ import BottomNav from "@/components/BottomNav";
 const Index = () => (
   <div className="min-h-screen bg-background pb-20 md:pb-0">
     <Navbar />
-    <HeroSection />
-    <StatsBar />
-    <CategoriesSection />
-    <NewArrivals />
-    <ShopTheLook />
-    <Testimonials />
+    <main>
+      <HeroSection />
+      <StatsBar />
+      <CategoriesSection />
+      <NewArrivals />
+      <ShopTheLook />
+      <Testimonials />
+    </main>
     <Footer />
     <BottomNav />
   </div>

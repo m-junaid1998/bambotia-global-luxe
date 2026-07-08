@@ -38,20 +38,20 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
           <div className="col-span-2">
-            <img src={logo} alt="Bambotia" className="h-[6em] w-auto mb-4" />
+            <img src={logo} alt="Bambotia" width={144} height={96} className="h-[6em] w-auto mb-4" />
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               Global Luxury meets Pakistani Elegance. Premium jewellery,
               cosmetics & designer purses curated for the modern woman.
             </p>
-            <p className="text-xs text-accent/60 italic mt-3 font-heading">
+            <p className="text-xs text-accent italic mt-3 font-heading">
               Curated With Passion
             </p>
           </div>
 
           <div>
-            <h4 className="font-heading text-sm font-semibold text-foreground mb-4 tracking-wider">
+            <h3 className="font-heading text-sm font-semibold text-foreground mb-4 tracking-wider">
               SHOP
-            </h4>
+            </h3>
 
             <ul className="space-y-2.5 text-sm text-muted-foreground">
               {quickLinks?.map((item, index) => (
@@ -79,9 +79,9 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-heading text-sm font-semibold text-foreground mb-4 tracking-wider">
+            <h3 className="font-heading text-sm font-semibold text-foreground mb-4 tracking-wider">
               ABOUT
-            </h4>
+            </h3>
 
             <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li>
@@ -97,9 +97,9 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-heading text-sm font-semibold text-foreground mb-4 tracking-wider">
+            <h3 className="font-heading text-sm font-semibold text-foreground mb-4 tracking-wider">
               SUPPORT
-            </h4>
+            </h3>
 
             <ul className="space-y-2.5 text-sm text-muted-foreground">
               <li>
@@ -150,7 +150,7 @@ const Footer = () => {
                   className="bg-background border border-border px-3 py-2.5 text-sm text-foreground rounded-l placeholder:text-muted-foreground focus:outline-none focus:border-accent w-52"
                 />
 
-                <button className="bg-accent text-accent-foreground px-4 py-2.5 rounded-r hover:opacity-90 transition-opacity">
+                <button type="submit" aria-label="Subscribe to newsletter" className="bg-accent text-accent-foreground px-4 py-2.5 rounded-r hover:opacity-90 transition-opacity">
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
