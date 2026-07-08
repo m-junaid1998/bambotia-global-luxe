@@ -6,7 +6,7 @@ import { useWishlist } from "@/contexts/WishlistContext";
 import CartDrawer from "@/components/CartDrawer";
 import MobileDrawer from "@/components/MobileDrawer";
 import FeedbackSettings from "@/components/FeedbackSettings";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo.webp";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
