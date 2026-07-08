@@ -55,9 +55,9 @@ const ProductCard = ({
         />
       </div>
 
-      <h4 className="text-xs md:text-sm font-medium text-foreground group-hover:text-accent transition-colors leading-tight mb-0.5">
+      <h3 className="text-xs md:text-sm font-medium text-foreground group-hover:text-accent transition-colors leading-tight mb-0.5">
         {product.name}
-      </h4>
+      </h3>
 
       <div className="flex items-center gap-2 flex-wrap">
         <p className="text-xs text-accent font-medium">
@@ -136,9 +136,9 @@ const TabProductCard = ({
       </Link>
 
       <Link to={`/product/${product.slug}`}>
-        <h4 className="text-xs md:text-sm font-medium text-foreground group-hover:text-accent transition-colors leading-tight mb-0.5">
+        <h3 className="text-xs md:text-sm font-medium text-foreground group-hover:text-accent transition-colors leading-tight mb-0.5">
           {product.name}
-        </h4>
+        </h3>
 
         <div className="flex items-center gap-2 flex-wrap">
           <p className="text-xs text-accent font-medium">
