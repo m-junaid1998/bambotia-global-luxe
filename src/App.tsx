@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -10,33 +11,32 @@ import { AdminProductsProvider } from "@/contexts/AdminProductsContext";
 import { OrdersProvider } from "@/contexts/OrdersContext";
 import { FeedbackProvider } from "@/contexts/FeedbackContext";
 
-
 import Index from "./pages/Index.tsx";
-import CategoryPage from "./pages/CategoryPage.tsx";
-import ProductDetail from "./pages/ProductDetail.tsx";
-import WishlistPage from "./pages/WishlistPage.tsx";
-import SignIn from "./pages/SignIn.tsx";
-import SignUp from "./pages/SignUp.tsx";
-import ForgotPassword from "./pages/ForgotPassword.tsx";
-import AdminLogin from "./pages/admin/AdminLogin.tsx";
-import AdminLayout from "./pages/admin/AdminLayout.tsx";
-import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
-import AdminProducts from "./pages/admin/AdminProducts.tsx";
-import AdminOrders from "./pages/admin/AdminOrders.tsx";
-import AdminCustomers from "./pages/admin/AdminCustomers.tsx";
-import AdminCategories from "./pages/admin/AdminCategories.tsx";
-import AdminAnalytics from "./pages/admin/AdminAnalytics.tsx";
-import AdminSettings from "./pages/admin/AdminSettings.tsx";
-import SearchPage from "./pages/SearchPage.tsx";
-import OurStory from "./pages/OurStory.tsx";
-import Contact from "./pages/Contact.tsx";
-import ShippingReturns from "./pages/ShippingReturns.tsx";
-import FAQs from "./pages/FAQs.tsx";
-import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
-import TermsOfService from "./pages/TermsOfService.tsx";
-import Checkout from "./pages/Checkout.tsx";
-import OrderConfirmation from "./pages/OrderConfirmation.tsx";
-import NotFound from "./pages/NotFound.tsx";
+const CategoryPage = lazy(() => import("./pages/CategoryPage.tsx"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail.tsx"));
+const WishlistPage = lazy(() => import("./pages/WishlistPage.tsx"));
+const SignIn = lazy(() => import("./pages/SignIn.tsx"));
+const SignUp = lazy(() => import("./pages/SignUp.tsx"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword.tsx"));
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin.tsx"));
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout.tsx"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.tsx"));
+const AdminProducts = lazy(() => import("./pages/admin/AdminProducts.tsx"));
+const AdminOrders = lazy(() => import("./pages/admin/AdminOrders.tsx"));
+const AdminCustomers = lazy(() => import("./pages/admin/AdminCustomers.tsx"));
+const AdminCategories = lazy(() => import("./pages/admin/AdminCategories.tsx"));
+const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics.tsx"));
+const AdminSettings = lazy(() => import("./pages/admin/AdminSettings.tsx"));
+const SearchPage = lazy(() => import("./pages/SearchPage.tsx"));
+const OurStory = lazy(() => import("./pages/OurStory.tsx"));
+const Contact = lazy(() => import("./pages/Contact.tsx"));
+const ShippingReturns = lazy(() => import("./pages/ShippingReturns.tsx"));
+const FAQs = lazy(() => import("./pages/FAQs.tsx"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.tsx"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService.tsx"));
+const Checkout = lazy(() => import("./pages/Checkout.tsx"));
+const OrderConfirmation = lazy(() => import("./pages/OrderConfirmation.tsx"));
+const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
 
@@ -52,6 +52,7 @@ const App = () => (
             <OrdersProvider>
               <CartProvider>
                 <WishlistProvider>
+                <Suspense fallback={null}>
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/category/:category" element={<CategoryPage />} />
@@ -81,6 +82,7 @@ const App = () => (
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>
+                </Suspense>
                 </WishlistProvider>
               </CartProvider>
             </OrdersProvider>
