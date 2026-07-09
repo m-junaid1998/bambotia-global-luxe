@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import StatsBar from "@/components/StatsBar";
+import StudioFeed from "@/components/StudioFeed";
 import CategoriesSection from "@/components/CategoriesSection";
 import NewArrivals from "@/components/NewArrivals";
 import ShopTheLook from "@/components/ShopTheLook";
@@ -14,6 +15,7 @@ const Index = () => (
     <main>
       <HeroSection />
       <StatsBar />
+      <StudioFeed />
       <CategoriesSection />
       <NewArrivals />
       <ShopTheLook />
