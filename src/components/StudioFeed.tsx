@@ -1,31 +1,34 @@
 import { useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Film, Volume2, VolumeX } from "lucide-react";
-import bangles from "@/assets/product-bangles.jpg";
-import necklace from "@/assets/product-necklace.jpg";
-import earrings from "@/assets/product-earrings.jpg";
-import ring from "@/assets/product-ring.jpg";
-import clutch from "@/assets/product-clutch.jpg";
-import lipstick from "@/assets/product-lipstick.jpg";
+import { useQuery } from "@tanstack/react-query";
+import { ChevronLeft, ChevronRight, Film, Play, Volume2, VolumeX } from "lucide-react";
 
 type Reel = {
   id: string;
   title: string;
   caption: string;
-  poster: string;
+  thumbnail: string;
+  videoUrl: string;
 };
 
-const reels: Reel[] = [
-  { id: "1", title: "Shiny bangles", caption: "Obsessed with these bangles", poster: bangles },
-  { id: "2", title: "Catalog Collections", caption: "New arrivals just dropped", poster: necklace },
-  { id: "3", title: "Heart necklace", caption: "Tum kab Dilaoge ye viral heart neclace", poster: earrings },
-  { id: "4", title: "Signature ring", caption: "A ring to remember", poster: ring },
-  { id: "5", title: "Evening clutch", caption: "Perfect for date nights", poster: clutch },
-  { id: "6", title: "Lip love", caption: "The velvet matte edit", poster: lipstick },
-];
+const REELS_ENDPOINT = "/api/reels.json";
+
+const fetchReels = async (): Promise<Reel[]> => {
+  const res = await fetch(REELS_ENDPOINT);
+  if (!res.ok) throw new Error(`Failed to load reels: ${res.status}`);
+  return res.json();
+};
 
 const StudioFeed = () => {
   const trackRef = useRef<HTMLDivElement>(null);
+  const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
   const [muted, setMuted] = useState<Record<string, boolean>>({});
+  const [playing, setPlaying] = useState<Record<string, boolean>>({});
+
+  const { data: reels, isLoading, isError } = useQuery({
+    queryKey: ["studio-reels"],
+    queryFn: fetchReels,
+    staleTime: 5 * 60 * 1000,
+  });
 
   const scrollBy = (dir: 1 | -1) => {
     const el = trackRef.current;
@@ -33,6 +36,18 @@ const StudioFeed = () => {
     const card = el.querySelector("article");
     const step = card ? (card as HTMLElement).offsetWidth + 16 : 280;
     el.scrollBy({ left: dir * step, behavior: "smooth" });
+  };
+
+  const togglePlay = (id: string) => {
+    const v = videoRefs.current[id];
+    if (!v) return;
+    if (v.paused) {
+      v.play().catch(() => {});
+      setPlaying((p) => ({ ...p, [id]: true }));
+    } else {
+      v.pause();
+      setPlaying((p) => ({ ...p, [id]: false }));
+    }
   };
 
   return (
@@ -63,41 +78,79 @@ const StudioFeed = () => {
           </div>
         </div>
 
-        <div
-          ref={trackRef}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 px-4 scrollbar-hide"
-        >
-          {reels.map((r) => {
-            const isMuted = muted[r.id] ?? true;
-            return (
-              <article
-                key={r.id}
-                className="snap-start shrink-0 w-[70vw] sm:w-[280px] group"
-              >
-                <div className="relative aspect-[9/14] rounded-2xl overflow-hidden border border-border bg-card shadow-lg">
-                  <img
-                    src={r.poster}
-                    alt={r.title}
-                    loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60" />
-                  <p className="absolute top-4 left-4 right-10 font-heading text-white text-lg leading-snug drop-shadow-lg [text-shadow:_0_2px_8px_rgb(0_0_0_/_60%)]">
-                    {r.caption}
-                  </p>
-                  <button
-                    onClick={() => setMuted((m) => ({ ...m, [r.id]: !isMuted }))}
-                    aria-label={isMuted ? "Unmute" : "Mute"}
-                    className="absolute bottom-3 right-3 p-1.5 rounded-full bg-black/50 backdrop-blur text-white hover:bg-black/70 transition-colors"
-                  >
-                    {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-                  </button>
-                </div>
-                <p className="mt-3 text-sm text-foreground font-medium">{r.title}</p>
-              </article>
-            );
-          })}
-        </div>
+        {isLoading && (
+          <div className="flex gap-4 overflow-hidden">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div
+                key={i}
+                className="shrink-0 w-[70vw] sm:w-[280px] aspect-[9/14] rounded-2xl bg-card animate-pulse"
+              />
+            ))}
+          </div>
+        )}
+
+        {isError && (
+          <p className="text-sm text-muted-foreground py-8">
+            Couldn't load the studio feed right now. Please try again shortly.
+          </p>
+        )}
+
+        {reels && reels.length > 0 && (
+          <div
+            ref={trackRef}
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-4 px-4 scrollbar-hide"
+          >
+            {reels.map((r) => {
+              const isMuted = muted[r.id] ?? true;
+              const isPlaying = playing[r.id] ?? false;
+              return (
+                <article
+                  key={r.id}
+                  className="snap-start shrink-0 w-[70vw] sm:w-[280px] group"
+                >
+                  <div className="relative aspect-[9/14] rounded-2xl overflow-hidden border border-border bg-card shadow-lg">
+                    <video
+                      ref={(el) => {
+                        videoRefs.current[r.id] = el;
+                      }}
+                      src={r.videoUrl}
+                      poster={r.thumbnail}
+                      muted={isMuted}
+                      loop
+                      playsInline
+                      preload="metadata"
+                      onClick={() => togglePlay(r.id)}
+                      className="w-full h-full object-cover cursor-pointer transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60" />
+                    <p className="pointer-events-none absolute top-4 left-4 right-10 font-heading text-white text-lg leading-snug [text-shadow:_0_2px_8px_rgb(0_0_0_/_60%)]">
+                      {r.caption}
+                    </p>
+                    {!isPlaying && (
+                      <button
+                        onClick={() => togglePlay(r.id)}
+                        aria-label="Play video"
+                        className="absolute inset-0 flex items-center justify-center"
+                      >
+                        <span className="p-4 rounded-full bg-black/40 backdrop-blur text-white group-hover:bg-black/60 transition-colors">
+                          <Play className="w-5 h-5 fill-current" />
+                        </span>
+                      </button>
+                    )}
+                    <button
+                      onClick={() => setMuted((m) => ({ ...m, [r.id]: !isMuted }))}
+                      aria-label={isMuted ? "Unmute" : "Mute"}
+                      className="absolute bottom-3 right-3 p-1.5 rounded-full bg-black/50 backdrop-blur text-white hover:bg-black/70 transition-colors"
+                    >
+                      {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                  <p className="mt-3 text-sm text-foreground font-medium">{r.title}</p>
+                </article>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );
