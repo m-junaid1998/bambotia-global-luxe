@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import WishlistButton from "@/components/WishlistButton";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -204,7 +202,7 @@ const SearchPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      
 
       <main className="pt-28 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -439,7 +437,7 @@ const SearchPage = () => {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 };

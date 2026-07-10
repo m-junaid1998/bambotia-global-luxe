@@ -13,8 +13,6 @@ import {
   ShieldCheck,
   Truck,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -155,7 +153,7 @@ const Checkout = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      
       <main className="pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center gap-2 text-xs text-muted-foreground mb-6">
@@ -561,7 +559,7 @@ const Checkout = () => {
         <span className="text-sm font-medium hidden sm:inline">WhatsApp</span>
       </a>
 
-      <Footer />
+      
     </div>
   );
 };
