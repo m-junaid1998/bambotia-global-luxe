@@ -48,6 +48,10 @@ const StudioFeed = () => {
   const [muted, setMuted] = useState<Record<string, boolean>>({});
   const [playing, setPlaying] = useState<Record<string, boolean>>({});
   const [inView, setInView] = useState(false);
+  // Which reel cards have entered the viewport at least once — used to lazy-load media.
+  const [loadedCards, setLoadedCards] = useState<Record<string, boolean>>({});
+  const markLoaded = (id: string) =>
+    setLoadedCards((prev) => (prev[id] ? prev : { ...prev, [id]: true }));
 
   const { data: reels, isLoading, isError } = useQuery({
     queryKey: ["studio-reels"],
@@ -168,30 +172,38 @@ const StudioFeed = () => {
             {reels.map((r) => {
               const isMuted = muted[r.id] ?? true;
               const isPlaying = playing[r.id] ?? false;
+              const shouldLoad = loadedCards[r.id] ?? false;
               return (
-                <article
-                  key={r.id}
-                  className="snap-start shrink-0 w-[70vw] sm:w-[280px] group"
-                >
+                <ReelCard key={r.id} id={r.id} onVisible={() => markLoaded(r.id)}>
                   <div className="relative aspect-[9/14] rounded-2xl overflow-hidden border border-border bg-card shadow-lg">
-                    <video
-                      ref={(el) => {
-                        videoRefs.current[r.id] = el;
-                      }}
-                      src={r.videoUrl}
-                      poster={r.thumbnail}
-                      muted={isMuted}
-                      loop
-                      playsInline
-                      preload="metadata"
-                      onClick={() => togglePlay(r.id)}
-                      className="w-full h-full object-cover cursor-pointer transition-transform duration-700 group-hover:scale-105"
-                    />
+                    {shouldLoad ? (
+                      <video
+                        ref={(el) => {
+                          videoRefs.current[r.id] = el;
+                        }}
+                        src={r.videoUrl}
+                        poster={r.thumbnail}
+                        muted={isMuted}
+                        loop
+                        playsInline
+                        preload="metadata"
+                        onClick={() => togglePlay(r.id)}
+                        className="w-full h-full object-cover cursor-pointer transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <img
+                        src={r.thumbnail}
+                        alt={r.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60" />
                     <p className="pointer-events-none absolute top-4 left-4 right-10 font-heading text-white text-lg leading-snug [text-shadow:_0_2px_8px_rgb(0_0_0_/_60%)]">
                       {r.caption}
                     </p>
-                    {!isPlaying && (
+                    {shouldLoad && !isPlaying && (
                       <button
                         onClick={() => togglePlay(r.id)}
                         aria-label="Play video"
@@ -202,22 +214,60 @@ const StudioFeed = () => {
                         </span>
                       </button>
                     )}
-                    <button
-                      onClick={() => setMuted((m) => ({ ...m, [r.id]: !isMuted }))}
-                      aria-label={isMuted ? "Unmute" : "Mute"}
-                      className="absolute bottom-3 right-3 p-1.5 rounded-full bg-black/50 backdrop-blur text-white hover:bg-black/70 transition-colors"
-                    >
-                      {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-                    </button>
+                    {shouldLoad && (
+                      <button
+                        onClick={() => setMuted((m) => ({ ...m, [r.id]: !isMuted }))}
+                        aria-label={isMuted ? "Unmute" : "Mute"}
+                        className="absolute bottom-3 right-3 p-1.5 rounded-full bg-black/50 backdrop-blur text-white hover:bg-black/70 transition-colors"
+                      >
+                        {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                      </button>
+                    )}
                   </div>
                   <p className="mt-3 text-sm text-foreground font-medium">{r.title}</p>
-                </article>
+                </ReelCard>
               );
             })}
           </div>
         )}
       </div>
     </section>
+  );
+};
+
+// Per-card wrapper that reports first viewport entry so parent can lazy-mount media.
+const ReelCard = ({
+  id,
+  onVisible,
+  children,
+}: {
+  id: string;
+  onVisible: () => void;
+  children: React.ReactNode;
+}) => {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            onVisible();
+            io.disconnect();
+            break;
+          }
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [id, onVisible]);
+  return (
+    <article ref={ref} className="snap-start shrink-0 w-[70vw] sm:w-[280px] group">
+      {children}
+    </article>
   );
 };
 
