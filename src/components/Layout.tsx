@@ -6,9 +6,7 @@ import BottomNav from "@/components/BottomNav";
 const Layout = () => (
   <div className="min-h-screen bg-background pb-20 md:pb-0">
     <Navbar />
-    <main>
-      <Outlet />
-    </main>
+    <Outlet />
     <Footer />
     <BottomNav />
   </div>
