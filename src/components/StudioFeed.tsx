@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight, Film, Play, Volume2, VolumeX } from "lucide-react";
 
@@ -10,25 +10,86 @@ type Reel = {
   videoUrl: string;
 };
 
-const REELS_ENDPOINT = "/api/reels.json";
+// Pool of sample vertical videos (royalty-free). Randomly assigned to jewellery items.
+const VIDEO_POOL = [
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+];
 
 const fetchReels = async (): Promise<Reel[]> => {
-  const res = await fetch(REELS_ENDPOINT);
+  // Random jewellery items from DummyJSON — a free public products API.
+  const res = await fetch("https://dummyjson.com/products/category/womens-jewellery?limit=8");
   if (!res.ok) throw new Error(`Failed to load reels: ${res.status}`);
-  return res.json();
+  const json = await res.json();
+  const items = (json.products ?? []) as Array<{
+    id: number;
+    title: string;
+    description: string;
+    thumbnail: string;
+    images: string[];
+  }>;
+  return items.map((p, i) => ({
+    id: String(p.id),
+    title: p.title,
+    caption: p.description?.split(".")[0] ?? p.title,
+    thumbnail: p.images?.[0] ?? p.thumbnail,
+    videoUrl: VIDEO_POOL[i % VIDEO_POOL.length],
+  }));
 };
 
 const StudioFeed = () => {
+  const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
   const [muted, setMuted] = useState<Record<string, boolean>>({});
   const [playing, setPlaying] = useState<Record<string, boolean>>({});
+  const [inView, setInView] = useState(false);
 
   const { data: reels, isLoading, isError } = useQuery({
     queryKey: ["studio-reels"],
     queryFn: fetchReels,
     staleTime: 5 * 60 * 1000,
   });
+
+  // Autoplay all reels when section enters viewport; pause when it leaves.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.25 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!reels) return;
+    const updates: Record<string, boolean> = {};
+    reels.forEach((r) => {
+      const v = videoRefs.current[r.id];
+      if (!v) return;
+      if (inView) {
+        v.muted = true;
+        v.play().then(() => { updates[r.id] = true; }).catch(() => {});
+      } else {
+        v.pause();
+        updates[r.id] = false;
+      }
+    });
+    setPlaying((p) => ({ ...p, ...updates }));
+    if (inView) {
+      setMuted((m) => {
+        const next = { ...m };
+        reels.forEach((r) => { if (next[r.id] === undefined) next[r.id] = true; });
+        return next;
+      });
+    }
+  }, [inView, reels]);
 
   const scrollBy = (dir: 1 | -1) => {
     const el = trackRef.current;
@@ -51,7 +112,7 @@ const StudioFeed = () => {
   };
 
   return (
-    <section className="py-14 md:py-20 bg-background">
+    <section ref={sectionRef} className="py-14 md:py-20 bg-background">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-end justify-between gap-4 mb-6">
           <div className="flex items-center gap-2">
