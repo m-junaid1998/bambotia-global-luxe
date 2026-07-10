@@ -12,6 +12,7 @@ import { OrdersProvider } from "@/contexts/OrdersContext";
 import { FeedbackProvider } from "@/contexts/FeedbackContext";
 
 import Index from "./pages/Index.tsx";
+import Layout from "./components/Layout.tsx";
 const CategoryPage = lazy(() => import("./pages/CategoryPage.tsx"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail.tsx"));
 const WishlistPage = lazy(() => import("./pages/WishlistPage.tsx"));
@@ -54,22 +55,24 @@ const App = () => (
                 <WishlistProvider>
                 <Suspense fallback={null}>
                 <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/category/:category" element={<CategoryPage />} />
-                  <Route path="/product/:slug" element={<ProductDetail />} />
-                  <Route path="/wishlist" element={<WishlistPage />} />
-                  <Route path="/search" element={<SearchPage />} />
-                  <Route path="/our-story" element={<OurStory />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/shipping-returns" element={<ShippingReturns />} />
-                  <Route path="/faqs" element={<FAQs />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/terms-of-service" element={<TermsOfService />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/order-confirmation" element={<OrderConfirmation />} />
-                  <Route path="/signin" element={<SignIn />} />
-                  <Route path="/signup" element={<SignUp />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route element={<Layout />}>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/category/:category" element={<CategoryPage />} />
+                    <Route path="/product/:slug" element={<ProductDetail />} />
+                    <Route path="/wishlist" element={<WishlistPage />} />
+                    <Route path="/search" element={<SearchPage />} />
+                    <Route path="/our-story" element={<OurStory />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/shipping-returns" element={<ShippingReturns />} />
+                    <Route path="/faqs" element={<FAQs />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route path="/terms-of-service" element={<TermsOfService />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                    <Route path="/signin" element={<SignIn />} />
+                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                  </Route>
                   <Route path="/admin/login" element={<AdminLogin />} />
                   <Route path="/admin" element={<AdminLayout />}>
                     <Route index element={<AdminDashboard />} />
