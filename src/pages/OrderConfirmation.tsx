@@ -10,8 +10,6 @@ import {
   Package,
   MessageCircle,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Separator } from "@/components/ui/separator";
 import PrintInvoice from "./PrintInvoice";
 
@@ -75,7 +73,7 @@ const OrderConfirmation = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      
       <main className="pt-24 pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Success header */}
@@ -263,7 +261,7 @@ const OrderConfirmation = () => {
         estimatedDelivery={estimatedDelivery}
         placedAt={placedAt}
       />
-      <Footer />
+      
     </div>
   );
 };

@@ -1,8 +1,6 @@
 import { ReactNode, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 interface PageShellProps {
   eyebrow?: string;
@@ -49,7 +47,7 @@ const PageShell = ({ eyebrow, title, subtitle, seoTitle, seoDescription, childre
 
   return (
   <div className="min-h-screen bg-background">
-    <Navbar />
+    
     <main className="pt-24 pb-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center gap-2 text-xs text-muted-foreground mb-8">
@@ -67,7 +65,7 @@ const PageShell = ({ eyebrow, title, subtitle, seoTitle, seoDescription, childre
         </div>
       </div>
     </main>
-    <Footer />
+    
   </div>
   );
 };

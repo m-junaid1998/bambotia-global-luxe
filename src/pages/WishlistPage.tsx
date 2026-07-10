@@ -3,8 +3,6 @@ import { Heart, ShoppingBag, Trash2, ArrowLeft } from "lucide-react";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { useCart } from "@/contexts/CartContext";
 import { products, formatPrice } from "@/data/products";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const WishlistPage = () => {
   const { items, toggleItem } = useWishlist();
@@ -14,7 +12,7 @@ const WishlistPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      
 
       <main className="pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -118,7 +116,7 @@ const WishlistPage = () => {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 };

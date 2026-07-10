@@ -11,8 +11,6 @@ import { formatPrice, getDiscountPercent } from "@/data/products";
 import { useStorefrontProductBySlug } from "@/hooks/useStorefrontProducts";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import ProductReviews from "@/components/ProductReviews";
 import Seo from "@/components/Seo";
 import RelatedProducts from "@/components/RelatedProducts";
@@ -80,7 +78,7 @@ const ProductDetail = () => {
         image={product.images[0]}
         type="product"
       />
-      <Navbar />
+      
 
       <main className="pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -248,7 +246,7 @@ const ProductDetail = () => {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 };

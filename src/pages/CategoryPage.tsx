@@ -30,7 +30,7 @@
 
 //   return (
 //     <div className="min-h-screen bg-background">
-//       <Navbar />
+//       
 
 //       <main className="pt-24 pb-20">
 //         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -113,7 +113,7 @@
 //         </div>
 //       </main>
 
-//       <Footer />
+//       
 //     </div>
 //   );
 // };
@@ -128,8 +128,6 @@ import { formatPrice, getDiscountPercent } from "@/data/products";
 
 import { useStorefrontProductsByCategory } from "@/hooks/useStorefrontProducts";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import WishlistButton from "@/components/WishlistButton";
 
 const categoryMeta: Record<string, { title: string; subtitle: string }> = {
@@ -223,7 +221,7 @@ const CategoryPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      
 
       <main className="pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -373,7 +371,7 @@ const CategoryPage = () => {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 };
