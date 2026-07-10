@@ -52,7 +52,11 @@ const StudioFeed = () => {
   const { data: reels, isLoading, isError } = useQuery({
     queryKey: ["studio-reels"],
     queryFn: fetchReels,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 5 * 60 * 1000, // 5 min — data considered fresh
+    gcTime: 30 * 60 * 1000, // 30 min — keep in cache after unmount
+    retry: 3,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10000),
+    refetchOnWindowFocus: false,
   });
 
   // Autoplay all reels when section enters viewport; pause when it leaves.
